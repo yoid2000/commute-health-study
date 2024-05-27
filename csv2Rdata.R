@@ -7,7 +7,7 @@ packageVersion("gridExtra")
 
 
 # Load the data from the CSV file
-data <- read.csv("CommData.csv")
+dd <- read.csv("CommData.csv")
 
 # Save the data frame as an RData file
-save(data, file = "CommData.Rdata")
+save(dd, file = "CommData.Rdata")

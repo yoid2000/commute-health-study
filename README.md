@@ -1,10 +1,16 @@
 # bojan-play
 
-Repo for testing synthetic data to see if it is fit for purpose for doing the analysis in the paper "Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian schoolchildren: a nationwide cross-sectional study"
+Repo for testing synthetic data to see if it is fit for purpose for doing the analysis in the paper "Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian schoolchildren: a nationwide cross-sectional study". (A copy of the paper is in the papers directory.)
+
+https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-021-10326-6
 
 ## Datasets
 
-CommData.csv and CommData.Rdata both contain synthetic versions of the full dataset used for the paper. These were produced from the original data by SynDiffix. They can be used to develop synthesis scripts, after which the scripts can be run on the original data by authorized persons.
+CommData.csv contains synthetic versions of the full dataset used for the paper. These were produced from the original data by SynDiffix. They can be used to develop synthesis scripts, after which the scripts can be run on the original data by authorized persons.
+
+## Paper script
+
+The script CommCode.R does the analysis and generates the figure from the paper. Note that since CommData.csv is not the original data, the plot produced is slightly different from that of the original paper.
 
 ## Useful scripts
 
