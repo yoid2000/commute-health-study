@@ -1,4 +1,4 @@
-# bojan-play
+# Commuting Health Paper
 
 Repo for testing synthetic data to see if it is fit for purpose for doing the analysis in the paper "Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian schoolchildren: a nationwide cross-sectional study". (A copy of the paper is in the papers directory.)
 
