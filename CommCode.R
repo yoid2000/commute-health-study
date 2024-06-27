@@ -6,7 +6,8 @@
 
 library(ggplot2)
 
-dd <- read.csv("CommData.csv")
+#dd <- read.csv("CommData.csv")
+dd <- read.csv("CommDataOrig.csv")
 dd$CommToSch = factor(dd$CommToSch, levels=c('car', 'public', 'wheels', 'walk'))
 dd$CommHome = factor(dd$CommHome, levels=c('car', 'public', 'wheels', 'walk'))
 dd$gender = factor(dd$gender, levels=c('male', 'female'))
