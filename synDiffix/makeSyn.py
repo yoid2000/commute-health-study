@@ -1,80 +1,72 @@
-import pandas as pd
 import os
-from syndiffix import Synthesizer
-from syndiffix.clustering.strategy import MlClustering
+import pandas as pd
+import itertools
+import json
+from syndiffix_tools.tables_builder import TablesBuilder
+import pprint
 
-inFile = 'CommDataOrig.csv'
+# Set this to true if you want to force synthesis of already synthesized files
+force = False
 
-colConfig = {
-    'VO2max': 'float',
-    'CommToSch': 'str',
-    'CommHome': 'str',
-    'gender': 'str',
-    'age': 'float',
-    'MVPAsqrt': 'float',
-    'DistLog2Home': 'float',
-    'DistLog2ToSch': 'float',
-    'DistFromHome': 'int',
-    'DistFromSchool': 'int',
-}
+max_combinations = 4
 
-cluster_params = {
-    'max_weight':22,       #15
-    'sample_size':2000,        #1000
-    'merge_threshold':0.075        #0.1
-}
+pp = pprint.PrettyPrinter(indent=4)
 
-# Read in file CommData.csv as dataframe, and set the column types according to the colConfig dictionary
-df = pd.read_csv(inFile, dtype=colConfig)
-print(df.columns)
+baseDir = os.environ['COMMUTE_HEALTH_PATH']
+print(f"setting baseDir to {baseDir}")
 
-# Seems that DistFromHome and DistFromSchool columns are not used
-# Though note that by removing them, we data quality basicly didn't change!
-# (which is good news, actually)
-requiredColumns = ["VO2max","CommToSch","CommHome","gender","age","MVPAsqrt","DistLog2Home","DistLog2ToSch",]
-allColumns = requiredColumns + ["DistFromHome","DistFromSchool"]
-toSchoolColumns = ["VO2max","CommToSch","gender","age","MVPAsqrt","DistLog2ToSch",]
-toHomeColumns = ["VO2max","CommHome","gender","age","MVPAsqrt","DistLog2Home",]
+tablesDir = os.path.join(baseDir, 'tmTables')
+if not os.path.exists(tablesDir):
+    os.makedirs(tablesDir)
 
-# Ok, turns out that the DistFromHome and DistFromSchool columns are not the same. 
-diff_count = df['DistFromHome'].ne(df['DistFromSchool']).sum()
-print(diff_count)
-# diff_rows = df[df['DistFromHome'].ne(df['DistFromSchool'])]
-# print(diff_rows.head(5))
+tb = TablesBuilder(dir_path=tablesDir)
 
-# Remove the first column from df
-df = df.drop(df.columns[0], axis=1)
-print(df.columns)
-print("Original data counts:")
-print(df.groupby(['gender', 'CommToSch']).size())
-print(df.groupby(['gender', 'CommHome']).size())
+if tb.df_orig is None:
+    # We've never configured the original data, so let's do that now
+    df = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    # The following establishes the initial configuration information and original
+    # dataset. Edit the file tablesDir/orig_meta_data.json to change the configuration
+    tb.put_df_orig(df, 'CommDataOrig')
 
-# Generate a targeted synthetic dataset with all columns
-syn_all = Synthesizer(df[allColumns], clustering=MlClustering(target_column="VO2max", drop_non_features=False))
-df_syn_all = syn_all.sample()
-# Save the synthetic data to a new csv file called CommDataSyn.csv
-df_syn_all.to_csv('CommDataSyn_target_VO2max_all.csv', index=True)
-print("Synthetic data counts:")
-print(df_syn_all.groupby(['gender', 'CommToSch']).size())
-print(df_syn_all.groupby(['gender', 'CommHome']).size())
+print("The original data looks like this:")
+print(tb.df_orig.head())
 
-# Generate a targeted synthetic dataset with only the columns required for analysis
-syn_req = Synthesizer(df[requiredColumns], clustering=MlClustering(target_column="VO2max", drop_non_features=False))
-df_syn_req = syn_req.sample()
-# Save the synthetic data to a new csv file called CommDataSyn.csv
-df_syn_req.to_csv('CommDataSyn_target_VO2max_req.csv', index=True)
-print("Synthetic data counts:")
-print(df_syn_req.groupby(['gender', 'CommToSch']).size())
-print(df_syn_req.groupby(['gender', 'CommHome']).size())
+print("The column dtypes are this:")
+print(tb.df_orig.dtypes)
 
-# Generate two targetted synthetic tables, each containinng only the columns needed for the
-# specific communuting direction used in the analysis
-syn_2school = Synthesizer(df[toSchoolColumns], clustering=MlClustering(target_column="VO2max", drop_non_features=True))
-df_syn_2school = syn_2school.sample()
-# Save the synthetic data to a new csv file c2schooled CommDataSyn.csv
-df_syn_2school.to_csv('CommDataSyn_target_VO2max_2school.csv', index=True)
+print("The columns are classified as follows:")
+pp.pprint(tb.orig_meta_data['column_classes'])
+print(f"If this is not correct, edit the file {os.path.join(tablesDir, 'orig_meta_data.json')}")
 
-syn_2home = Synthesizer(df[toHomeColumns], clustering=MlClustering(target_column="VO2max", drop_non_features=False))
-df_syn_2home = syn_2home.sample()
-# Save the synthetic data to a new csv file c2homeed CommDataSyn.csv
-df_syn_2home.to_csv('CommDataSyn_target_VO2max_2home.csv', index=True)
+# This is a relatively small dataset, so let's create every column combination
+# up to four columns. Let's also create a targeted dataset for each column.
+# Finally, we'll make a general purpose dataset with all columns.
+
+print("Synthesizing generic all-columns dataset")
+tb.synthesize(save_stats="min", force=force)
+
+# Let's do all of the targeted datasets
+for target_column in tb.df_orig.columns:
+    print(f"Synthesizing dataset with target column {target_column}")
+    tb.synthesize(target_column=target_column, save_stats="min", force=force)
+
+# Now let's do the combinations
+for i in range(1, max_combinations+1):
+    for comb in itertools.combinations(tb.df_orig.columns, i):
+        print(f"Synthesizing {list(comb)}")
+        tb.synthesize(columns=list(comb), save_stats="min", force=force)
+
+# Let's get some stats about the synthesis process
+stats_dir = os.path.join(tablesDir, 'stats')
+
+# read in every json file in stats_dir
+elapsed = []
+for file in os.listdir(stats_dir):
+    if file.endswith('.json'):
+        with open(os.path.join(stats_dir, file), 'r') as f:
+            stats = json.load(f)
+        elapsed.append(stats['elapsed_time'])
+print(f"Total files: {len(elapsed)}")
+print(f"Max elapsed time: {max(elapsed)}")
+print(f"Total elapsed time: {round(sum(elapsed))} seconds, {round(sum(elapsed)/60)} minutes")
