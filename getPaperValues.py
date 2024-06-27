@@ -24,7 +24,6 @@ for column in df_orig.columns:
     print(f"Column: {column}")
     if len(distinct_values) <= 20:
         print(distinct_values)
-        print()
     else:
         print(f"Number of distinct values: {len(distinct_values)}")
 
@@ -37,6 +36,34 @@ dataset_info = {
     'arx': {'df': df_arx, 'val': 'arx_val'},
     'sdx': {'df': None, 'tr': tr, 'val': 'sdx_val'},
 }
+
+def do_checks(df):
+    ans = df[(df['context'] == 'Table 1') & (df['tab_column'] == 'Commuting from school') & (df['tab_row'] == 'Commuting to school') & (df['tab_sub_column'] == 'walk') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'count')]['orig_val'].iloc[0]
+    if ans != 275:
+        print(f"ERROR: Expected 275, got {ans}")
+    ans = df[(df['context'] == 'Table 1') & (df['tab_column'] == 'Commuting from school') & (df['tab_row'] == 'Commuting to school') & (df['tab_sub_column'] == 'walk') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'percent')]['orig_val'].iloc[0]
+    if round(ans,1) != 38.6:
+        print(f"ERROR: Expected 38.6, got {ans}")
+    ans = df[(df['context'] == 'Table 1') & (df['tab_column'] == 'Commuting from school') & (df['tab_row'] == 'Commuting to school') & (df['tab_sub_column'] == 'walk') & (df['tab_sub_row'] == 'car') & (df['val_type'] == 'count')]['orig_val'].iloc[0]
+    if ans != 57:
+        print(f"ERROR: Expected 57, got {ans}")
+    ans = df[(df['context'] == 'Table 1') & (df['tab_column'] == 'Commuting from school') & (df['tab_row'] == 'Commuting to school') & (df['tab_sub_column'] == 'walk') & (df['tab_sub_row'] == 'car') & (df['val_type'] == 'percent')]['orig_val'].iloc[0]
+    if round(ans,1) != 8.0:
+        print(f"ERROR: Expected 8.0, got {ans}")
+
+    ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From home to school') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == 'N') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'count')]['orig_val'].iloc[0]
+    if ans != 279:
+        print(f"ERROR: Expected 279, got {ans}")
+    ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From home to school') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == '(%)') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'percent')]['orig_val'].iloc[0]
+    if round(ans,0) != 39.0:
+        print(f"ERROR: Expected 39.0, got {ans}")
+
+    ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == 'N') & (df['tab_sub_row'] == 'public') & (df['val_type'] == 'count')]['orig_val'].iloc[0]
+    if ans != 245:
+        print(f"ERROR: Expected 245, got {ans}")
+    ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == '(%)') & (df['tab_sub_row'] == 'public') & (df['val_type'] == 'percent')]['orig_val'].iloc[0]
+    if round(ans,0) != 34.0:
+        print(f"ERROR: Expected 34.0, got {ans}")
 
 def get_dataset(dataset, columns, target):
     if dataset_info[dataset]['df'] is not None:
@@ -147,10 +174,8 @@ for comm_to_sch in commute_modes:
 target = None
 tab_row = 'Commuting group'
 for tab_column, working_columns in [
-    ('From home to school', ['CommToSch']),
-    ('From school to home', ['CommHome']),
-]:
-    df = get_dataset(dataset, working_columns, target)
+    ('From home to school', 'CommToSch'),
+    ('From school to home', 'CommHome'), ]:
     for commute_mode in commute_modes:
         row_count = init_row()
         row_count['context'] = 'Table 2'
@@ -167,24 +192,37 @@ for tab_column, working_columns in [
         row_percent['tab_sub_row'] = commute_mode
         row_percent['tab_sub_column'] = '(%)'
         for dataset in dataset_info.keys():
-            count = len(df[(df[working_columns] == commute_mode)])
+            df = get_dataset(dataset, [working_columns], target)
+            count = len(df[df[working_columns] == commute_mode])
             percent = (count / total_rows) * 100
             update_row(row_count, dataset, count)
             update_row(row_percent, dataset, percent)
-            paper_values.append(row_count)
-            paper_values.append(row_percent)
+        paper_values.append(row_count)
+        paper_values.append(row_percent)
 
 # ------------------------------------------------
 with open(os.path.join('results', 'paper_values.json'), 'w') as file:
     json.dump(paper_values, file, indent=4)
 
 # convert paper_values to a dataframe, and save as a csv file
-df_paper_values = pd.DataFrame(paper_values)
-df_paper_values.to_csv(os.path.join('results', 'paper_values.csv'), index=False)
+df_summ = pd.DataFrame(paper_values)
+df_summ.to_csv(os.path.join('results', 'paper_values.csv'), index=False)
+
+
+print('----------------------------------------------------')
+for column in df_summ.columns:
+    distinct_values = df_summ[column].value_counts()
+    print(f"Column: {column}")
+    if len(distinct_values) <= 20:
+        print(distinct_values)
+    else:
+        print(f"Number of distinct values: {len(distinct_values)}")
+
+do_checks(df_summ)
 
 # Make a basic boxplot for all of the normalized error values
 columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
-sns.boxplot(data=df_paper_values[columns])
+sns.boxplot(data=df_summ[columns])
 plt.xlabel('Error Type')
 plt.ylabel('Normalized Error')
 plt.savefig(os.path.join('results', 'norm_err.png'))
@@ -192,7 +230,7 @@ plt.close()
 
 # Make a basic boxplot for all of the count error values
 columns = ['sdx_cnt_err', 'arx_cnt_err', 'sdv_cnt_err']
-sns.boxplot(data=df_paper_values[columns])
+sns.boxplot(data=df_summ[columns])
 plt.xlabel('Error Type')
 plt.ylabel('Count Error')
 plt.savefig(os.path.join('results', 'count_err.png'))
