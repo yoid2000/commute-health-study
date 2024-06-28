@@ -1,0 +1,128 @@
+[
+  {
+    "2.5 %": 41.8569,
+    "97.5 %": 54.7457,
+    "Estimate": 48.3013,
+    "Std.Error": 3.2823,
+    "t.value": 14.7155,
+    "Pr.t.": 6.6191e-43,
+    "_row": "(Intercept)"
+  },
+  {
+    "2.5 %": -7.1373,
+    "97.5 %": 4.3791,
+    "Estimate": -1.3791,
+    "Std.Error": 2.9328,
+    "t.value": -0.4702,
+    "Pr.t.": 0.6383,
+    "_row": "CommToSchcar"
+  },
+  {
+    "2.5 %": -7.1812,
+    "97.5 %": 4.9164,
+    "Estimate": -1.1324,
+    "Std.Error": 3.0809,
+    "t.value": -0.3676,
+    "Pr.t.": 0.7133,
+    "_row": "CommToSchpublic"
+  },
+  {
+    "2.5 %": -16.044,
+    "97.5 %": 7.5272,
+    "Estimate": -4.2584,
+    "Std.Error": 6.0028,
+    "t.value": -0.7094,
+    "Pr.t.": 0.4783,
+    "_row": "CommToSchwheels"
+  },
+  {
+    "2.5 %": 7.0535,
+    "97.5 %": 9.1417,
+    "Estimate": 8.0976,
+    "Std.Error": 0.5318,
+    "t.value": 15.2269,
+    "Pr.t.": 1.956e-45,
+    "_row": "gendermale"
+  },
+  {
+    "2.5 %": -0.3519,
+    "97.5 %": 0.3875,
+    "Estimate": 0.0178,
+    "Std.Error": 0.1883,
+    "t.value": 0.0944,
+    "Pr.t.": 0.9248,
+    "_row": "age"
+  },
+  {
+    "2.5 %": 0.0333,
+    "97.5 %": 0.1187,
+    "Estimate": 0.076,
+    "Std.Error": 0.0217,
+    "t.value": 3.4945,
+    "Pr.t.": 0.0005,
+    "_row": "MVPAsqrt"
+  },
+  {
+    "2.5 %": -2.4976,
+    "97.5 %": 0.9122,
+    "Estimate": -0.7927,
+    "Std.Error": 0.8683,
+    "t.value": -0.9129,
+    "Pr.t.": 0.3616,
+    "_row": "CommToSchcar:gendermale"
+  },
+  {
+    "2.5 %": -4.0192,
+    "97.5 %": -0.9535,
+    "Estimate": -2.4864,
+    "Std.Error": 0.7807,
+    "t.value": -3.1847,
+    "Pr.t.": 0.0015,
+    "_row": "CommToSchpublic:gendermale"
+  },
+  {
+    "2.5 %": -5.6104,
+    "97.5 %": 0.6327,
+    "Estimate": -2.4888,
+    "Std.Error": 1.5899,
+    "t.value": -1.5654,
+    "Pr.t.": 0.1179,
+    "_row": "CommToSchwheels:gendermale"
+  },
+  {
+    "2.5 %": -0.9823,
+    "97.5 %": -0.2796,
+    "Estimate": -0.631,
+    "Std.Error": 0.179,
+    "t.value": -3.5258,
+    "Pr.t.": 0.0004,
+    "_row": "CommToSchwalk:DistLog2ToSch"
+  },
+  {
+    "2.5 %": -0.7724,
+    "97.5 %": -0.0105,
+    "Estimate": -0.3915,
+    "Std.Error": 0.194,
+    "t.value": -2.0176,
+    "Pr.t.": 0.044,
+    "_row": "CommToSchcar:DistLog2ToSch"
+  },
+  {
+    "2.5 %": -0.7405,
+    "97.5 %": 0.0833,
+    "Estimate": -0.3286,
+    "Std.Error": 0.2098,
+    "t.value": -1.5664,
+    "Pr.t.": 0.1177,
+    "_row": "CommToSchpublic:DistLog2ToSch"
+  },
+  {
+    "2.5 %": -0.9688,
+    "97.5 %": 0.9606,
+    "Estimate": -0.0041,
+    "Std.Error": 0.4913,
+    "t.value": -0.0084,
+    "Pr.t.": 0.9933,
+    "_row": "CommToSchwheels:DistLog2ToSch"
+  }
+]
