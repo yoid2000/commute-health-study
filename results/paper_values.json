@@ -13,9 +13,9 @@
         "sdv_norm_err": 0.04908835904628331,
         "arx_norm_err": 0.05890603085553997,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 35,
-        "arx_cnt_err": 42,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 35,
+        "arx_abs_err": 42,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -31,9 +31,9 @@
         "sdv_norm_err": 0.0490883590462833,
         "arx_norm_err": 0.05890603085553996,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -49,9 +49,9 @@
         "sdv_norm_err": 0.0070126227208976155,
         "arx_norm_err": 0.009817671809256662,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 5,
-        "arx_cnt_err": 7,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 5,
+        "arx_abs_err": 7,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -67,9 +67,9 @@
         "sdv_norm_err": 0.007012622720897612,
         "arx_norm_err": 0.00981767180925666,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -85,9 +85,9 @@
         "sdv_norm_err": 0.001402524544179523,
         "arx_norm_err": 0.06030855539971949,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 1,
-        "arx_cnt_err": 43,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 1,
+        "arx_abs_err": 43,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -103,9 +103,9 @@
         "sdv_norm_err": 0.0014025245441795153,
         "arx_norm_err": 0.06030855539971949,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -121,9 +121,9 @@
         "sdv_norm_err": 0.03225806451612903,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 23,
-        "arx_cnt_err": 5,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 23,
+        "arx_abs_err": 5,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 1",
@@ -139,9 +139,9 @@
         "sdv_norm_err": 0.03225806451612903,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -157,9 +157,9 @@
         "sdv_norm_err": 0.030855539971949508,
         "arx_norm_err": 0.015427769985974754,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": 22,
-        "arx_cnt_err": 11,
-        "sdx_cnt_err": 2
+        "sdv_abs_err": 22,
+        "arx_abs_err": 11,
+        "sdx_abs_err": 2
     },
     {
         "context": "Table 1",
@@ -175,9 +175,9 @@
         "sdv_norm_err": 0.030855539971949505,
         "arx_norm_err": 0.015427769985974756,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -193,9 +193,9 @@
         "sdv_norm_err": 0.21739130434782608,
         "arx_norm_err": 0.15007012622720897,
         "sdx_norm_err": 0.005610098176718092,
-        "sdv_cnt_err": 155,
-        "arx_cnt_err": 107,
-        "sdx_cnt_err": 4
+        "sdv_abs_err": 155,
+        "arx_abs_err": 107,
+        "sdx_abs_err": 4
     },
     {
         "context": "Table 1",
@@ -211,9 +211,9 @@
         "sdv_norm_err": 0.21739130434782608,
         "arx_norm_err": 0.15007012622720897,
         "sdx_norm_err": 0.005610098176718097,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -229,9 +229,9 @@
         "sdv_norm_err": 0.12342215988779803,
         "arx_norm_err": 0.12622720897615708,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 88,
-        "arx_cnt_err": 90,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 88,
+        "arx_abs_err": 90,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -247,9 +247,9 @@
         "sdv_norm_err": 0.12342215988779802,
         "arx_norm_err": 0.12622720897615708,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -265,9 +265,9 @@
         "sdv_norm_err": 0.030855539971949508,
         "arx_norm_err": 0.009817671809256662,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 22,
-        "arx_cnt_err": 7,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 22,
+        "arx_abs_err": 7,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -283,9 +283,9 @@
         "sdv_norm_err": 0.030855539971949505,
         "arx_norm_err": 0.009817671809256662,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -301,9 +301,9 @@
         "sdv_norm_err": 0.04207573632538569,
         "arx_norm_err": 0.0364656381486676,
         "sdx_norm_err": 0.004207573632538569,
-        "sdv_cnt_err": 30,
-        "arx_cnt_err": 26,
-        "sdx_cnt_err": 3
+        "sdv_abs_err": 30,
+        "arx_abs_err": 26,
+        "sdx_abs_err": 3
     },
     {
         "context": "Table 1",
@@ -319,9 +319,9 @@
         "sdv_norm_err": 0.04207573632538569,
         "arx_norm_err": 0.0364656381486676,
         "sdx_norm_err": 0.004207573632538569,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -337,9 +337,9 @@
         "sdv_norm_err": 0.12061711079943899,
         "arx_norm_err": 0.14165497896213183,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 86,
-        "arx_cnt_err": 101,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 86,
+        "arx_abs_err": 101,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 1",
@@ -355,9 +355,9 @@
         "sdv_norm_err": 0.12061711079943899,
         "arx_norm_err": 0.14165497896213183,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -373,9 +373,9 @@
         "sdv_norm_err": 0.2496493688639551,
         "arx_norm_err": 0.2005610098176718,
         "sdx_norm_err": 0.005610098176718092,
-        "sdv_cnt_err": 178,
-        "arx_cnt_err": 143,
-        "sdx_cnt_err": 4
+        "sdv_abs_err": 178,
+        "arx_abs_err": 143,
+        "sdx_abs_err": 4
     },
     {
         "context": "Table 1",
@@ -391,9 +391,9 @@
         "sdv_norm_err": 0.24964936886395514,
         "arx_norm_err": 0.2005610098176718,
         "sdx_norm_err": 0.005610098176718097,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -409,9 +409,9 @@
         "sdv_norm_err": 0.04067321178120617,
         "arx_norm_err": 0.021037868162692847,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 29,
-        "arx_cnt_err": 15,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 29,
+        "arx_abs_err": 15,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -427,9 +427,9 @@
         "sdv_norm_err": 0.04067321178120617,
         "arx_norm_err": 0.021037868162692847,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -445,9 +445,9 @@
         "sdv_norm_err": 0.0182328190743338,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 13,
-        "arx_cnt_err": 5,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 13,
+        "arx_abs_err": 5,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -463,9 +463,9 @@
         "sdv_norm_err": 0.0182328190743338,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -481,9 +481,9 @@
         "sdv_norm_err": 0.033660589060308554,
         "arx_norm_err": 0.0182328190743338,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 24,
-        "arx_cnt_err": 13,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 24,
+        "arx_abs_err": 13,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 1",
@@ -499,9 +499,9 @@
         "sdv_norm_err": 0.033660589060308554,
         "arx_norm_err": 0.0182328190743338,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -517,9 +517,9 @@
         "sdv_norm_err": 0.061711079943899017,
         "arx_norm_err": 0.012622720897615708,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 44,
-        "arx_cnt_err": 9,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 44,
+        "arx_abs_err": 9,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 1",
@@ -535,9 +535,9 @@
         "sdv_norm_err": 0.06171107994389902,
         "arx_norm_err": 0.01262272089761571,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 1",
@@ -553,9 +553,9 @@
         "sdv_norm_err": 0.012622720897615708,
         "arx_norm_err": 0.030855539971949508,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": 9,
-        "arx_cnt_err": 22,
-        "sdx_cnt_err": 2
+        "sdv_abs_err": 9,
+        "arx_abs_err": 22,
+        "sdx_abs_err": 2
     },
     {
         "context": "Table 1",
@@ -571,9 +571,9 @@
         "sdv_norm_err": 0.012622720897615704,
         "arx_norm_err": 0.030855539971949505,
         "sdx_norm_err": 0.002805049088359044,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -589,9 +589,9 @@
         "sdv_norm_err": 0.02244039270687237,
         "arx_norm_err": 0.001402524544179523,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 16,
-        "arx_cnt_err": 1,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 16,
+        "arx_abs_err": 1,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 2",
@@ -607,9 +607,9 @@
         "sdv_norm_err": 0.022440392706872387,
         "arx_norm_err": 0.001402524544179542,
         "sdx_norm_err": 0.001402524544179542,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -625,9 +625,9 @@
         "sdv_norm_err": 0.03225806451612903,
         "arx_norm_err": 0.001402524544179523,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": 23,
-        "arx_cnt_err": 1,
-        "sdx_cnt_err": 2
+        "sdv_abs_err": 23,
+        "arx_abs_err": 1,
+        "sdx_abs_err": 2
     },
     {
         "context": "Table 2",
@@ -643,9 +643,9 @@
         "sdv_norm_err": 0.032258064516129004,
         "arx_norm_err": 0.001402524544179542,
         "sdx_norm_err": 0.002805049088359013,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -661,9 +661,9 @@
         "sdv_norm_err": 0.04628330995792426,
         "arx_norm_err": 0.001402524544179523,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 33,
-        "arx_cnt_err": 1,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 33,
+        "arx_abs_err": 1,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 2",
@@ -679,9 +679,9 @@
         "sdv_norm_err": 0.04628330995792425,
         "arx_norm_err": 0.001402524544179542,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -697,9 +697,9 @@
         "sdv_norm_err": 0.10098176718092566,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": 72,
-        "arx_cnt_err": 5,
-        "sdx_cnt_err": 2
+        "sdv_abs_err": 72,
+        "arx_abs_err": 5,
+        "sdx_abs_err": 2
     },
     {
         "context": "Table 2",
@@ -715,9 +715,9 @@
         "sdv_norm_err": 0.10098176718092565,
         "arx_norm_err": 0.007012622720897612,
         "sdx_norm_err": 0.0028050490883590484,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -733,9 +733,9 @@
         "sdv_norm_err": 0.04207573632538569,
         "arx_norm_err": 0.0,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 30,
-        "arx_cnt_err": 0,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 30,
+        "arx_abs_err": 0,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 2",
@@ -751,9 +751,9 @@
         "sdv_norm_err": 0.04207573632538569,
         "arx_norm_err": 0.0,
         "sdx_norm_err": 0.0014025245441795242,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -769,9 +769,9 @@
         "sdv_norm_err": 0.07012622720897616,
         "arx_norm_err": 0.0,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": 50,
-        "arx_cnt_err": 0,
-        "sdx_cnt_err": 0
+        "sdv_abs_err": 50,
+        "arx_abs_err": 0,
+        "sdx_abs_err": 0
     },
     {
         "context": "Table 2",
@@ -787,9 +787,9 @@
         "sdv_norm_err": 0.07012622720897614,
         "arx_norm_err": 0.0,
         "sdx_norm_err": 0.0,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -805,9 +805,9 @@
         "sdv_norm_err": 0.06311360448807854,
         "arx_norm_err": 0.001402524544179523,
         "sdx_norm_err": 0.001402524544179523,
-        "sdv_cnt_err": 45,
-        "arx_cnt_err": 1,
-        "sdx_cnt_err": 1
+        "sdv_abs_err": 45,
+        "arx_abs_err": 1,
+        "sdx_abs_err": 1
     },
     {
         "context": "Table 2",
@@ -823,9 +823,9 @@
         "sdv_norm_err": 0.06311360448807854,
         "arx_norm_err": 0.001402524544179542,
         "sdx_norm_err": 0.001402524544179542,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
     },
     {
         "context": "Table 2",
@@ -841,9 +841,9 @@
         "sdv_norm_err": 0.091164095371669,
         "arx_norm_err": 0.0070126227208976155,
         "sdx_norm_err": 0.002805049088359046,
-        "sdv_cnt_err": 65,
-        "arx_cnt_err": 5,
-        "sdx_cnt_err": 2
+        "sdv_abs_err": 65,
+        "arx_abs_err": 5,
+        "sdx_abs_err": 2
     },
     {
         "context": "Table 2",
@@ -859,8 +859,296 @@
         "sdv_norm_err": 0.091164095371669,
         "arx_norm_err": 0.007012622720897616,
         "sdx_norm_err": 0.002805049088359044,
-        "sdv_cnt_err": null,
-        "arx_cnt_err": null,
-        "sdx_cnt_err": null
+        "sdv_abs_err": null,
+        "arx_abs_err": null,
+        "sdx_abs_err": null
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "car",
+        "val_type": "distance_median",
+        "orig_val": 3036,
+        "sdv_val": 1261,
+        "arx_val": 1856,
+        "sdx_val": 3745,
+        "sdv_norm_err": 0.5846508563899868,
+        "arx_norm_err": 0.38866930171277997,
+        "sdx_norm_err": 0.18931909212283043,
+        "sdv_abs_err": 1775,
+        "arx_abs_err": 1180,
+        "sdx_abs_err": 709
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "car",
+        "val_type": "distance_iqr",
+        "orig_val": 3966,
+        "sdv_val": 2100,
+        "arx_val": 4618,
+        "sdx_val": 4218,
+        "sdv_norm_err": 0.47049924357034795,
+        "arx_norm_err": 0.14118666089216111,
+        "sdx_norm_err": 0.059743954480796585,
+        "sdv_abs_err": 1866,
+        "arx_abs_err": 652,
+        "sdx_abs_err": 252
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "public",
+        "val_type": "distance_median",
+        "orig_val": 4751,
+        "sdv_val": 1805,
+        "arx_val": 1795,
+        "sdx_val": 4643,
+        "sdv_norm_err": 0.6200799831614398,
+        "arx_norm_err": 0.6221848031993265,
+        "sdx_norm_err": 0.022732056409177016,
+        "sdv_abs_err": 2946,
+        "arx_abs_err": 2956,
+        "sdx_abs_err": 108
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "public",
+        "val_type": "distance_iqr",
+        "orig_val": 4341,
+        "sdv_val": 1866,
+        "arx_val": 3529,
+        "sdx_val": 4052,
+        "sdv_norm_err": 0.5701451278507257,
+        "arx_norm_err": 0.1870536742686017,
+        "sdx_norm_err": 0.06657452199953928,
+        "sdv_abs_err": 2475,
+        "arx_abs_err": 812,
+        "sdx_abs_err": 289
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "walk",
+        "val_type": "distance_median",
+        "orig_val": 799,
+        "sdv_val": 1397,
+        "arx_val": 1946,
+        "sdx_val": 785,
+        "sdv_norm_err": 0.4280601288475304,
+        "arx_norm_err": 0.5894141829393628,
+        "sdx_norm_err": 0.017521902377972465,
+        "sdv_abs_err": 598,
+        "arx_abs_err": 1147,
+        "sdx_abs_err": 14
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "walk",
+        "val_type": "distance_iqr",
+        "orig_val": 783,
+        "sdv_val": 2107,
+        "arx_val": 3681,
+        "sdx_val": 730,
+        "sdv_norm_err": 0.6283815851922164,
+        "arx_norm_err": 0.7872860635696821,
+        "sdx_norm_err": 0.06768837803320563,
+        "sdv_abs_err": 1324,
+        "arx_abs_err": 2898,
+        "sdx_abs_err": 53
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "wheels",
+        "val_type": "distance_median",
+        "orig_val": 1313,
+        "sdv_val": 1470,
+        "arx_val": 1495,
+        "sdx_val": 1097,
+        "sdv_norm_err": 0.10680272108843537,
+        "arx_norm_err": 0.12173913043478261,
+        "sdx_norm_err": 0.16450875856816452,
+        "sdv_abs_err": 157,
+        "arx_abs_err": 182,
+        "sdx_abs_err": 216
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From home to school",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "wheels",
+        "val_type": "distance_iqr",
+        "orig_val": 2232,
+        "sdv_val": 2122,
+        "arx_val": 4238,
+        "sdx_val": 2355,
+        "sdv_norm_err": 0.0492831541218638,
+        "arx_norm_err": 0.4733364794714488,
+        "sdx_norm_err": 0.05222929936305733,
+        "sdv_abs_err": 110,
+        "arx_abs_err": 2006,
+        "sdx_abs_err": 123
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "car",
+        "val_type": "distance_median",
+        "orig_val": 3615,
+        "sdv_val": 1124,
+        "arx_val": 1695,
+        "sdx_val": 2725,
+        "sdv_norm_err": 0.689073305670816,
+        "arx_norm_err": 0.5311203319502075,
+        "sdx_norm_err": 0.24619640387275243,
+        "sdv_abs_err": 2491,
+        "arx_abs_err": 1920,
+        "sdx_abs_err": 890
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "car",
+        "val_type": "distance_iqr",
+        "orig_val": 3872,
+        "sdv_val": 2392,
+        "arx_val": 3442,
+        "sdx_val": 4219,
+        "sdv_norm_err": 0.3822314049586777,
+        "arx_norm_err": 0.11105371900826447,
+        "sdx_norm_err": 0.08224697795686181,
+        "sdv_abs_err": 1480,
+        "arx_abs_err": 430,
+        "sdx_abs_err": 347
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "public",
+        "val_type": "distance_median",
+        "orig_val": 4996,
+        "sdv_val": 1635,
+        "arx_val": 1951,
+        "sdx_val": 5029,
+        "sdv_norm_err": 0.672738190552442,
+        "arx_norm_err": 0.6094875900720577,
+        "sdx_norm_err": 0.006561940743686618,
+        "sdv_abs_err": 3361,
+        "arx_abs_err": 3045,
+        "sdx_abs_err": 33
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "public",
+        "val_type": "distance_iqr",
+        "orig_val": 4033,
+        "sdv_val": 2975,
+        "arx_val": 4054,
+        "sdx_val": 4060,
+        "sdv_norm_err": 0.2623357302256385,
+        "arx_norm_err": 0.005180069067587568,
+        "sdx_norm_err": 0.006650246305418719,
+        "sdv_abs_err": 1058,
+        "arx_abs_err": 21,
+        "sdx_abs_err": 27
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "walk",
+        "val_type": "distance_median",
+        "orig_val": 973,
+        "sdv_val": 1510,
+        "arx_val": 1831,
+        "sdx_val": 961,
+        "sdv_norm_err": 0.35562913907284766,
+        "arx_norm_err": 0.468596395412343,
+        "sdx_norm_err": 0.012332990750256937,
+        "sdv_abs_err": 537,
+        "arx_abs_err": 858,
+        "sdx_abs_err": 12
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "walk",
+        "val_type": "distance_iqr",
+        "orig_val": 1043,
+        "sdv_val": 4567,
+        "arx_val": 3793,
+        "sdx_val": 1037,
+        "sdv_norm_err": 0.77162250930589,
+        "arx_norm_err": 0.7250197732665437,
+        "sdx_norm_err": 0.005752636625119847,
+        "sdv_abs_err": 3524,
+        "arx_abs_err": 2750,
+        "sdx_abs_err": 6
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance median",
+        "tab_sub_row": "wheels",
+        "val_type": "distance_median",
+        "orig_val": 1468,
+        "sdv_val": 2038,
+        "arx_val": 1867,
+        "sdx_val": 1243,
+        "sdv_norm_err": 0.27968596663395484,
+        "arx_norm_err": 0.2137118371719336,
+        "sdx_norm_err": 0.15326975476839236,
+        "sdv_abs_err": 570,
+        "arx_abs_err": 399,
+        "sdx_abs_err": 225
+    },
+    {
+        "context": "Table 2",
+        "tab_column": "From school to home",
+        "tab_row": "Commuting group",
+        "tab_sub_column": "Distance IQR",
+        "tab_sub_row": "wheels",
+        "val_type": "distance_iqr",
+        "orig_val": 2299,
+        "sdv_val": 4703,
+        "arx_val": 3798,
+        "sdx_val": 2846,
+        "sdv_norm_err": 0.511163087391027,
+        "arx_norm_err": 0.394681411269089,
+        "sdx_norm_err": 0.1921995783555868,
+        "sdv_abs_err": 2404,
+        "arx_abs_err": 1499,
+        "sdx_abs_err": 547
     }
 ]
