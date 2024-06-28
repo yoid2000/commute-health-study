@@ -4,66 +4,73 @@
 
 # Total columns: "VO2max","CommToSch","CommHome","gender","age","MVPAsqrt","DistLog2Home","DistLog2ToSch","DistFromHome","DistFromSchool"
 
-library(ggplot2)
+runComputation <- function(commDataPath, home2schPath, sch2homePath) {
+    library(ggplot2)
 
-#dd <- read.csv("CommData.csv")
-dd <- read.csv("CommDataOrig.csv")
-dd$CommToSch = factor(dd$CommToSch, levels=c('car', 'public', 'wheels', 'walk'))
-dd$CommHome = factor(dd$CommHome, levels=c('car', 'public', 'wheels', 'walk'))
-dd$gender = factor(dd$gender, levels=c('male', 'female'))
-dd <- within(dd, gender <- relevel(gender, ref = 2))
-dd <- within(dd, CommToSch <- relevel(CommToSch, ref = 4))
-dd <- within(dd, CommHome <- relevel(CommHome, ref = 4))
+    #dd <- read.csv("CommData.csv")
+    dd <- read.csv(commDataPath)
+    dd$CommToSch = factor(dd$CommToSch, levels=c('car', 'public', 'wheels', 'walk'))
+    dd$CommHome = factor(dd$CommHome, levels=c('car', 'public', 'wheels', 'walk'))
+    dd$gender = factor(dd$gender, levels=c('male', 'female'))
+    dd <- within(dd, gender <- relevel(gender, ref = 2))
+    dd <- within(dd, CommToSch <- relevel(CommToSch, ref = 4))
+    dd <- within(dd, CommHome <- relevel(CommHome, ref = 4))
 
-### from Home 2 Sch
-m=lm(VO2max ~ CommToSch*gender + age + MVPAsqrt + DistLog2ToSch:CommToSch , data=dd)
-summary(m)
-summ <- summary(m)
-conf_int <- confint(m, level = 0.95)
-df <- as.data.frame(conf_int)
-df$Estimate <- summ$coefficients[, "Estimate"]
-df$Std.Error <- summ$coefficients[, "Std. Error"]
-df$t.value <- summ$coefficients[, "t value"]
-df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
-library(jsonlite)
-write_json(df, path = "home2sch_coefficients.json", pretty=TRUE)
-new= data.frame(gender=c(rep(1,4), rep(2,4)), CommToSch=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt),
-                DistLog2ToSch=aggregate(dd[, "DistLog2ToSch"], list(dd$CommToSch), median)$x)
-new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
-new$CommToSch= factor(new$CommToSch);  levels(new$CommToSch)=levels(dd$CommToSch)
-new$CommToSch = factor(new$CommToSch,levels(dd$CommToSch)[c(1,2,4,3)])
-Ypred= predict.lm(m, new)
-pred.w.plim <- predict(m, new, interval = "prediction")
-pred.w.clim <- predict(m, new, interval = "confidence")
-pd <- position_dodge(0.3) # move them .05 to the left and right
-q=cbind(new, pred.w.clim)
-p1=ggplot(q, aes(x=CommToSch, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
-  geom_line(position=pd) +   geom_point(position=pd) +ylim(40,55)+ xlab("Commuting mode (from home to school)") + ylab("VO2max (predicted at mode median distance)")
+    ### from Home 2 Sch
+    m=lm(VO2max ~ CommToSch*gender + age + MVPAsqrt + DistLog2ToSch:CommToSch , data=dd)
+    summary(m)
+    summ <- summary(m)
+    conf_int <- confint(m, level = 0.95)
+    df <- as.data.frame(conf_int)
+    df$Estimate <- summ$coefficients[, "Estimate"]
+    df$Std.Error <- summ$coefficients[, "Std. Error"]
+    df$t.value <- summ$coefficients[, "t value"]
+    df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
+    library(jsonlite)
+    write_json(df, path = home2schPath, pretty=TRUE)
+    new= data.frame(gender=c(rep(1,4), rep(2,4)), CommToSch=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt),
+                    DistLog2ToSch=aggregate(dd[, "DistLog2ToSch"], list(dd$CommToSch), median)$x)
+    new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
+    new$CommToSch= factor(new$CommToSch);  levels(new$CommToSch)=levels(dd$CommToSch)
+    new$CommToSch = factor(new$CommToSch,levels(dd$CommToSch)[c(1,2,4,3)])
+    Ypred= predict.lm(m, new)
+    pred.w.plim <- predict(m, new, interval = "prediction")
+    pred.w.clim <- predict(m, new, interval = "confidence")
+    pd <- position_dodge(0.3) # move them .05 to the left and right
+    q=cbind(new, pred.w.clim)
+    p1=ggplot(q, aes(x=CommToSch, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
+    geom_line(position=pd) +   geom_point(position=pd) +ylim(40,55)+ xlab("Commuting mode (from home to school)") + ylab("VO2max (predicted at mode median distance)")
 
 
-### from Sch 2 Home
-m=lm(VO2max ~ CommHome*gender + age + MVPAsqrt + DistLog2Home:CommHome , data=dd)
-summary(m)
-summ <- summary(m)
-conf_int <- confint(m, level = 0.95)
-df <- as.data.frame(conf_int)
-df$Estimate <- summ$coefficients[, "Estimate"]
-df$Std.Error <- summ$coefficients[, "Std. Error"]
-df$t.value <- summ$coefficients[, "t value"]
-df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
-write_json(df, path = "sch2home_coefficients.json", pretty=TRUE)
-new= data.frame(gender=c(rep(1,4), rep(2,4)), CommHome=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt), DistLog2Home=aggregate(dd[, "DistLog2Home"], list(dd$CommHome), median)$x)
-new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
-new$CommHome= factor(new$CommHome);  levels(new$CommHome)=levels(dd$CommHome)
-new$CommHome = factor(new$CommHome,levels(dd$CommHome)[c(1,2,4,3)])
-Ypred= predict.lm(m, new)
-pred.w.plim <- predict(m, new, interval = "prediction")
-pred.w.clim <- predict(m, new, interval = "confidence")
-pd <- position_dodge(0.3) # move them .05 to the left and right
-q=cbind(new, pred.w.clim)
-p2=ggplot(q, aes(x=CommHome, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
-  geom_line(position=pd) +   geom_point(position=pd)+ylim(40,55) + xlab("Commuting mode (from school to home)") + ylab("VO2max (predicted at mode median distance)")
-png("Fig2a.png", 20, 10, units="cm", res=600)
-library(gridExtra)
-grid.arrange(p1, p2, ncol=2)
-dev.off()
+    ### from Sch 2 Home
+    m=lm(VO2max ~ CommHome*gender + age + MVPAsqrt + DistLog2Home:CommHome , data=dd)
+    summary(m)
+    summ <- summary(m)
+    conf_int <- confint(m, level = 0.95)
+    df <- as.data.frame(conf_int)
+    df$Estimate <- summ$coefficients[, "Estimate"]
+    df$Std.Error <- summ$coefficients[, "Std. Error"]
+    df$t.value <- summ$coefficients[, "t value"]
+    df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
+    write_json(df, path = sch2homePath, pretty=TRUE)
+    new= data.frame(gender=c(rep(1,4), rep(2,4)), CommHome=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt), DistLog2Home=aggregate(dd[, "DistLog2Home"], list(dd$CommHome), median)$x)
+    new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
+    new$CommHome= factor(new$CommHome);  levels(new$CommHome)=levels(dd$CommHome)
+    new$CommHome = factor(new$CommHome,levels(dd$CommHome)[c(1,2,4,3)])
+    Ypred= predict.lm(m, new)
+    pred.w.plim <- predict(m, new, interval = "prediction")
+    pred.w.clim <- predict(m, new, interval = "confidence")
+    pd <- position_dodge(0.3) # move them .05 to the left and right
+    q=cbind(new, pred.w.clim)
+    p2=ggplot(q, aes(x=CommHome, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
+    geom_line(position=pd) +   geom_point(position=pd)+ylim(40,55) + xlab("Commuting mode (from school to home)") + ylab("VO2max (predicted at mode median distance)")
+    png("Fig2a.png", 20, 10, units="cm", res=600)
+    library(gridExtra)
+    grid.arrange(p1, p2, ncol=2)
+    dev.off()
+}
+
+runComputation("CommDataOrig.csv", "r_orig_home2sch_coef.json", "r_orig_sch2home_coef.json")
+runComputation("ARX/datasets/syn_dataset.csv", "r_arx_home2sch_coef.json", "r_arx_sch2home_coef.json")
+runComputation("SDV/datasets/syn_dataset.csv", "r_sdv_home2sch_coef.json", "r_sdv_sch2home_coef.json")
+runComputation("synDiffix/datasets/target_VO2max.csv", "r_sdx_home2sch_coef.json", "r_sdx_sch2home_coef.json")
