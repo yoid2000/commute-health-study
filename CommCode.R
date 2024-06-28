@@ -11,10 +11,22 @@ dd <- read.csv("CommDataOrig.csv")
 dd$CommToSch = factor(dd$CommToSch, levels=c('car', 'public', 'wheels', 'walk'))
 dd$CommHome = factor(dd$CommHome, levels=c('car', 'public', 'wheels', 'walk'))
 dd$gender = factor(dd$gender, levels=c('male', 'female'))
+dd <- within(dd, gender <- relevel(gender, ref = 2))
+dd <- within(dd, CommToSch <- relevel(CommToSch, ref = 4))
+dd <- within(dd, CommHome <- relevel(CommHome, ref = 4))
 
 ### from Home 2 Sch
 m=lm(VO2max ~ CommToSch*gender + age + MVPAsqrt + DistLog2ToSch:CommToSch , data=dd)
 summary(m)
+summ <- summary(m)
+conf_int <- confint(m, level = 0.95)
+df <- as.data.frame(conf_int)
+df$Estimate <- summ$coefficients[, "Estimate"]
+df$Std.Error <- summ$coefficients[, "Std. Error"]
+df$t.value <- summ$coefficients[, "t value"]
+df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
+library(jsonlite)
+write_json(df, path = "home2sch_coefficients.json", pretty=TRUE)
 new= data.frame(gender=c(rep(1,4), rep(2,4)), CommToSch=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt),
                 DistLog2ToSch=aggregate(dd[, "DistLog2ToSch"], list(dd$CommToSch), median)$x)
 new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
@@ -32,6 +44,14 @@ p1=ggplot(q, aes(x=CommToSch, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=l
 ### from Sch 2 Home
 m=lm(VO2max ~ CommHome*gender + age + MVPAsqrt + DistLog2Home:CommHome , data=dd)
 summary(m)
+summ <- summary(m)
+conf_int <- confint(m, level = 0.95)
+df <- as.data.frame(conf_int)
+df$Estimate <- summ$coefficients[, "Estimate"]
+df$Std.Error <- summ$coefficients[, "Std. Error"]
+df$t.value <- summ$coefficients[, "t value"]
+df$Pr.t. <- summ$coefficients[, "Pr(>|t|)"]
+write_json(df, path = "sch2home_coefficients.json", pretty=TRUE)
 new= data.frame(gender=c(rep(1,4), rep(2,4)), CommHome=0:3, age=mean(dd$age), MVPAsqrt=mean(dd$MVPAsqrt), DistLog2Home=aggregate(dd[, "DistLog2Home"], list(dd$CommHome), median)$x)
 new$gender= factor(new$gender);  levels(new$gender)=levels(dd$gender)
 new$CommHome= factor(new$CommHome);  levels(new$CommHome)=levels(dd$CommHome)

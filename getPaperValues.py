@@ -65,6 +65,14 @@ def do_checks(df):
     if round(ans,0) != 34.0:
         print(f"ERROR: Expected 34.0, got {ans}")
 
+    if False:
+        ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == 'Distance median') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'distance_median')]['orig_val'].iloc[0]
+        if ans != 973:
+            print(f"ERROR: Expected 973, got {ans}")
+        ans = df[(df['context'] == 'Table 2') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Commuting group') & (df['tab_sub_column'] == 'Distance IQR') & (df['tab_sub_row'] == 'walk') & (df['val_type'] == 'distance_iqr')]['orig_val'].iloc[0]
+        if round(ans,0) != 1046:
+            print(f"ERROR: Expected 1046, got {ans}")
+
 def get_dataset(dataset, columns, target):
     if dataset_info[dataset]['df'] is not None:
         return dataset_info[dataset]['df'][columns]
@@ -93,9 +101,9 @@ def init_row():
         'sdv_norm_err': None,
         'arx_norm_err': None,
         'sdx_norm_err': None,
-        'sdv_cnt_err': None,
-        'arx_cnt_err': None,
-        'sdx_cnt_err': None,
+        'sdv_abs_err': None,
+        'arx_abs_err': None,
+        'sdx_abs_err': None,
     }
 
 def update_row(row, dataset, val):
@@ -106,11 +114,15 @@ def update_row(row, dataset, val):
         # Compute error relative to the total count, normalized
         # to the range 0-1
         row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / total_rows
-        row[f'{dataset}_cnt_err'] = abs(val - row['orig_val'])
+        row[f'{dataset}_abs_err'] = abs(val - row['orig_val'])
     if row['val_type'] == 'percent':
         # Compute error relative to the total percent, normalized
         # to the range 0-1
         row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / 100
+    if row['val_type'] in ['distance_median', 'distance_iqr']:
+        row[f'{dataset}_abs_err'] = abs(val - row['orig_val'])
+        if max(val, row['orig_val']) != 0:
+            row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / max(val, row['orig_val'])
 
 paper_values = []
 
@@ -200,6 +212,36 @@ for tab_column, working_columns in [
         paper_values.append(row_count)
         paper_values.append(row_percent)
 
+target = None
+tab_row = 'Commuting group'
+for tab_column, working_columns, dist_column in [
+    ('From home to school', ['CommToSch', 'DistFromHome'], 'DistFromHome'),
+    ('From school to home', ['CommHome', 'DistFromSchool'], 'DistFromSchool'), ]:
+    for commute_mode in commute_modes:
+        row_dist = init_row()
+        row_dist['context'] = 'Table 2'
+        row_dist['tab_column'] = tab_column
+        row_dist['tab_row'] = tab_row
+        row_dist['val_type'] = 'distance_median'
+        row_dist['tab_sub_row'] = commute_mode
+        row_dist['tab_sub_column'] = 'Distance median'
+        row_iqr = init_row()
+        row_iqr['context'] = 'Table 2'
+        row_iqr['tab_column'] = tab_column
+        row_iqr['tab_row'] = tab_row
+        row_iqr['val_type'] = 'distance_iqr'
+        row_iqr['tab_sub_row'] = commute_mode
+        row_iqr['tab_sub_column'] = 'Distance IQR'
+        for dataset in dataset_info.keys():
+            df = get_dataset(dataset, working_columns, target)
+            df_temp = df[df[working_columns[0]] == commute_mode]
+            distance_median = int(df_temp[dist_column].quantile(0.5, interpolation='nearest'))
+            distance_iqr = int(df_temp[dist_column].quantile(0.75, interpolation='nearest') - df_temp[dist_column].quantile(0.25, interpolation='nearest'))
+            update_row(row_dist, dataset, distance_median)
+            update_row(row_iqr, dataset, distance_iqr)
+        paper_values.append(row_dist)
+        paper_values.append(row_iqr)
+
 # ------------------------------------------------
 with open(os.path.join('results', 'paper_values.json'), 'w') as file:
     json.dump(paper_values, file, indent=4)
@@ -223,15 +265,15 @@ do_checks(df_summ)
 # Make a basic boxplot for all of the normalized error values
 columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
 sns.boxplot(data=df_summ[columns])
-plt.xlabel('Error Type')
+plt.xlabel('')
 plt.ylabel('Normalized Error')
 plt.savefig(os.path.join('results', 'norm_err.png'))
 plt.close()
 
 # Make a basic boxplot for all of the count error values
-columns = ['sdx_cnt_err', 'arx_cnt_err', 'sdv_cnt_err']
+columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
 sns.boxplot(data=df_summ[columns])
-plt.xlabel('Error Type')
+plt.xlabel('')
 plt.ylabel('Count Error')
 plt.savefig(os.path.join('results', 'count_err.png'))
 plt.close()
