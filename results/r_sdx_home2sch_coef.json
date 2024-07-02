@@ -1,0 +1,119 @@
+[
+  {
+    "2.5 %": 15.8193,
+    "97.5 %": 31.8435,
+    "Estimate": 23.8314,
+    "Std.Error": 4.0808,
+    "t.value": 5.8398,
+    "Pr.t.": 7.9854e-09,
+    "_row": "(Intercept)"
+  },
+  {
+    "2.5 %": 11.3004,
+    "97.5 %": 27.4906,
+    "Estimate": 19.3955,
+    "Std.Error": 4.1231,
+    "t.value": 4.7041,
+    "Pr.t.": 3.0707e-06,
+    "_row": "CommToSchcar"
+  },
+  {
+    "2.5 %": 4.6062,
+    "97.5 %": 20.2399,
+    "Estimate": 12.4231,
+    "Std.Error": 3.9814,
+    "t.value": 3.1203,
+    "Pr.t.": 0.0019,
+    "_row": "CommToSchpublic"
+  },
+  {
+    "2.5 %": 7.3755,
+    "97.5 %": 29.7489,
+    "Estimate": 18.5622,
+    "Std.Error": 5.6978,
+    "t.value": 3.2578,
+    "Pr.t.": 0.0012,
+    "_row": "CommToSchwheels"
+  },
+  {
+    "2.5 %": 7.467,
+    "97.5 %": 9.4475,
+    "Estimate": 8.4572,
+    "Std.Error": 0.5044,
+    "t.value": 16.7674,
+    "Pr.t.": 2.4741e-53,
+    "_row": "gendermale"
+  },
+  {
+    "2.5 %": -0.1832,
+    "97.5 %": 0.5327,
+    "Estimate": 0.1748,
+    "Std.Error": 0.1823,
+    "t.value": 0.9586,
+    "Pr.t.": 0.3381,
+    "_row": "age"
+  },
+  {
+    "2.5 %": 0.0559,
+    "97.5 %": 0.1379,
+    "Estimate": 0.0969,
+    "Std.Error": 0.0209,
+    "t.value": 4.6409,
+    "Pr.t.": 4.1393e-06,
+    "_row": "MVPAsqrt"
+  },
+  {
+    "2.5 %": -4.9537,
+    "97.5 %": -1.6362,
+    "Estimate": -3.2949,
+    "Std.Error": 0.8448,
+    "t.value": -3.9,
+    "Pr.t.": 0.0001,
+    "_row": "CommToSchcar:gendermale"
+  },
+  {
+    "2.5 %": -4.4623,
+    "97.5 %": -1.6096,
+    "Estimate": -3.036,
+    "Std.Error": 0.7265,
+    "t.value": -4.179,
+    "Pr.t.": 0,
+    "_row": "CommToSchpublic:gendermale"
+  },
+  {
+    "2.5 %": 0.9421,
+    "97.5 %": 2.246,
+    "Estimate": 1.5941,
+    "Std.Error": 0.3321,
+    "t.value": 4.8006,
+    "Pr.t.": 1.9333e-06,
+    "_row": "CommToSchwalk:DistLog2ToSch"
+  },
+  {
+    "2.5 %": -0.6274,
+    "97.5 %": 0.2865,
+    "Estimate": -0.1705,
+    "Std.Error": 0.2327,
+    "t.value": -0.7325,
+    "Pr.t.": 0.4641,
+    "_row": "CommToSchcar:DistLog2ToSch"
+  },
+  {
+    "2.5 %": 0.0264,
+    "97.5 %": 0.7829,
+    "Estimate": 0.4047,
+    "Std.Error": 0.1926,
+    "t.value": 2.1006,
+    "Pr.t.": 0.036,
+    "_row": "CommToSchpublic:DistLog2ToSch"
+  },
+  {
+    "2.5 %": -1.1857,
+    "97.5 %": 0.5775,
+    "Estimate": -0.3041,
+    "Std.Error": 0.449,
+    "t.value": -0.6772,
+    "Pr.t.": 0.4985,
+    "_row": "CommToSchwheels:DistLog2ToSch"
+  }
+]

@@ -1,0 +1,119 @@
+[
+  {
+    "2.5 %": 19.8157,
+    "97.5 %": 30.9437,
+    "Estimate": 25.3797,
+    "Std.Error": 2.8339,
+    "t.value": 8.9556,
+    "Pr.t.": 3.0079e-18,
+    "_row": "(Intercept)"
+  },
+  {
+    "2.5 %": -17.4962,
+    "97.5 %": 2.9221,
+    "Estimate": -7.287,
+    "Std.Error": 5.1999,
+    "t.value": -1.4014,
+    "Pr.t.": 0.1615,
+    "_row": "CommHomecar"
+  },
+  {
+    "2.5 %": -2.6031,
+    "97.5 %": 7.9563,
+    "Estimate": 2.6766,
+    "Std.Error": 2.6891,
+    "t.value": 0.9953,
+    "Pr.t.": 0.3199,
+    "_row": "CommHomepublic"
+  },
+  {
+    "2.5 %": -14.9674,
+    "97.5 %": 20.0734,
+    "Estimate": 2.553,
+    "Std.Error": 8.9237,
+    "t.value": 0.2861,
+    "Pr.t.": 0.7749,
+    "_row": "CommHomewheels"
+  },
+  {
+    "2.5 %": 5.7266,
+    "97.5 %": 7.582,
+    "Estimate": 6.6543,
+    "Std.Error": 0.4725,
+    "t.value": 14.0827,
+    "Pr.t.": 7.6164e-40,
+    "_row": "gendermale"
+  },
+  {
+    "2.5 %": 0.6611,
+    "97.5 %": 1.2833,
+    "Estimate": 0.9722,
+    "Std.Error": 0.1584,
+    "t.value": 6.136,
+    "Pr.t.": 1.4153e-09,
+    "_row": "age"
+  },
+  {
+    "2.5 %": 0.0411,
+    "97.5 %": 0.1294,
+    "Estimate": 0.0853,
+    "Std.Error": 0.0225,
+    "t.value": 3.7912,
+    "Pr.t.": 0.0002,
+    "_row": "MVPAsqrt"
+  },
+  {
+    "2.5 %": 3.5535,
+    "97.5 %": 9.0911,
+    "Estimate": 6.3223,
+    "Std.Error": 1.4103,
+    "t.value": 4.4831,
+    "Pr.t.": 8.5924e-06,
+    "_row": "CommHomecar:gendermale"
+  },
+  {
+    "2.5 %": -2.3337,
+    "97.5 %": 0.4731,
+    "Estimate": -0.9303,
+    "Std.Error": 0.7148,
+    "t.value": -1.3015,
+    "Pr.t.": 0.1935,
+    "_row": "CommHomepublic:gendermale"
+  },
+  {
+    "2.5 %": 0.0749,
+    "97.5 %": 0.6853,
+    "Estimate": 0.3801,
+    "Std.Error": 0.1554,
+    "t.value": 2.4455,
+    "Pr.t.": 0.0147,
+    "_row": "CommHomewalk:DistLog2Home"
+  },
+  {
+    "2.5 %": -0.1175,
+    "97.5 %": 1.5856,
+    "Estimate": 0.7341,
+    "Std.Error": 0.4337,
+    "t.value": 1.6925,
+    "Pr.t.": 0.091,
+    "_row": "CommHomecar:DistLog2Home"
+  },
+  {
+    "2.5 %": -0.1421,
+    "97.5 %": 0.6047,
+    "Estimate": 0.2313,
+    "Std.Error": 0.1902,
+    "t.value": 1.2163,
+    "Pr.t.": 0.2243,
+    "_row": "CommHomepublic:DistLog2Home"
+  },
+  {
+    "2.5 %": -1.1522,
+    "97.5 %": 2.0857,
+    "Estimate": 0.4668,
+    "Std.Error": 0.8246,
+    "t.value": 0.5661,
+    "Pr.t.": 0.5715,
+    "_row": "CommHomewheels:DistLog2Home"
+  }
+]

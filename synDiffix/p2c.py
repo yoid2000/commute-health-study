@@ -12,7 +12,9 @@ def parquet_to_csv(ppath, cpath):
     df.to_csv(cpath, index=False)
 
 # Example usage
-ppath = os.path.join(baseDir, 'tmTables', 'syn', 'sdx.CommDataOrig.col10.Comm_Comm_Dist_Dist_Dist_Dist_MVPA_VO2m_age_gend.TAR.VO2max.9slp0r.parquet')
-cpath = os.path.join(baseDir, 'tmTables', 'syn', 'sdx.CommDataOrig.col10.Comm_Comm_Dist_Dist_Dist_Dist_MVPA_VO2m_age_gend.TAR.VO2max.9slp0r.csv')
-
+ppath = os.path.join(baseDir, 'tmTables', 'syn','sdx.CommDataOrig.col8.Comm_Comm_Dist_Dist_MVPA_VO2m_age_gend.TAR.VO2max.0vuirf.parquet')
+cpath = os.path.join(baseDir, 'tmTables', 'syn','sdx.CommDataOrig.col8.Comm_Comm_Dist_Dist_MVPA_VO2m_age_gend.TAR.VO2max.0vuirf.csv')
+parquet_to_csv(ppath, cpath)
+ppath = os.path.join(baseDir, 'tmTables', 'syn', 'sdx.CommDataOrig.col8.Comm_Comm_Dist_Dist_MVPA_VO2m_age_gend.gba9yi.parquet')
+cpath = os.path.join(baseDir, 'tmTables', 'syn', 'sdx.CommDataOrig.col8.Comm_Comm_Dist_Dist_MVPA_VO2m_age_gend.gba9yi.csv')
 parquet_to_csv(ppath, cpath)

@@ -99,7 +99,6 @@ runComputation <- function(commDataPath, home2schPath, sch2homePath, plotPath) {
 }
 
 options(error = traceback)
-runComputation("CommDataOrig.csv", "results/r_orig_home2sch_coef.json", "results/r_orig_sch2home_coef.json", "results/r_orig_plot.png")
-runComputation("SDV/datasets/syn_dataset.csv", "results/r_sdv_home2sch_coef.json", "results/r_sdv_sch2home_coef.json", "results/r_sdv_plot.png")
-runComputation("ARX/datasets/syn_dataset.csv", "results/r_arx_home2sch_coef.json", "results/r_arx_sch2home_coef.json", "results/r_arx_plot.png")
-runComputation("synDiffix/datasets/target_VO2max.csv", "results/r_sdx_home2sch_coef.json", "results/r_sdx_sch2home_coef.json", "results/r_sdx_plot.png")
+runComputation("CommDataSyn_target_VO2max_all.csv", "results/r_old_home2sch_coef.json", "results/r_old_sch2home_coef.json", "results/r_old_plot.png")
+runComputation("target_VO2max.csv", "results/r_target_home2sch_coef.json", "results/r_target_sch2home_coef.json", "results/r_target_plot.png")
+runComputation("CommDataSyn.csv", "results/r_home2sch_coef.json", "results/r_sch2home_coef.json", "results/r_notarget_plot.png")

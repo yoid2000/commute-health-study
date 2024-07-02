@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 pp = pprint.PrettyPrinter(indent=4)
 
+paper_values = []
 baseDir = os.environ['COMMUTE_HEALTH_PATH']
 print(f"setting baseDir to {baseDir}")
 
@@ -73,6 +74,21 @@ def do_checks(df):
         if round(ans,0) != 1046:
             print(f"ERROR: Expected 1046, got {ans}")
 
+    ans = df[(df['context'] == 'Table 3') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Constant') & (df['tab_sub_column'] == 'Coefficient') & (df['val_type'] == 'coefficient')]['orig_val'].iloc[0]
+    if round(ans,2) != 36.63:
+        print(f"ERROR: Expected 36.63, got {ans}")
+    ans = df[(df['context'] == 'Table 3') & (df['tab_column'] == 'From school to home') & (df['tab_row'] == 'Constant') & (df['tab_sub_column'] == '95% CI') & (df['val_type'] == 'ci_low')]['orig_val'].iloc[0]
+    if round(ans,2) != 29.11:
+        print(f"ERROR: Expected 29.11, got {ans}")
+
+    ans = df[(df['context'] == 'Table 3') & (df['tab_column'] == 'From home to school') & (df['tab_row'] == 'Public x Distance') & (df['tab_sub_column'] == 'Coefficient') & (df['val_type'] == 'coefficient')]['orig_val'].iloc[0]
+    if round(ans,2) != 0.06:
+        print(f"ERROR: Expected 0.06, got {ans}")
+    ans = df[(df['context'] == 'Table 3') & (df['tab_column'] == 'From home to school') & (df['tab_row'] == 'Public x Distance') & (df['tab_sub_column'] == '95% CI') & (df['val_type'] == 'ci_high')]['orig_val'].iloc[0]
+    if round(ans,2) != 0.61:
+        print(f"ERROR: Expected 0.61, got {ans}")
+
+
 def get_dataset(dataset, columns, target):
     if dataset_info[dataset]['df'] is not None:
         return dataset_info[dataset]['df'][columns]
@@ -80,10 +96,10 @@ def get_dataset(dataset, columns, target):
     df_syn = tr.get_best_syn_df(columns=columns, target=target)
     if df_syn is None:
         print(f"ERROR: Could not find a dataset for {columns}, target")
-        quit()
+        a=1/0
     if list(df_syn[columns]).sort() != columns.sort():
         print(f"ERROR: Columns in df_syn {list(df_syn[columns])} do not match expected columns {columns}")
-        quit()
+        a=1/0
     return df_syn
 
 def init_row():
@@ -106,25 +122,104 @@ def init_row():
         'sdx_abs_err': None,
     }
 
-def update_row(row, dataset, val):
-    row[dataset_info[dataset]['val']] = val
-    if dataset == 'orig':
+def update_row(row, dset, val):
+    row[dataset_info[dset]['val']] = val
+    if dset == 'orig':
         return
     if row['val_type'] == 'count':
         # Compute error relative to the total count, normalized
         # to the range 0-1
-        row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / total_rows
-        row[f'{dataset}_abs_err'] = abs(val - row['orig_val'])
-    if row['val_type'] == 'percent':
+        row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / total_rows
+        row[f'{dset}_abs_err'] = abs(val - row['orig_val'])
+    elif row['val_type'] == 'percent':
         # Compute error relative to the total percent, normalized
         # to the range 0-1
-        row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / 100
-    if row['val_type'] in ['distance_median', 'distance_iqr']:
-        row[f'{dataset}_abs_err'] = abs(val - row['orig_val'])
+        row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / 100
+    else:
+        row[f'{dset}_abs_err'] = abs(val - row['orig_val'])
         if max(val, row['orig_val']) != 0:
-            row[f'{dataset}_norm_err'] = abs(val - row['orig_val']) / max(val, row['orig_val'])
+            row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / max(val, row['orig_val'])
 
-paper_values = []
+tab3_mappings = {
+    "(Intercept)": "Constant",
+    "gendermale": "Males",
+    "age": "Age",
+    "MVPAsqrt": "MVPA",
+    "CommToSchcar": "Car",
+    "CommToSchpublic": "Public",
+    "CommToSchwheels": "Wheels",
+    "CommToSchcar:gendermale": "Car x Males",
+    "CommToSchpublic:gendermale": "Public x Males",
+    "CommToSchwheels:gendermale": "Wheels x Males",
+    "CommToSchwalk:DistLog2ToSch": "Walk x Distance",
+    "CommToSchcar:DistLog2ToSch": "Car x Distance",
+    "CommToSchpublic:DistLog2ToSch": "Public x Distance",
+    "CommToSchwheels:DistLog2ToSch": "Wheels x Distance",
+    "CommHomecar": "Car",
+    "CommHomepublic": "Public",
+    "CommHomewheels": "Wheels",
+    "CommHomecar:gendermale": "Car x Males",
+    "CommHomepublic:gendermale": "Public x Males",
+    "CommHomewheels:gendermale": "Wheels x Males",
+    "CommHomewalk:DistLog2Home": "Walk x Distance",
+    "CommHomecar:DistLog2Home": "Car x Distance",
+    "CommHomepublic:DistLog2Home": "Public x Distance",
+    "CommHomewheels:DistLog2Home": "Wheels x Distance",
+}
+def find_row(context, tab_column, tab_row, val_type):
+    match = None
+    for row in paper_values:
+        if row['context'] == context and row['tab_column'] == tab_column and row['tab_row'] == tab_row and row['val_type'] == val_type:
+            if match is not None:
+                print(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}")
+                a=1/0
+            match = row
+    if match is None:
+        print(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}")
+        a=1/0
+    return match
+
+def populate_table3(data, dset, tab_column):
+    for datapoint in data:
+        if dset == 'orig':
+            row_coef = init_row()
+            row_coef['context'] = 'Table 3'
+            row_coef['tab_column'] = tab_column
+            row_coef['tab_row'] = f"{tab3_mappings[datapoint['_row']]}"
+            row_coef['val_type'] = 'coefficient'
+            row_coef['tab_sub_column'] = 'Coefficient'
+            row_prt = init_row()
+            row_prt['context'] = 'Table 3'
+            row_prt['tab_column'] = tab_column
+            row_prt['tab_row'] = f"{tab3_mappings[datapoint['_row']]}"
+            row_prt['val_type'] = 'prt'
+            row_prt['tab_sub_column'] = 'Coefficient'
+            row_ci_low = init_row()
+            row_ci_low['context'] = 'Table 3'
+            row_ci_low['tab_column'] = tab_column
+            row_ci_low['tab_row'] = f"{tab3_mappings[datapoint['_row']]}"
+            row_ci_low['val_type'] = 'ci_low'
+            row_ci_low['tab_sub_column'] = '95% CI'
+            row_ci_high = init_row()
+            row_ci_high['context'] = 'Table 3'
+            row_ci_high['tab_column'] = tab_column
+            row_ci_high['tab_row'] = f"{tab3_mappings[datapoint['_row']]}"
+            row_ci_high['val_type'] = 'ci_high'
+            row_ci_high['tab_sub_column'] = '95% CI'
+            paper_values.append(row_coef)
+            paper_values.append(row_prt)
+            paper_values.append(row_ci_low)
+            paper_values.append(row_ci_high)
+        else:
+            row_coef = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'coefficient')
+            row_prt = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'prt')
+            row_ci_low = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_low')
+            row_ci_high = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_high')
+        update_row(row_coef, dset, datapoint['Estimate'])
+        update_row(row_prt, dset, datapoint['Pr.t.'])
+        update_row(row_ci_low, dset, datapoint['2.5 %'])
+        update_row(row_ci_high, dset, datapoint['97.5 %'])
+
 
 # ------------------------------------------------
 '''
@@ -158,15 +253,15 @@ for comm_to_sch in commute_modes:
     for comm_home in commute_modes:
         row_count = init_row()
         row_count['context'] = 'Table 1'
-        row_count['tab_column'] ='Commuting from school'
-        row_count['tab_row'] ='Commuting to school'
+        row_count['tab_column'] = 'Commuting from school'
+        row_count['tab_row'] = 'Commuting to school'
         row_count['val_type'] = 'count'
         row_count['tab_sub_row'] = comm_to_sch
         row_count['tab_sub_column'] = comm_home
         row_percent = init_row()
         row_percent['context'] = 'Table 1'
-        row_percent['tab_column'] ='Commuting from school'
-        row_percent['tab_row'] ='Commuting to school'
+        row_percent['tab_column'] = 'Commuting from school'
+        row_percent['tab_row'] = 'Commuting to school'
         row_percent['val_type'] = 'percent'
         row_percent['tab_sub_row'] = comm_to_sch
         row_percent['tab_sub_column'] = comm_home
@@ -235,12 +330,44 @@ for tab_column, working_columns, dist_column in [
         for dataset in dataset_info.keys():
             df = get_dataset(dataset, working_columns, target)
             df_temp = df[df[working_columns[0]] == commute_mode]
-            distance_median = int(df_temp[dist_column].quantile(0.5, interpolation='nearest'))
-            distance_iqr = int(df_temp[dist_column].quantile(0.75, interpolation='nearest') - df_temp[dist_column].quantile(0.25, interpolation='nearest'))
+            distance_median = int(df_temp[dist_column].quantile(0.5, interpolation='linear'))
+            distance_iqr = int(df_temp[dist_column].quantile(0.75, interpolation='linear') - df_temp[dist_column].quantile(0.25, interpolation='linear'))
             update_row(row_dist, dataset, distance_median)
             update_row(row_iqr, dataset, distance_iqr)
         paper_values.append(row_dist)
         paper_values.append(row_iqr)
+
+# Gather table 3 data
+with open(os.path.join('results', 'r_orig_home2sch_coef.json'), 'r') as file:
+    tab3_orig = json.load(file)
+populate_table3(tab3_orig, 'orig', 'From home to school')
+with open(os.path.join('results', 'r_orig_sch2home_coef.json'), 'r') as file:
+    tab3_orig = json.load(file)
+populate_table3(tab3_orig, 'orig', 'From school to home')
+with open(os.path.join('results', 'paper_values.json'), 'w') as file:
+    json.dump(paper_values, file, indent=4)
+
+with open(os.path.join('results', 'r_arx_home2sch_coef.json'), 'r') as file:
+    tab3_arx = json.load(file)
+populate_table3(tab3_arx, 'arx', 'From home to school')
+with open(os.path.join('results', 'r_arx_sch2home_coef.json'), 'r') as file:
+    tab3_arx = json.load(file)
+populate_table3(tab3_arx, 'arx', 'From school to home')
+
+with open(os.path.join('results', 'r_sdv_home2sch_coef.json'), 'r') as file:
+    tab3_sdv = json.load(file)
+populate_table3(tab3_sdv, 'sdv', 'From home to school')
+with open(os.path.join('results', 'r_sdv_sch2home_coef.json'), 'r') as file:
+    tab3_sdv = json.load(file)
+populate_table3(tab3_sdv, 'sdv', 'From school to home')
+
+with open(os.path.join('results', 'r_sdx_home2sch_coef.json'), 'r') as file:
+    tab3_sdx = json.load(file)
+populate_table3(tab3_sdx, 'sdx', 'From home to school')
+with open(os.path.join('results', 'r_sdx_sch2home_coef.json'), 'r') as file:
+    tab3_sdx = json.load(file)
+populate_table3(tab3_sdx, 'sdx', 'From school to home')
+
 
 # ------------------------------------------------
 with open(os.path.join('results', 'paper_values.json'), 'w') as file:
@@ -261,6 +388,7 @@ for column in df_summ.columns:
         print(f"Number of distinct values: {len(distinct_values)}")
 
 do_checks(df_summ)
+
 
 # Make a basic boxplot for all of the normalized error values
 columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
