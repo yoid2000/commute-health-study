@@ -1,0 +1,63 @@
+{
+    "cluster_info": [
+        {
+            "cluster_id": [
+                0,
+                2,
+                3,
+                5
+            ],
+            "cluster_name": [
+                "VO2max",
+                "gender",
+                "age",
+                "DistFromSchool"
+            ],
+            "type": "initial"
+        },
+        {
+            "cluster_name": [
+                "CommHome"
+            ],
+            "stitch_name": [],
+            "cluster_id": [
+                1
+            ],
+            "stitch_id": [],
+            "type": "patch"
+        },
+        {
+            "cluster_name": [
+                "MVPAsqrt"
+            ],
+            "stitch_name": [],
+            "cluster_id": [
+                4
+            ],
+            "stitch_id": [],
+            "type": "patch"
+        }
+    ],
+    "initial": [
+        0,
+        2,
+        3,
+        5
+    ],
+    "derived": [
+        [
+            "StitchOwner.LEFT",
+            [],
+            [
+                1
+            ]
+        ],
+        [
+            "StitchOwner.LEFT",
+            [],
+            [
+                4
+            ]
+        ]
+    ]
+}

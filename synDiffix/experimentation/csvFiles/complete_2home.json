@@ -1,0 +1,32 @@
+{
+    "cluster_info": [
+        {
+            "cluster_id": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "cluster_name": [
+                "VO2max",
+                "CommHome",
+                "gender",
+                "age",
+                "MVPAsqrt",
+                "DistFromSchool"
+            ],
+            "type": "initial"
+        }
+    ],
+    "initial": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+    ],
+    "derived": []
+}

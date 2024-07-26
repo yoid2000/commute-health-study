@@ -51,6 +51,17 @@ for target_column in tb.df_orig.columns:
     print(f"Synthesizing dataset with target column {target_column}")
     tb.synthesize(target_column=target_column, save_stats="min", force=force)
 
+# I'm going to make two targeted datasets customized to this problem.
+# Note that this is cheating ... in general, one should not need to know
+# the analysis use case in advance
+force=True
+target_column = 'VO2max'
+to_school_columns = ['VO2max', 'CommToSch', 'gender', 'age', 'MVPAsqrt', 'DistFromHome']
+tb.synthesize(columns=to_school_columns, target_column=target_column, save_stats="min", force=force)
+to_home_columns = ['VO2max', 'CommHome', 'gender', 'age', 'MVPAsqrt', 'DistFromSchool']
+tb.synthesize(columns=to_home_columns, target_column=target_column, save_stats="min", force=force)
+force=False
+
 # Now let's do the combinations
 for i in range(1, max_combinations+1):
     for comb in itertools.combinations(tb.df_orig.columns, i):

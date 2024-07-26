@@ -16,6 +16,7 @@ synDir = os.path.join(baseDir, 'tmTables', 'syn')
 
 tr = TablesReader(dir_path=synDir)
 df_orig = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+print(list(df_orig.columns))
 df_orig = df_orig.loc[:, ~df_orig.columns.str.contains('^Unnamed')]
 total_rows = len(df_orig)
 commute_modes = list(df_orig['CommToSch'].unique())
@@ -151,22 +152,36 @@ tab3_mappings = {
     "CommToSchcar:gendermale": "Car x Males",
     "CommToSchpublic:gendermale": "Public x Males",
     "CommToSchwheels:gendermale": "Wheels x Males",
-    "CommToSchwalk:DistLog2ToSch": "Walk x Distance",
-    "CommToSchcar:DistLog2ToSch": "Car x Distance",
-    "CommToSchpublic:DistLog2ToSch": "Public x Distance",
-    "CommToSchwheels:DistLog2ToSch": "Wheels x Distance",
+    "CommToSchwalk:DistLogToSch": "Walk x Distance",
+    "CommToSchcar:DistLogToSch": "Car x Distance",
+    "CommToSchpublic:DistLogToSch": "Public x Distance",
+    "CommToSchwheels:DistLogToSch": "Wheels x Distance",
     "CommHomecar": "Car",
     "CommHomepublic": "Public",
     "CommHomewheels": "Wheels",
     "CommHomecar:gendermale": "Car x Males",
     "CommHomepublic:gendermale": "Public x Males",
     "CommHomewheels:gendermale": "Wheels x Males",
-    "CommHomewalk:DistLog2Home": "Walk x Distance",
-    "CommHomecar:DistLog2Home": "Car x Distance",
-    "CommHomepublic:DistLog2Home": "Public x Distance",
-    "CommHomewheels:DistLog2Home": "Wheels x Distance",
+    "CommHomewalk:DistLogToHome": "Walk x Distance",
+    "CommHomecar:DistLogToHome": "Car x Distance",
+    "CommHomepublic:DistLogToHome": "Public x Distance",
+    "CommHomewheels:DistLogToHome": "Wheels x Distance",
 }
-def find_row(context, tab_column, tab_row, val_type):
+
+def find_fig1_row(context, tab_column, tab_sub_column, tab_row, tab_sub_row, val_type):
+    match = None
+    for row in paper_values:
+        if row['context'] == context and row['tab_column'] == tab_column and row['tab_row'] == tab_row and row['val_type'] == val_type and row['tab_sub_column'] == tab_sub_column and row['tab_sub_row'] == tab_sub_row:
+            if match is not None:
+                print(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
+                a=1/0
+            match = row
+    if match is None:
+        print(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
+        a=1/0
+    return match
+
+def find_tab3_row(context, tab_column, tab_row, val_type):
     match = None
     for row in paper_values:
         if row['context'] == context and row['tab_column'] == tab_column and row['tab_row'] == tab_row and row['val_type'] == val_type:
@@ -178,6 +193,45 @@ def find_row(context, tab_column, tab_row, val_type):
         print(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}")
         a=1/0
     return match
+
+def populate_figure1(data, dset):
+    for mode, label, modeKey in [['conf_2s','Commuting mode (from home to school)', 'CommToSch'],
+               ['conf_2h','Commuting mode (from school to home)', 'CommHome']]:
+        for datapoint in data[mode]:
+            if dset == 'orig':
+                row_fit = init_row()
+                row_fit['context'] = 'Figure 1'
+                row_fit['tab_column'] = label
+                row_fit['tab_sub_column'] = datapoint[modeKey]
+                row_fit['tab_row'] = "VO2max (predicted at mode median distance)"
+                row_fit['tab_sub_row'] = datapoint['gender']
+                row_fit['val_type'] = 'fit'
+                row_lwr = init_row()
+                row_lwr['context'] = 'Figure 1'
+                row_lwr['tab_column'] = label
+                row_lwr['tab_sub_column'] = datapoint[modeKey]
+                row_lwr['tab_row'] = "VO2max (predicted at mode median distance)"
+                row_lwr['tab_sub_row'] = datapoint['gender']
+                row_lwr['val_type'] = 'lwr'
+                row_upr = init_row()
+                row_upr['context'] = 'Figure 1'
+                row_upr['tab_column'] = label
+                row_upr['tab_sub_column'] = datapoint[modeKey]
+                row_upr['tab_row'] = "VO2max (predicted at mode median distance)"
+                row_upr['tab_sub_row'] = datapoint['gender']
+                row_upr['val_type'] = 'upr'
+                paper_values.append(row_fit)
+                paper_values.append(row_lwr)
+                paper_values.append(row_upr)
+            else:
+                row_fit = find_fig1_row('Figure 1', label, datapoint[modeKey], 'VO2max (predicted at mode median distance)', datapoint['gender'], 'fit')
+                row_lwr = find_fig1_row('Figure 1', label, datapoint[modeKey], 'VO2max (predicted at mode median distance)', datapoint['gender'], 'lwr')
+                row_upr = find_fig1_row('Figure 1', label, datapoint[modeKey], 'VO2max (predicted at mode median distance)', datapoint['gender'], 'upr')
+            update_row(row_fit, dset, datapoint['fit'])
+            update_row(row_lwr, dset, datapoint['lwr'])
+            update_row(row_upr, dset, datapoint['upr'])
+
+'''def find_fig1_row(context, tab_column, tab_sub_column, tab_row, tab_sub_row, val_type):'''
 
 def populate_table3(data, dset, tab_column):
     for datapoint in data:
@@ -211,10 +265,10 @@ def populate_table3(data, dset, tab_column):
             paper_values.append(row_ci_low)
             paper_values.append(row_ci_high)
         else:
-            row_coef = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'coefficient')
-            row_prt = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'prt')
-            row_ci_low = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_low')
-            row_ci_high = find_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_high')
+            row_coef = find_tab3_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'coefficient')
+            row_prt = find_tab3_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'prt')
+            row_ci_low = find_tab3_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_low')
+            row_ci_high = find_tab3_row('Table 3', tab_column, f"{tab3_mappings[datapoint['_row']]}", 'ci_high')
         update_row(row_coef, dset, datapoint['Estimate'])
         update_row(row_prt, dset, datapoint['Pr.t.'])
         update_row(row_ci_low, dset, datapoint['2.5 %'])
@@ -338,35 +392,30 @@ for tab_column, working_columns, dist_column in [
         paper_values.append(row_iqr)
 
 # Gather table 3 data
-with open(os.path.join('results', 'r_orig_home2sch_coef.json'), 'r') as file:
+with open(os.path.join('results', 'r_orig.json'), 'r') as file:
     tab3_orig = json.load(file)
-populate_table3(tab3_orig, 'orig', 'From home to school')
-with open(os.path.join('results', 'r_orig_sch2home_coef.json'), 'r') as file:
-    tab3_orig = json.load(file)
-populate_table3(tab3_orig, 'orig', 'From school to home')
+with open(os.path.join('results', 'r_arx.json'), 'r') as file:
+    tab3_arx = json.load(file)
+with open(os.path.join('results', 'r_sdv.json'), 'r') as file:
+    tab3_sdv = json.load(file)
+with open(os.path.join('results', 'r_sdx.json'), 'r') as file:
+    tab3_sdx = json.load(file)
+
+populate_table3(tab3_orig['coef_2s'], 'orig', 'From home to school')
+populate_table3(tab3_orig['coef_2h'], 'orig', 'From school to home')
+populate_table3(tab3_arx['coef_2s'], 'arx', 'From home to school')
+populate_table3(tab3_arx['coef_2h'], 'arx', 'From school to home')
+populate_table3(tab3_sdv['coef_2s'], 'sdv', 'From home to school')
+populate_table3(tab3_sdv['coef_2h'], 'sdv', 'From school to home')
+populate_table3(tab3_sdx['coef_2s'], 'sdx', 'From home to school')
+populate_table3(tab3_sdx['coef_2h'], 'sdx', 'From school to home')
+
+populate_figure1(tab3_orig, 'orig')
 with open(os.path.join('results', 'paper_values.json'), 'w') as file:
     json.dump(paper_values, file, indent=4)
-
-with open(os.path.join('results', 'r_arx_home2sch_coef.json'), 'r') as file:
-    tab3_arx = json.load(file)
-populate_table3(tab3_arx, 'arx', 'From home to school')
-with open(os.path.join('results', 'r_arx_sch2home_coef.json'), 'r') as file:
-    tab3_arx = json.load(file)
-populate_table3(tab3_arx, 'arx', 'From school to home')
-
-with open(os.path.join('results', 'r_sdv_home2sch_coef.json'), 'r') as file:
-    tab3_sdv = json.load(file)
-populate_table3(tab3_sdv, 'sdv', 'From home to school')
-with open(os.path.join('results', 'r_sdv_sch2home_coef.json'), 'r') as file:
-    tab3_sdv = json.load(file)
-populate_table3(tab3_sdv, 'sdv', 'From school to home')
-
-with open(os.path.join('results', 'r_sdx_home2sch_coef.json'), 'r') as file:
-    tab3_sdx = json.load(file)
-populate_table3(tab3_sdx, 'sdx', 'From home to school')
-with open(os.path.join('results', 'r_sdx_sch2home_coef.json'), 'r') as file:
-    tab3_sdx = json.load(file)
-populate_table3(tab3_sdx, 'sdx', 'From school to home')
+populate_figure1(tab3_arx, 'arx')
+populate_figure1(tab3_sdv, 'sdv')
+populate_figure1(tab3_sdx, 'sdx')
 
 
 # ------------------------------------------------
@@ -395,7 +444,8 @@ columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
 sns.boxplot(data=df_summ[columns])
 plt.xlabel('')
 plt.ylabel('Normalized Error')
-plt.savefig(os.path.join('results', 'norm_err.png'))
+plt.savefig(os.path.join('results', 'plots', 'norm_err.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err.pdf'))
 plt.close()
 
 # Make a basic boxplot for all of the count error values
@@ -403,5 +453,63 @@ columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
 sns.boxplot(data=df_summ[columns])
 plt.xlabel('')
 plt.ylabel('Count Error')
-plt.savefig(os.path.join('results', 'count_err.png'))
+plt.savefig(os.path.join('results', 'plots', 'count_err.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'count_err.pdf'))
+plt.close()
+
+groups = ['count', 'distance_median', 'distance_iqr']
+columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
+fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
+for i, group in enumerate(groups):
+    df_filtered = df_summ[df_summ['val_type'] == group]
+    data_to_plot = df_filtered[columns].dropna()
+    axs[i].boxplot(data_to_plot, tick_labels=columns)
+    axs[i].set_title(group)
+plt.suptitle('Normalized Error for Tables 1 and 2')
+plt.savefig(os.path.join('results', 'plots', 'norm_err_tab1_tab2.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab1_tab2.pdf'))
+plt.close()
+
+groups = ['count', 'distance_median', 'distance_iqr']
+columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
+fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
+for i, group in enumerate(groups):
+    df_filtered = df_summ[df_summ['val_type'] == group]
+    data_to_plot = df_filtered[columns].dropna()
+    axs[i].boxplot(data_to_plot, tick_labels=columns)
+    axs[i].set_title(group)
+plt.suptitle('Absolute Error for Tables 1 and 2')
+plt.savefig(os.path.join('results', 'plots', 'abs_err_tab1_tab2.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'abs_err_tab1_tab2.pdf'))
+plt.close()
+
+groups = ['coefficient', 'fit']
+columns = ['sdv_norm_err', 'arx_norm_err', 'sdx_norm_err']
+fig, axs = plt.subplots(1, 2, figsize=(10, 5), sharey=False)
+for i, group in enumerate(groups):
+    df_filtered = df_summ[df_summ['val_type'] == group]
+    data_to_plot = df_filtered[columns].dropna()
+    axs[i].boxplot(data_to_plot, tick_labels=columns)
+    axs[i].set_title(group)
+plt.suptitle('Normalized Error for Table 3 and Figure 1')
+plt.savefig(os.path.join('results', 'plots', 'norm_err_tab3_fig1.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab3_fig1.pdf'))
+plt.close()
+
+df_orig_sorted_home = df_orig['DistFromHome'].sort_values().reset_index(drop=True)
+df_orig_sorted_school = df_orig['DistFromSchool'].sort_values().reset_index(drop=True)
+df_sdx_sorted_home = df_sdx['DistFromHome'].sort_values().reset_index(drop=True)
+df_sdx_sorted_school = df_sdx['DistFromSchool'].sort_values().reset_index(drop=True)
+plt.figure(figsize=(10, 6))
+plt.plot(df_orig_sorted_home, label='Orig - Home', linestyle='-', marker='')
+plt.plot(df_orig_sorted_school, label='Orig - School', linestyle='-', marker='')
+plt.plot(df_sdx_sorted_home, label='SDX - Home', linestyle='-', marker='')
+plt.plot(df_sdx_sorted_school, label='SDX - School', linestyle='-', marker='')
+plt.title('Distance Distributions')
+plt.xlabel('')
+plt.ylabel('Distance (meters)')
+plt.legend()
+plt.grid(True)
+plt.savefig(os.path.join('results', 'plots', 'distances.png'))
+plt.savefig(os.path.join('results', 'plots', 'pdf', 'distances.pdf'))
 plt.close()

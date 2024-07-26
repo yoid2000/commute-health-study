@@ -1,0 +1,79 @@
+{
+    "cluster_info": [
+        {
+            "cluster_id": [
+                0,
+                2,
+                3,
+                4
+            ],
+            "cluster_name": [
+                "VO2max",
+                "gender",
+                "age",
+                "MVPAsqrt"
+            ],
+            "type": "initial"
+        },
+        {
+            "cluster_name": [
+                "VO2max",
+                "DistFromHome"
+            ],
+            "stitch_name": [
+                "VO2max"
+            ],
+            "cluster_id": [
+                0,
+                5
+            ],
+            "stitch_id": [
+                0
+            ],
+            "type": "left_stitch"
+        },
+        {
+            "cluster_name": [
+                "VO2max",
+                "CommToSch"
+            ],
+            "stitch_name": [
+                "VO2max"
+            ],
+            "cluster_id": [
+                0,
+                1
+            ],
+            "stitch_id": [
+                0
+            ],
+            "type": "left_stitch"
+        }
+    ],
+    "initial": [
+        0,
+        2,
+        3,
+        4
+    ],
+    "derived": [
+        [
+            "StitchOwner.LEFT",
+            [
+                0
+            ],
+            [
+                5
+            ]
+        ],
+        [
+            "StitchOwner.LEFT",
+            [
+                0
+            ],
+            [
+                1
+            ]
+        ]
+    ]
+}

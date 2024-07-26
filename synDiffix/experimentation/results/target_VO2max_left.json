@@ -1,0 +1,374 @@
+{
+  "coef_2s": [
+    {
+      "2.5 %": 24.8614,
+      "97.5 %": 36.3759,
+      "Estimate": 30.6187,
+      "Std.Error": 2.9323,
+      "t.value": 10.4417,
+      "Pr.t.": 8.0373e-24,
+      "_row": "(Intercept)"
+    },
+    {
+      "2.5 %": -3.4392,
+      "97.5 %": 7.7263,
+      "Estimate": 2.1435,
+      "Std.Error": 2.8435,
+      "t.value": 0.7538,
+      "Pr.t.": 0.4512,
+      "_row": "CommToSchcar"
+    },
+    {
+      "2.5 %": -7.8778,
+      "97.5 %": 2.3504,
+      "Estimate": -2.7637,
+      "Std.Error": 2.6048,
+      "t.value": -1.061,
+      "Pr.t.": 0.289,
+      "_row": "CommToSchpublic"
+    },
+    {
+      "2.5 %": -3.6704,
+      "97.5 %": 18.6023,
+      "Estimate": 7.4659,
+      "Std.Error": 5.6721,
+      "t.value": 1.3163,
+      "Pr.t.": 0.1885,
+      "_row": "CommToSchwheels"
+    },
+    {
+      "2.5 %": 5.2,
+      "97.5 %": 7.0723,
+      "Estimate": 6.1362,
+      "Std.Error": 0.4768,
+      "t.value": 12.8688,
+      "Pr.t.": 3.5777e-34,
+      "_row": "gendermale"
+    },
+    {
+      "2.5 %": 0.316,
+      "97.5 %": 0.9656,
+      "Estimate": 0.6408,
+      "Std.Error": 0.1654,
+      "t.value": 3.8739,
+      "Pr.t.": 0.0001,
+      "_row": "age"
+    },
+    {
+      "2.5 %": 0.0813,
+      "97.5 %": 0.1594,
+      "Estimate": 0.1204,
+      "Std.Error": 0.0199,
+      "t.value": 6.0507,
+      "Pr.t.": 2.3479e-09,
+      "_row": "MVPAsqrt"
+    },
+    {
+      "2.5 %": -1.3587,
+      "97.5 %": 1.6221,
+      "Estimate": 0.1317,
+      "Std.Error": 0.7591,
+      "t.value": 0.1735,
+      "Pr.t.": 0.8623,
+      "_row": "CommToSchcar:gendermale"
+    },
+    {
+      "2.5 %": -1.3692,
+      "97.5 %": 1.3498,
+      "Estimate": -0.0097,
+      "Std.Error": 0.6924,
+      "t.value": -0.014,
+      "Pr.t.": 0.9888,
+      "_row": "CommToSchpublic:gendermale"
+    },
+    {
+      "2.5 %": -2.2173,
+      "97.5 %": 3.2803,
+      "Estimate": 0.5315,
+      "Std.Error": 1.4001,
+      "t.value": 0.3796,
+      "Pr.t.": 0.7043,
+      "_row": "CommToSchwheels:gendermale"
+    },
+    {
+      "2.5 %": -0.0301,
+      "97.5 %": 0.589,
+      "Estimate": 0.2795,
+      "Std.Error": 0.1577,
+      "t.value": 1.7724,
+      "Pr.t.": 0.0768,
+      "_row": "CommToSchwalk:DistLogToSch"
+    },
+    {
+      "2.5 %": -0.2856,
+      "97.5 %": 0.5014,
+      "Estimate": 0.1079,
+      "Std.Error": 0.2004,
+      "t.value": 0.5382,
+      "Pr.t.": 0.5906,
+      "_row": "CommToSchcar:DistLogToSch"
+    },
+    {
+      "2.5 %": 0.1579,
+      "97.5 %": 0.8555,
+      "Estimate": 0.5067,
+      "Std.Error": 0.1776,
+      "t.value": 2.8522,
+      "Pr.t.": 0.0045,
+      "_row": "CommToSchpublic:DistLogToSch"
+    },
+    {
+      "2.5 %": -1.3207,
+      "97.5 %": 0.5705,
+      "Estimate": -0.3751,
+      "Std.Error": 0.4816,
+      "t.value": -0.7789,
+      "Pr.t.": 0.4363,
+      "_row": "CommToSchwheels:DistLogToSch"
+    }
+  ],
+  "conf_2s": [
+    {
+      "CommToSch": "walk",
+      "gender": "female",
+      "fit": 45.8365,
+      "lwr": 45.1571,
+      "upr": 46.5159
+    },
+    {
+      "CommToSch": "car",
+      "gender": "female",
+      "fit": 46.1212,
+      "lwr": 45.2362,
+      "upr": 47.0062
+    },
+    {
+      "CommToSch": "public",
+      "gender": "female",
+      "fit": 45.4603,
+      "lwr": 44.7359,
+      "upr": 46.1847
+    },
+    {
+      "CommToSch": "wheels",
+      "gender": "female",
+      "fit": 46.2736,
+      "lwr": 44.2768,
+      "upr": 48.2703
+    },
+    {
+      "CommToSch": "walk",
+      "gender": "male",
+      "fit": 51.9727,
+      "lwr": 51.3458,
+      "upr": 52.5996
+    },
+    {
+      "CommToSch": "car",
+      "gender": "male",
+      "fit": 52.3891,
+      "lwr": 51.5933,
+      "upr": 53.1849
+    },
+    {
+      "CommToSch": "public",
+      "gender": "male",
+      "fit": 51.5868,
+      "lwr": 50.8879,
+      "upr": 52.2856
+    },
+    {
+      "CommToSch": "wheels",
+      "gender": "male",
+      "fit": 52.9412,
+      "lwr": 51.2832,
+      "upr": 54.5992
+    }
+  ],
+  "coef_2h": [
+    {
+      "2.5 %": 33.9729,
+      "97.5 %": 49.9992,
+      "Estimate": 41.986,
+      "Std.Error": 4.0813,
+      "t.value": 10.2873,
+      "Pr.t.": 3.2768e-23,
+      "_row": "(Intercept)"
+    },
+    {
+      "2.5 %": -3.363,
+      "97.5 %": 19.5958,
+      "Estimate": 8.1164,
+      "Std.Error": 5.8468,
+      "t.value": 1.3882,
+      "Pr.t.": 0.1655,
+      "_row": "CommHomecar"
+    },
+    {
+      "2.5 %": -5.742,
+      "97.5 %": 8.2316,
+      "Estimate": 1.2448,
+      "Std.Error": 3.5586,
+      "t.value": 0.3498,
+      "Pr.t.": 0.7266,
+      "_row": "CommHomepublic"
+    },
+    {
+      "2.5 %": -5.7928,
+      "97.5 %": 25.8919,
+      "Estimate": 10.0495,
+      "Std.Error": 8.069,
+      "t.value": 1.2454,
+      "Pr.t.": 0.2134,
+      "_row": "CommHomewheels"
+    },
+    {
+      "2.5 %": 6.7388,
+      "97.5 %": 8.9053,
+      "Estimate": 7.822,
+      "Std.Error": 0.5517,
+      "t.value": 14.1774,
+      "Pr.t.": 2.715e-40,
+      "_row": "gendermale"
+    },
+    {
+      "2.5 %": -0.2862,
+      "97.5 %": 0.6067,
+      "Estimate": 0.1603,
+      "Std.Error": 0.2274,
+      "t.value": 0.7049,
+      "Pr.t.": 0.4811,
+      "_row": "age"
+    },
+    {
+      "2.5 %": -0.0693,
+      "97.5 %": 0.0156,
+      "Estimate": -0.0269,
+      "Std.Error": 0.0216,
+      "t.value": -1.243,
+      "Pr.t.": 0.2143,
+      "_row": "MVPAsqrt"
+    },
+    {
+      "2.5 %": -1.1742,
+      "97.5 %": 4.3027,
+      "Estimate": 1.5643,
+      "Std.Error": 1.3948,
+      "t.value": 1.1215,
+      "Pr.t.": 0.2625,
+      "_row": "CommHomecar:gendermale"
+    },
+    {
+      "2.5 %": -1.9886,
+      "97.5 %": 1.4431,
+      "Estimate": -0.2728,
+      "Std.Error": 0.874,
+      "t.value": -0.3121,
+      "Pr.t.": 0.7551,
+      "_row": "CommHomepublic:gendermale"
+    },
+    {
+      "2.5 %": -2.0063,
+      "97.5 %": 5.8819,
+      "Estimate": 1.9378,
+      "Std.Error": 2.0088,
+      "t.value": 0.9646,
+      "Pr.t.": 0.3351,
+      "_row": "CommHomewheels:gendermale"
+    },
+    {
+      "2.5 %": -0.3391,
+      "97.5 %": 0.5101,
+      "Estimate": 0.0855,
+      "Std.Error": 0.2163,
+      "t.value": 0.3953,
+      "Pr.t.": 0.6927,
+      "_row": "CommHomewalk:DistLogToHome"
+    },
+    {
+      "2.5 %": -1.6914,
+      "97.5 %": 0.2315,
+      "Estimate": -0.73,
+      "Std.Error": 0.4897,
+      "t.value": -1.4907,
+      "Pr.t.": 0.1365,
+      "_row": "CommHomecar:DistLogToHome"
+    },
+    {
+      "2.5 %": -0.4465,
+      "97.5 %": 0.5439,
+      "Estimate": 0.0487,
+      "Std.Error": 0.2522,
+      "t.value": 0.1931,
+      "Pr.t.": 0.847,
+      "_row": "CommHomepublic:DistLogToHome"
+    },
+    {
+      "2.5 %": -2.414,
+      "97.5 %": 0.4777,
+      "Estimate": -0.9681,
+      "Std.Error": 0.7364,
+      "t.value": -1.3146,
+      "Pr.t.": 0.1891,
+      "_row": "CommHomewheels:DistLogToHome"
+    }
+  ],
+  "conf_2h": [
+    {
+      "CommHome": "walk",
+      "gender": "female",
+      "fit": 44.1859,
+      "lwr": 43.3944,
+      "upr": 44.9774
+    },
+    {
+      "CommHome": "car",
+      "gender": "female",
+      "fit": 43.7914,
+      "lwr": 41.8724,
+      "upr": 45.7104
+    },
+    {
+      "CommHome": "public",
+      "gender": "female",
+      "fit": 45.0455,
+      "lwr": 44.0517,
+      "upr": 46.0393
+    },
+    {
+      "CommHome": "wheels",
+      "gender": "female",
+      "fit": 43.7561,
+      "lwr": 41.008,
+      "upr": 46.5041
+    },
+    {
+      "CommHome": "walk",
+      "gender": "male",
+      "fit": 52.0079,
+      "lwr": 51.2494,
+      "upr": 52.7664
+    },
+    {
+      "CommHome": "car",
+      "gender": "male",
+      "fit": 53.1777,
+      "lwr": 51.5362,
+      "upr": 54.8192
+    },
+    {
+      "CommHome": "public",
+      "gender": "male",
+      "fit": 52.5948,
+      "lwr": 51.6568,
+      "upr": 53.5327
+    },
+    {
+      "CommHome": "wheels",
+      "gender": "male",
+      "fit": 53.5159,
+      "lwr": 50.7641,
+      "upr": 56.2677
+    }
+  ]
+}
