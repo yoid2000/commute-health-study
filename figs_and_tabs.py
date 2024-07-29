@@ -17,19 +17,120 @@ commute_modes = list(df_orig['CommToSch'].unique())
 df_sdv = pd.read_parquet(os.path.join('SDV', 'datasets', 'syn_dataset.parquet'))
 df_arx = pd.read_parquet(os.path.join('ARX', 'datasets', 'syn_dataset.parquet'))
 
+def change_modes(df):
+    changes = [['car','Car'], ['public','Public'], ['wheels','Wheels'], ['walk','Walk']]
+    for change in changes:
+        for column in df.columns:
+            df[column] = df[column].replace(change[0], change[1], regex=True)
+    return df
+
 # Read in results/paper_values.json as a DataFrame
 df = pd.read_json(os.path.join('results', 'paper_values.json'))
 print(df.head())
 methods = ['orig_val', 'sdx_val', 'arx_val', 'sdv_val']
 
-changes = [['car','Car'], ['public','Public'], ['wheels','Wheels'], ['walk','Walk']]
-for change in changes:
-    for column in df.columns:
-        df[column] = df[column].replace(change[0], change[1], regex=True)
+df = change_modes(df)
+df_sdv = change_modes(df_sdv)
+df_arx = change_modes(df_arx)
+df_orig = change_modes(df_orig)
 modes = ['Car', 'Public', 'Wheels', 'Walk']
 
+def make_vo2max_grid():
+
+    latex_code = r"""
+
+    \begin{figure}[htbp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/r_orig_plot.png}
+            \caption{Original Plot}
+            \label{fig:r_orig_plot}
+        \end{subfigure}
+        \hspace{0.0\textwidth}
+        \begin{subfigure}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/r_sdx_plot.png}
+            \caption{SynDiffix Plot}
+            \label{fig:r_sdx_plot}
+        \end{subfigure}
+        \vfill
+        \begin{subfigure}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/r_arx_plot.png}
+            \caption{ARX Plot}
+            \label{fig:r_arx_plot}
+        \end{subfigure}
+        \hspace{0.0\textwidth}
+        \begin{subfigure}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/r_sdv_plot.png}
+            \caption{SDV Plot}
+            \label{fig:r_sdv_plot}
+        \end{subfigure}
+        \caption{Comparison of Different Plots}
+        \label{fig:comparison_plots}
+    \end{figure}
+
+    """
+
+    with open(os.path.join('results', 'tables', 'r_plots.tex'), 'w') as file:
+        file.write(latex_code)
+
 def make_figure_median_plots():
-    pass
+    # These are the columns we'll use for the syndiffix plots
+    working_columns = ['CommToSch', 'DistFromHome']
+    df_sdx = tr.get_best_syn_df(columns=working_columns, target=None)
+    df_sdx = change_modes(df_sdx)
+
+    # Assuming df_orig, df_sdx, df_arx are already defined and modes is a list of CommToSch values
+
+    dataframes = {
+        'Original': df_orig,
+        'SynDiffix': df_sdx,
+        'ARX': df_arx,
+    }
+
+    fig, axs = plt.subplots(1, 4, figsize=(20, 5), sharey=False)
+
+    for i, comm_value in enumerate(modes):
+        for label, df in dataframes.items():
+            df_filtered = df[df['CommToSch'] == comm_value][['CommToSch', 'DistFromHome']]
+            df_filtered = df_filtered.sort_values(by='DistFromHome').reset_index(drop=True)
+            
+            median_value = df_filtered['DistFromHome'].median()
+            
+            # Add the median value to the dataframe
+            median_row = pd.DataFrame({'CommToSch': [comm_value], 'DistFromHome': [median_value]})
+            df_filtered = pd.concat([df_filtered, median_row], ignore_index=True)
+            df_filtered = df_filtered.sort_values(by='DistFromHome').reset_index(drop=True)
+            
+            median_index = df_filtered[df_filtered['DistFromHome'] == median_value].index[0]
+            
+            axs[i].plot(df_filtered.index, df_filtered['DistFromHome'], label=label, marker='o', markersize=2)
+            axs[i].plot(median_index, median_value, 'x', markersize=10, label=f'{label} Median')
+        
+        axs[i].set_title(f'CommToSch: {comm_value}')
+        axs[i].set_xlabel('Index')
+        
+        # Set y-axis range according to the range of the data for the subplot
+        y_min = df_filtered['DistFromHome'].min()
+        y_max = df_filtered['DistFromHome'].max()
+        axs[i].set_ylim([y_min, y_max])
+        
+        # Remove y-axis label from all but the leftmost subplot
+        if i == 0:
+            axs[i].set_ylabel('DistFromHome')
+        else:
+            axs[i].set_yticklabels([])
+
+        axs[i].legend()
+
+    plt.suptitle('DistFromHome by CommToSch')
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.savefig(os.path.join('results', 'tables', 'median_plots.png'))
+    plt.savefig(os.path.join('results', 'tables', 'figs', 'median_plots.pdf'))
+    plt.close()
 
 def make_abs_err_tab1_tab2():
     groups = ['count', 'distance_median', 'distance_iqr']
@@ -233,11 +334,14 @@ figs_tabs = [
     'table1',
     'table2',
     'abs_err_tab1_tab2',
+    'r_plots',
 ]
 
 make_table1()
 make_table2()
 make_figure_abs_err()
+make_figure_median_plots()
+make_vo2max_grid()
 
 # Create a complete LaTeX document
 doc = '''\\documentclass{article}
@@ -247,6 +351,9 @@ doc = '''\\documentclass{article}
 \\usepackage{multirow}
 \\usepackage[left=2cm,right=2cm]{geometry}
 \\usepackage{graphicx}
+\\usepackage{caption}
+\\usepackage{subcaption}
+
 
 \\graphicspath{{figs/}}
 \\DeclareGraphicsExtensions{.png,.pdf}
@@ -258,7 +365,7 @@ for fig_tab in figs_tabs:
     doc += f'\\input{{{fig_tab}}}\n'
 
 doc += '\\end{document}\n'
-doc_path = os.path.join('results', 'tables', 'figs_and_docs.tex')
+doc_path = os.path.join('results', 'tables', 'figs_and_tabs.tex')
 with open(doc_path, 'w') as f:
     f.write(doc)
 
