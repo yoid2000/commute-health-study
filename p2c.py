@@ -15,6 +15,11 @@ def csv_to_parquet(csv_path, parquet_path):
     # Write the DataFrame to a Parquet file
     df.to_parquet(parquet_path, index=False)
 
+parquet_path = os.path.join('ARX', 'datasets', 'syn_dataset.parquet')
+csv_path = os.path.join('ARX', 'datasets', 'syn_dataset.csv')
+csv_to_parquet(csv_path, parquet_path)
+quit()
+
 directory = os.path.join('synDiffix', 'datasets')
 for filename in os.listdir(directory):
     if filename.endswith('.parquet'):
@@ -22,11 +27,7 @@ for filename in os.listdir(directory):
         csv_path = os.path.join(directory, filename.replace('.parquet', '.csv'))
         parquet_to_csv(parquet_path, csv_path)
 
-quit()
 # Example usage
-parquet_path = os.path.join('ARX', 'datasets', 'syn_dataset.parquet')
-csv_path = os.path.join('ARX', 'datasets', 'syn_dataset.csv')
-csv_to_parquet(csv_path, parquet_path)
 parquet_path = os.path.join('SDV', 'datasets', 'syn_dataset.parquet')
 csv_path = os.path.join('SDV', 'datasets', 'syn_dataset.csv')
 csv_to_parquet(csv_path, parquet_path)

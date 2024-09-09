@@ -68,7 +68,8 @@ def make_vo2max_grid():
             \caption{SDV Plot}
             \label{fig:r_sdv_plot}
         \end{subfigure}
-        \caption{Comparison of Different Plots}
+        \caption{Comparison of the VO2max data. Here we see that ARX matches very closely with the original data. SynDiffix is quite close for female, but for reasons I don't understand yet, does somewhat bad for the car commute for males. Otherwise, though SynDiffix is pretty good. SDV is again quite bad. What will be important is whether the correct conclusions can be drown from the data in spite of the error.
+        }
         \label{fig:comparison_plots}
     \end{figure}
 
@@ -91,11 +92,14 @@ def make_figure_median_plots():
         'ARX': df_arx,
     }
 
-    fig, axs = plt.subplots(1, 4, figsize=(20, 5), sharey=False)
+    fig, axs = plt.subplots(1, 5, figsize=(20, 5), sharey=False)
 
-    for i, comm_value in enumerate(modes):
+    for i, comm_value in enumerate(modes + ['all']):
         for label, df in dataframes.items():
-            df_filtered = df[df['CommToSch'] == comm_value][['CommToSch', 'DistFromHome']]
+            if comm_value == 'all':
+                df_filtered = df[['CommToSch', 'DistFromHome']]
+            else:
+                df_filtered = df[df['CommToSch'] == comm_value][['CommToSch', 'DistFromHome']]
             df_filtered = df_filtered.sort_values(by='DistFromHome').reset_index(drop=True)
             
             median_value = df_filtered['DistFromHome'].median()
@@ -121,8 +125,8 @@ def make_figure_median_plots():
         # Remove y-axis label from all but the leftmost subplot
         if i == 0:
             axs[i].set_ylabel('DistFromHome')
-        else:
-            axs[i].set_yticklabels([])
+        #else:
+            #axs[i].set_yticklabels([])
 
         axs[i].legend()
 
@@ -131,6 +135,18 @@ def make_figure_median_plots():
     plt.savefig(os.path.join('results', 'tables', 'median_plots.png'))
     plt.savefig(os.path.join('results', 'tables', 'figs', 'median_plots.pdf'))
     plt.close()
+    figure = '''
+        \\begin{figure}
+        \\begin{center}
+        \\includegraphics[width=1.0\linewidth]{median_plots}
+        \\caption{Distance from home distributions, by commuting type. Median distances marked with an X. I made this plot just to better understand where median distance errors were coming from for SynDiffix. There are two problems for SynDiffix. First, we adjust the "outlier" data points because they strictly speaking might break anonymity. Second, there are very few Wheels datapoints, and SynDiffix struggles with that. 
+        }
+        \\label{fig:median_plots}
+        \\end{center}
+        \\end{figure}
+    '''
+    with open(os.path.join('results', 'tables', 'median_plots.tex'), 'w') as f:
+        f.write(figure)
 
 def make_abs_err_tab1_tab2():
     groups = ['count', 'distance_median', 'distance_iqr']
@@ -151,13 +167,27 @@ def make_abs_err_tab1_tab2():
     plt.savefig(os.path.join('results', 'tables', 'figs', 'abs_err_tab1_tab2.pdf'))
     plt.close()
 
+def make_figure_norm_err_tab3_fig1():
+    figure = '''
+        \\begin{figure}
+        \\begin{center}
+        \\includegraphics[width=0.65\linewidth]{norm_err_tab3_fig1}
+        \\caption{Normalized error for coefficients and fit for Figure~\\ref{fig:comparison_plots}. (Note that this plot isn't prettified yet.) This reflects the quality we see in Figure~\\ref{fig:comparison_plots}. SynDiffix clearly has more error than ARX.
+        }
+        \\end{center}
+        \\end{figure}
+    '''
+    with open(os.path.join('results', 'tables', 'norm_err_tab3_fig1.tex'), 'w') as f:
+        f.write(figure)
+    pass
+
 def make_figure_abs_err():
     make_abs_err_tab1_tab2()
     figure = '''
         \\begin{figure}
         \\begin{center}
         \\includegraphics[width=0.85\linewidth]{abs_err_tab1_tab2}
-        \\caption{Absolute error of the three anonymization methods for the counts and distances in Tables~\\ref{tab:table1} and \\ref{tab:table2}.
+        \\caption{Absolute error of the three anonymization methods for the counts and distances in Tables~\\ref{tab:table1} and \\ref{tab:table2}. What we see here is that, for counts, SynDiffix is extremely accurate, but ARX is very accurate as well. SynDiffix and ARX are of equal quality for median and IQR distances. SDV is quite bad.
         }
         \\label{fig:abs_err_tab1_tab2}
         \\end{center}
@@ -335,6 +365,8 @@ figs_tabs = [
     'table2',
     'abs_err_tab1_tab2',
     'r_plots',
+    'norm_err_tab3_fig1',
+    'median_plots'
 ]
 
 make_table1()
@@ -342,6 +374,7 @@ make_table2()
 make_figure_abs_err()
 make_figure_median_plots()
 make_vo2max_grid()
+make_figure_norm_err_tab3_fig1()
 
 # Create a complete LaTeX document
 doc = '''\\documentclass{article}
