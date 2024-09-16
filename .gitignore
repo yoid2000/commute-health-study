@@ -162,3 +162,25 @@ cython_debug/
 CommDataOrig.Rdata
 CommDataOrig.csv
 /.project
+
+
+# LaTeX intermediate and output files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.dvi
+*.ps
+*.spl
+*.run.xml
