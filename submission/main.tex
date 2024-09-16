@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{makecell}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[left=2cm,right=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage[dvipsnames]{xcolor}
+
+\newif\ifblind
+%\blindtrue
+\blindfalse
+
+% Define custom TODO commands for each person with different colors
+\newcommand{\TODO}[3]{\textcolor{#1}{\textbf{TODO[#2]: #3}}}
+\newcommand{\TODOpf}[1]{\TODO{red}{PF}{#1}}
+\newcommand{\TODObl}[1]{\TODO{blue}{BL}{#1}}
+\newcommand{\TODOko}[1]{\TODO{purple}{KO}{#1}}
+\newcommand{\TODOtm}[1]{\TODO{orange}{TM}{#1}}
+\newcommand{\TODOfp}[1]{\TODO{ForestGreen}{FP}{#1}}
+\newcommand{\TODOall}[1]{\TODO{Magenta}{ALL}{#1}}
+
+\graphicspath{{figs/}}
+\DeclareGraphicsExtensions{.png,.pdf}
+
+
+\title{A study of the suitability of synthetic data for the analysis of a health fitness dataset}
+
+\author{
+  Paul Francis\\
+  MPI-SWS
+  \and
+  Gregor Jurak\\
+  Institution
+  \and
+  Bojan Leskošek\\
+  Institution
+  \and
+  Thierry Meurers\\
+  Institution
+  \and
+  Karen Otte\\
+  Institution
+  \and
+  Fabian Praßer\\
+  Institution
+}
+
+\date{} % Suppress the date
+
+\begin{document}
+\maketitle
+\input{abstract}
+\input{introduction}
+\input{methods}
+\input{dataset}
+\input{results}
+\input{analysis}
+\input{modified}
+\input{overall}
+\input{summary}
+
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}

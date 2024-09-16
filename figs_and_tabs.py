@@ -1,8 +1,46 @@
 import pandas as pd
 import os
+import shutil
 import subprocess
 import matplotlib.pyplot as plt
 from syndiffix_tools.tables_reader import TablesReader
+
+import pandas as pd
+import numpy as np
+
+def write_table(table, name):
+    with open(os.path.join('results', 'tables', name), 'w') as f:
+        f.write(table)
+    with open(os.path.join('submission', 'tables', name), 'w') as f:
+        f.write(table)
+
+def my_savefig(plt, name):
+    plt.savefig(os.path.join('results', 'tables', f'{name}.png'))
+    plt.savefig(os.path.join('results', 'tables', 'figs', f'{name}.pdf'))
+    plt.savefig(os.path.join('submission', 'figs', f'{name}.pdf'))
+
+
+def set_prt_class(df):
+    xx = ['orig', 'sdx', 'arx', 'sdv']
+    # Initialize the new columns
+    for x in xx:
+        df[f'{x}_p'] = -1
+    
+    def classify(val):
+        if val <= 0.001:
+            return 3
+        elif val <= 0.01:
+            return 2
+        elif val <= 0.05:
+            return 1
+        else:
+            return 0
+    
+    mask = df['val_type'] == 'prt'
+    for x in xx:
+        df.loc[mask, f'{x}_p'] = df.loc[mask, f'{x}_val'].apply(classify)
+        df[f'{x}_p'] = df[f'{x}_p'].astype(int)
+    return df
 
 # Get the original and synthetic data
 baseDir = os.environ['COMMUTE_HEALTH_PATH']
@@ -17,6 +55,11 @@ commute_modes = list(df_orig['CommToSch'].unique())
 df_sdv = pd.read_parquet(os.path.join('SDV', 'datasets', 'syn_dataset.parquet'))
 df_arx = pd.read_parquet(os.path.join('ARX', 'datasets', 'syn_dataset.parquet'))
 
+# Copy the figures made with CommCode.R to the results/tables/figs directory
+for filename in ['r_orig_plot.png', 'r_sdx_plot.png', 'r_arx_plot.png', 'r_sdv_plot.png']:
+    shutil.copy(os.path.join('results', filename), os.path.join('results', 'tables', 'figs', filename))
+    shutil.copy(os.path.join('results', filename), os.path.join('submission', 'figs', filename))
+
 def change_modes(df):
     changes = [['car','Car'], ['public','Public'], ['wheels','Wheels'], ['walk','Walk']]
     for change in changes:
@@ -26,7 +69,10 @@ def change_modes(df):
 
 # Read in results/paper_values.json as a DataFrame
 df = pd.read_json(os.path.join('results', 'paper_values.json'))
-print(df.head())
+df = set_prt_class(df)
+df_filtered = df[df['val_type'] == 'prt']
+pd.set_option('display.max_columns', None)
+print(df_filtered.head(5))
 methods = ['orig_val', 'sdx_val', 'arx_val', 'sdv_val']
 
 df = change_modes(df)
@@ -75,8 +121,7 @@ def make_vo2max_grid():
 
     """
 
-    with open(os.path.join('results', 'tables', 'r_plots.tex'), 'w') as file:
-        file.write(latex_code)
+    write_table(latex_code, 'r_plots.tex')
 
 def make_figure_median_plots():
     # These are the columns we'll use for the syndiffix plots
@@ -132,8 +177,7 @@ def make_figure_median_plots():
 
     plt.suptitle('DistFromHome by CommToSch')
     plt.tight_layout(rect=[0, 0, 1, 0.95])
-    plt.savefig(os.path.join('results', 'tables', 'median_plots.png'))
-    plt.savefig(os.path.join('results', 'tables', 'figs', 'median_plots.pdf'))
+    my_savefig(plt, 'median_plots')
     plt.close()
     figure = '''
         \\begin{figure}
@@ -145,8 +189,7 @@ def make_figure_median_plots():
         \\end{center}
         \\end{figure}
     '''
-    with open(os.path.join('results', 'tables', 'median_plots.tex'), 'w') as f:
-        f.write(figure)
+    write_table(figure, 'median_plots.tex')
 
 def make_abs_err_tab1_tab2():
     groups = ['count', 'distance_median', 'distance_iqr']
@@ -163,23 +206,51 @@ def make_abs_err_tab1_tab2():
         axs[i].set_title(titles[i])
 
     plt.tight_layout(rect=[0, 0, 1, 0.95]) 
-    plt.savefig(os.path.join('results', 'tables', 'abs_err_tab1_tab2.png'))
-    plt.savefig(os.path.join('results', 'tables', 'figs', 'abs_err_tab1_tab2.pdf'))
+    my_savefig(plt, 'abs_err_tab1_tab2')
+    plt.close()
+
+
+def get_low_p(df):
+    df1 = df[(df['val_type'] == 'prt') & (df['orig_val'] <= 0.05)]
+    df_coeff = df[df['val_type'] == 'coefficient']
+    df_filtered = df_coeff.merge(
+        df1[['context', 'tab_column', 'tab_row', 'tab_sub_column']],
+        on=['context', 'tab_column', 'tab_row', 'tab_sub_column'],
+        how='inner'
+    )
+    return df_filtered
+
+def make_norm_err_tab3_fig1():
+    groups = ['coefficient', 'custom', 'fit']
+    titles = ['Coefficient (all)', 'Coefficient (p <= 0.05)', 'Fit']
+    columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
+    x_labels = ['SynDiffix', 'ARX', 'SDV']
+    fig, axs = plt.subplots(1, len(groups), figsize=(9, 3), sharey=False)
+    for i, group in enumerate(groups):
+        if group == 'custom':
+            df_filtered = get_low_p(df)
+        else:
+            df_filtered = df[df['val_type'] == group]
+        data_to_plot = df_filtered[columns].dropna()
+        axs[i].boxplot(data_to_plot, tick_labels=columns)
+        axs[i].set_xticklabels(x_labels)
+        axs[i].set_title(titles[i])
+    plt.tight_layout()
+    my_savefig(plt, 'norm_err_tab3_fig1')
     plt.close()
 
 def make_figure_norm_err_tab3_fig1():
+    make_norm_err_tab3_fig1()
     figure = '''
         \\begin{figure}
         \\begin{center}
         \\includegraphics[width=0.65\linewidth]{norm_err_tab3_fig1}
-        \\caption{Normalized error for coefficients and fit for Figure~\\ref{fig:comparison_plots}. (Note that this plot isn't prettified yet.) This reflects the quality we see in Figure~\\ref{fig:comparison_plots}. SynDiffix clearly has more error than ARX.
+        \\caption{Normalized error for coefficients and fit for Figure~\\ref{fig:comparison_plots}. This reflects the quality we see in Figure~\\ref{fig:comparison_plots}. SynDiffix clearly has more error than ARX.
         }
         \\end{center}
         \\end{figure}
     '''
-    with open(os.path.join('results', 'tables', 'norm_err_tab3_fig1.tex'), 'w') as f:
-        f.write(figure)
-    pass
+    write_table(figure, 'norm_err_tab3_fig1.tex')
 
 def make_figure_abs_err():
     make_abs_err_tab1_tab2()
@@ -193,9 +264,194 @@ def make_figure_abs_err():
         \\end{center}
         \\end{figure}
     '''
-    with open(os.path.join('results', 'tables', 'abs_err_tab1_tab2.tex'), 'w') as f:
-        f.write(figure)
-    pass
+    write_table(figure, 'abs_err_tab1_tab2.tex')
+
+def make_table3():
+    dirs = ['From home to school', 'From school to home']
+
+    def make_cell(mode, dir, val_type1, val_type2):
+        df1 = df[(df['context'] == 'Table 3') & (df['tab_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type1)]
+        if len(df1) != 1:
+            print(f'Error: df1 has length {len(df1)}, {mode}, {dir}, {val_type1}')
+        df2 = df[(df['context'] == 'Table 3') & (df['tab_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type2)]
+        if len(df2) != 1:
+            print(f'Error: df2 has length {len(df2)}, {mode}, {dir}, {val_type2}')
+        cell = ' \\makecell[l]{'
+        for method in methods:
+            val1 = df1.iloc[0][method]
+            val2 = df2.iloc[0][method]
+            op = cma = cp = ''
+            if val_type1 == 'ci_low':
+                op = '('                  # open paren
+                cma = ', '                # comma
+                cp = ')'                  # close paren
+            val1 = round(val1, 2)
+            if val_type2 == 'prt':
+                if val2 <= 0.001: val2 = '***'
+                elif val2 <= 0.01: val2 = '**'
+                elif val2 <= 0.05: val2 = '*'
+                else: val2 = ''
+            else:
+                val2 = round(val2, 2)
+            if method == 'orig_val':
+                cell += f'\\textbf{{{op}{val1}{cma}{val2}{cp}}} \\\\'
+            else:
+                cell += f'{op}{val1}{cma}{val2}{cp} \\\\'
+        return cell + '}'
+    # ------------------------------------------------------
+    table = '''
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllll}
+      \\toprule
+        \\textbf{Variables}
+          & \\multicolumn{4}{l}{\\textbf{Adjusted model}} \\\\ \\cline{2-5}
+        & \\multicolumn{2}{l}{\\textbf{From home to school}} 
+          & \\multicolumn{2}{l}{\\textbf{From school to home}} \\\\ \\cline{2-3} \\cline{4-5}
+        & \\textbf{Coefficient} & \\textbf{95\\% CI} & \\textbf{Coefficient} & \\textbf{95\\% CI} \\\\
+      \\midrule
+    '''
+    table += '\\textbf{Constant} '
+    table += f'   & {make_cell("Constant", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Constant", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Constant", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Constant", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Commuting group}} \\\\ \n'
+    table += '\\quad Car '
+    table += f'   & {make_cell("Car", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public '
+    table += f'   & {make_cell("Public", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels '
+    table += f'   & {make_cell("Wheels", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Walk (ref) & & & & \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Interaction Commuting group x Distance}} \\\\ \n'
+    table += '\\quad Car x Distance '
+    table += f'   & {make_cell("Car x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public x Distance '
+    table += f'   & {make_cell("Public x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels x Distance '
+    table += f'   & {make_cell("Wheels x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Walk x Distance '
+    table += f'   & {make_cell("Walk x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '''
+      \\bottomrule
+      {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
+      \\end{tabular}
+      \\end{small}
+      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      }
+      \\label{tab:table3a}
+      \\end{center}
+      \\end{table}
+    '''
+    write_table(table, 'table3a.tex')
+    # ------------------------------------------------------
+    # ------------------------------------------------------
+    table = '''
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllll}
+      \\toprule
+        \\textbf{Variables}
+          & \\multicolumn{4}{l}{\\textbf{Adjusted model}} \\\\ \\cline{2-5}
+        & \\multicolumn{2}{l}{\\textbf{From home to school}} 
+          & \\multicolumn{2}{l}{\\textbf{From school to home}} \\\\ \\cline{2-3} \\cline{4-5}
+        & \\textbf{Coefficient} & \\textbf{95\\% CI} & \\textbf{Coefficient} & \\textbf{95\\% CI} \\\\
+      \\midrule
+    '''
+    table += '\\textbf{Gender} & & & & \\\\ \n'
+    table += '\\quad Males '
+    table += f'   & {make_cell("Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Females (ref) & & & & \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Interaction Commuting group x Gender}} \\\\ \n'
+    table += '\\quad Car x Gender '
+    table += f'   & {make_cell("Car x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public x Males '
+    table += f'   & {make_cell("Public x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels x Males '
+    table += f'   & {make_cell("Wheels x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Walk x Males (ref) & & & & \\\\ \n'
+    table += '\\textbf{Covariates} & & & & \\\\ \n'
+    table += '\\quad MVPA '
+    table += f'   & {make_cell("MVPA", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("MVPA", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("MVPA", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("MVPA", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Age '
+    table += f'   & {make_cell("Age", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Age", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Age", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Age", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '''
+      \\bottomrule
+      {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
+      \\end{tabular}
+      \\end{small}
+      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      }
+      \\label{tab:table3b}
+      \\end{center}
+      \\end{table}
+    '''
+    write_table(table, 'table3b.tex')
+    # ------------------------------------------------------
 
 def make_table2():
     dirs = ['From home to school', 'From school to home']
@@ -261,13 +517,12 @@ def make_table2():
       \\bottomrule
       \\end{tabular}
       \\end{small}
-      \\caption{Table 2 from the paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \\caption{Table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
       \\label{tab:table2}
       \\end{center}
       \\end{table}
     '''
-    with open(os.path.join('results', 'tables', 'table2.tex'), 'w') as f:
-        f.write(table)
+    write_table(table, 'table2.tex')
 
 def make_table1():
     CNT = 0
@@ -357,20 +612,89 @@ def make_table1():
       \\end{center}
       \\end{table}
     '''
-    with open(os.path.join('results', 'tables', 'table1.tex'), 'w') as f:
-        f.write(table)
+    write_table(table, 'table1.tex')
+
+def make_p_table():
+    count_prt = (df['val_type'] == 'prt').sum()
+    count_small_p = ((df['val_type'] == 'prt') & (df['orig_p'] > 0)).sum()
+    count_big_p = count_prt - count_small_p
+    xx = ['sdx', 'arx', 'sdv']
+    pdata = {}
+    for x in xx:
+        small_match = ((df['orig_p'] > 0) & (df[f'{x}_p'] > 0)).sum()
+        big_match = ((df['orig_p'] == 0) & (df[f'{x}_p'] == 0)).sum()
+        exact_small = ((df['orig_p'] > 0) & (df['orig_p'] == df[f'{x}_p'])).sum()
+        small_off_1 = ((df['orig_p'] > 0) & (df[f'{x}_p'] > 0) & ((abs(df['orig_p'] - df[f'{x}_p'])) == 1)).sum()
+        small_off_2 = ((df['orig_p'] > 0) & (df[f'{x}_p'] > 0) & ((abs(df['orig_p'] - df[f'{x}_p'])) == 2)).sum()
+        pdata[x] = {
+            'small_match': small_match,
+            'big_match': big_match,
+            'exact_small': exact_small,
+            'small_off_1': small_off_1,
+            'small_off_2': small_off_2,
+            'small_match_per': round(100 * (small_match / count_small_p)),
+            'big_match_per': round(100 * (big_match / count_big_p)),
+            'exact_small_per': round(100 * (exact_small / count_small_p)),
+            'small_off_1_per': round(100 * (small_off_1 / count_small_p)),
+            'small_off_2_per': round(100 * (small_off_2 / count_small_p)),
+        }
+    table = '''
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{llll}
+      \\toprule
+        & SDX & ARX & SDV \\\\
+      \\midrule
+    '''
+    table += f'    Of the original {count_small_p} significant p-values, method is also significat '
+    for x in xx:
+        table += f' & {pdata[x]["small_match"]} ({pdata[x]["small_match_per"]}\\%) '
+    table += ' \\\\ \n'
+    table += f'    Of the original {count_big_p} insignificant p-values, method is also insignificat '
+    for x in xx:
+        table += f' & {pdata[x]["big_match"]} ({pdata[x]["big_match_per"]}\\%) '
+    table += ' \\\\ \n'
+    table += f'    Of the original {count_small_p} significant p-values, method matches '
+    for x in xx:
+        table += f' & {pdata[x]["exact_small"]} ({pdata[x]["exact_small_per"]}\\%) '
+    table += ' \\\\ \n'
+    table += f'    Of the original {count_small_p} significant p-values, method off by 1 '
+    for x in xx:
+        table += f' & {pdata[x]["small_off_1"]} ({pdata[x]["small_off_1_per"]}\\%) '
+    table += ' \\\\ \n'
+    table += f'    Of the original {count_small_p} significant p-values, method off by 2 '
+    for x in xx:
+        table += f' & {pdata[x]["small_off_2"]} ({pdata[x]["small_off_2_per"]}\\%) '
+    table += ' \\\\ \n'
+    table += '''
+      \\bottomrule
+      \\end{tabular}
+      \\end{small}
+      \\caption{Error between each method's p-values and the original p-values. P-values are significant when $p \\leq 0.05$. P-values are binned as $p \\leq 0.001$, $0.001 < p \\leq 0.01$, and $0.01 < p \\leq 0.05$. Off by 1 means that the method's bin is one off from the original data's bin (both being significant). Off by 2 means that the method's bin is two off from the original data's bin.
+      }
+      \\label{tab:p_table}
+      \\end{center}
+      \\end{table}
+    '''
+    write_table(table, 'p_table.tex')
 
 figs_tabs = [
     'table1',
     'table2',
+    'table3a',
+    'table3b',
     'abs_err_tab1_tab2',
     'r_plots',
     'norm_err_tab3_fig1',
+    'p_table',
     'median_plots'
 ]
 
 make_table1()
 make_table2()
+make_table3()
+make_p_table()
 make_figure_abs_err()
 make_figure_median_plots()
 make_vo2max_grid()
@@ -386,6 +710,7 @@ doc = '''\\documentclass{article}
 \\usepackage{graphicx}
 \\usepackage{caption}
 \\usepackage{subcaption}
+\\usepackage{longtable}
 
 
 \\graphicspath{{figs/}}

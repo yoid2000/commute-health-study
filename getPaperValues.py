@@ -138,8 +138,8 @@ def update_row(row, dset, val):
         row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / 100
     else:
         row[f'{dset}_abs_err'] = abs(val - row['orig_val'])
-        if max(val, row['orig_val']) != 0:
-            row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / max(val, row['orig_val'])
+        if max(abs(val), abs(row['orig_val'])) != 0:
+            row[f'{dset}_norm_err'] = abs(val - row['orig_val']) / max(abs(val), abs(row['orig_val']))
 
 tab3_mappings = {
     "(Intercept)": "Constant",
@@ -494,22 +494,4 @@ for i, group in enumerate(groups):
 plt.suptitle('Normalized Error for Table 3 and Figure 1')
 plt.savefig(os.path.join('results', 'plots', 'norm_err_tab3_fig1.png'))
 plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab3_fig1.pdf'))
-plt.close()
-
-df_orig_sorted_home = df_orig['DistFromHome'].sort_values().reset_index(drop=True)
-df_orig_sorted_school = df_orig['DistFromSchool'].sort_values().reset_index(drop=True)
-df_sdx_sorted_home = df_sdx['DistFromHome'].sort_values().reset_index(drop=True)
-df_sdx_sorted_school = df_sdx['DistFromSchool'].sort_values().reset_index(drop=True)
-plt.figure(figsize=(10, 6))
-plt.plot(df_orig_sorted_home, label='Orig - Home', linestyle='-', marker='')
-plt.plot(df_orig_sorted_school, label='Orig - School', linestyle='-', marker='')
-plt.plot(df_sdx_sorted_home, label='SDX - Home', linestyle='-', marker='')
-plt.plot(df_sdx_sorted_school, label='SDX - School', linestyle='-', marker='')
-plt.title('Distance Distributions')
-plt.xlabel('')
-plt.ylabel('Distance (meters)')
-plt.legend()
-plt.grid(True)
-plt.savefig(os.path.join('results', 'plots', 'distances.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'distances.pdf'))
 plt.close()
