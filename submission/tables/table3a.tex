@@ -1,4 +1,5 @@
 
+      \setlength{\fboxsep}{0pt}
       \begin{table}
       \begin{center}
       \begin{small}
@@ -10,30 +11,31 @@
           & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
         & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
       \midrule
-    \textbf{Constant}    &  \makecell[l]{\textbf{36.42***} \\32.34*** \\33.19*** \\56.08*** \\}   &  \makecell[l]{\textbf{(28.17, 44.67)} \\(25.94, 38.74) \\(25.82, 40.56) \\(45.07, 67.09) \\}   &  \makecell[l]{\textbf{36.63***} \\35.49*** \\35.36*** \\49.18*** \\}   &  \makecell[l]{\textbf{(29.11, 44.15)} \\(29.47, 41.5) \\(28.65, 42.07) \\(40.44, 57.91) \\} \\ 
+    \textbf{Constant}    &  \makecell[l]{\orig{36.42}\orig{***} \\\arxg{33.19}\arxg{***} \\\sdvg{56.08}\sdvg{***} \\\sdxg{27.94}\sdxg{***} \\}   &  \makecell[l]{\orig{(28.17}, \orig{44.67)} \\\arxg{(25.82}, \arxg{40.56)} \\\sdvg{(45.07}, \sdvg{67.09)} \\\sdxg{(20.74}, \sdxg{35.14)} \\}   &  \makecell[l]{\orig{36.63}\orig{***} \\\arxg{35.36}\arxg{***} \\\sdvg{49.18}\sdvg{***} \\\sdxg{32.89}\sdxg{***} \\}   &  \makecell[l]{\orig{(29.11}, \orig{44.15)} \\\arxg{(28.65}, \arxg{42.07)} \\\sdvg{(40.44}, \sdvg{57.91)} \\\sdxg{(26.25}, \sdxg{39.54)} \\} \\ 
 \multicolumn{5}{l}{\textbf{Commuting group}} \\ 
-\quad Car    &  \makecell[l]{\textbf{-6.49} \\8.68** \\-7.28 \\-9.17 \\}   &  \makecell[l]{\textbf{(-15.92, 2.94)} \\(2.32, 15.04) \\(-15.49, 0.92) \\(-21.3, 2.95) \\}   &  \makecell[l]{\textbf{-15.13*} \\-7.57 \\-17.72** \\2.4 \\}   &  \makecell[l]{\textbf{(-26.88, -3.39)} \\(-15.5, 0.36) \\(-29.65, -5.8) \\(-6.44, 11.24) \\} \\ 
+\quad Car    &  \makecell[l]{\orig{-6.49}\orig{\phantom{***}} \\\arxg{-7.28}\arxg{\phantom{***}} \\\sdvg{-9.17}\sdvg{\phantom{***}} \\\sdxg{-2.18}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-15.92}, \orig{2.94)} \\\arxg{(-15.49}, \arxg{0.92)} \\\sdvg{(-21.3}, \sdvg{2.95)} \\\sdxg{(-9.25}, \sdxg{4.88)} \\}   &  \makecell[l]{\orig{-15.13}\orig{*\phantom{**}} \\\arxg{-17.72}\arxg{**\phantom{*}} \\\sdvg{2.4}\sdvvb{\phantom{***}} \\\sdxg{-12.67}\sdxg{*\phantom{**}} \\}   &  \makecell[l]{\orig{(-26.88}, \orig{-3.39)} \\\arxg{(-29.65}, \arxg{-5.8)} \\\sdvg{(-6.44}, \sdvg{11.24)} \\\sdxg{(-22.82}, \sdxg{-2.52)} \\} \\ 
 & & & & \\ 
-\quad Public    &  \makecell[l]{\textbf{-0.08} \\2.93 \\3.21 \\-6.17 \\}   &  \makecell[l]{\textbf{(-9.06, 8.9)} \\(-2.61, 8.48) \\(-4.59, 11.01) \\(-16.67, 4.32) \\}   &  \makecell[l]{\textbf{-3.19} \\2.3 \\-4.08 \\-2.57 \\}   &  \makecell[l]{\textbf{(-11.27, 4.88)} \\(-2.92, 7.53) \\(-10.99, 2.84) \\(-9.06, 3.92) \\} \\ 
+\quad Public    &  \makecell[l]{\orig{-0.08}\orig{\phantom{***}} \\\arxg{3.21}\arxg{\phantom{***}} \\\sdvg{-6.17}\sdvg{\phantom{***}} \\\sdxg{-0.15}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-9.06}, \orig{8.9)} \\\arxg{(-4.59}, \arxg{11.01)} \\\sdvg{(-16.67}, \sdvg{4.32)} \\\sdxg{(-6.37}, \sdxg{6.07)} \\}   &  \makecell[l]{\orig{-3.19}\orig{\phantom{***}} \\\arxg{-4.08}\arxg{\phantom{***}} \\\sdvg{-2.57}\sdvg{\phantom{***}} \\\sdxg{8.71}\sdxvb{**\phantom{*}} \\}   &  \makecell[l]{\orig{(-11.27}, \orig{4.88)} \\\arxg{(-10.99}, \arxg{2.84)} \\\sdvg{(-9.06}, \sdvg{3.92)} \\\sdxg{(2.72}, \sdxg{14.71)} \\} \\ 
 & & & & \\ 
-\quad Wheels    &  \makecell[l]{\textbf{3.0} \\9.95 \\3.88 \\-8.69 \\}   &  \makecell[l]{\textbf{(-16.24, 22.25)} \\(-1.84, 21.74) \\(-11.83, 19.58) \\(-23.52, 6.14) \\}   &  \makecell[l]{\textbf{15.66} \\6.92 \\17.16 \\1.48 \\}   &  \makecell[l]{\textbf{(-4.09, 35.41)} \\(-10.66, 24.5) \\(-4.9, 39.22) \\(-7.47, 10.44) \\} \\ 
+\quad Wheels    &  \makecell[l]{\orig{3.0}\orig{\phantom{***}} \\\arxg{3.88}\arxg{\phantom{***}} \\\sdvg{-8.69}\sdvg{\phantom{***}} \\\sdxg{3.23}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-16.24}, \orig{22.25)} \\\arxg{(-11.83}, \arxg{19.58)} \\\sdvg{(-23.52}, \sdvg{6.14)} \\\sdxg{(-10.68}, \sdxg{17.13)} \\}   &  \makecell[l]{\orig{15.66}\orig{\phantom{***}} \\\arxg{17.16}\arxg{\phantom{***}} \\\sdvg{1.48}\sdvg{\phantom{***}} \\\sdxg{10.7}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-4.09}, \orig{35.41)} \\\arxg{(-4.9}, \arxg{39.22)} \\\sdvg{(-7.47}, \sdvg{10.44)} \\\sdxg{(-3.6}, \sdxg{24.99)} \\} \\ 
 \quad Walk (ref) & & & & \\ 
 \multicolumn{5}{l}{\textbf{Interaction Commuting group x Distance}} \\ 
-\quad Car x Distance    &  \makecell[l]{\textbf{0.58} \\-0.69** \\0.79** \\0.35 \\}   &  \makecell[l]{\textbf{(-0.04, 1.2)} \\(-1.16, -0.22) \\(0.24, 1.34) \\(-0.35, 1.06) \\}   &  \makecell[l]{\textbf{1.25**} \\0.31 \\1.38** \\-0.28 \\}   &  \makecell[l]{\textbf{(0.34, 2.17)} \\(-0.37, 0.98) \\(0.44, 2.33) \\(-0.94, 0.37) \\} \\ 
+\quad Car x Distance    &  \makecell[l]{\orig{0.58}\orig{\phantom{***}} \\\arxg{0.79}\arxvb{**\phantom{*}} \\\sdvg{0.35}\sdvg{\phantom{***}} \\\sdxg{0.42}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-0.04}, \orig{1.2)} \\\arxg{(0.24}, \arxg{1.34)} \\\sdvg{(-0.35}, \sdvg{1.06)} \\\sdxg{(-0.08}, \sdxg{0.91)} \\}   &  \makecell[l]{\orig{1.25}\orig{**\phantom{*}} \\\arxg{1.38}\arxg{**\phantom{*}} \\\sdvg{-0.28}\sdvvb{\phantom{***}} \\\sdxg{2.06}\sdxg{***} \\}   &  \makecell[l]{\orig{(0.34}, \orig{2.17)} \\\arxg{(0.44}, \arxg{2.33)} \\\sdvg{(-0.94}, \sdvg{0.37)} \\\sdxg{(1.19}, \sdxg{2.93)} \\} \\ 
 & & & & \\ 
-\quad Public x Distance    &  \makecell[l]{\textbf{0.06} \\-0.13 \\-0.04 \\0.04 \\}   &  \makecell[l]{\textbf{(-0.49, 0.61)} \\(-0.5, 0.23) \\(-0.52, 0.45) \\(-0.48, 0.56) \\}   &  \makecell[l]{\textbf{0.33} \\-0.4* \\0.37 \\0.38 \\}   &  \makecell[l]{\textbf{(-0.21, 0.88)} \\(-0.77, -0.04) \\(-0.1, 0.84) \\(-0.06, 0.82) \\} \\ 
+\quad Public x Distance    &  \makecell[l]{\orig{0.06}\orig{\phantom{***}} \\\arxg{-0.04}\arxg{\phantom{***}} \\\sdvg{0.04}\sdvg{\phantom{***}} \\\sdxg{0.26}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-0.49}, \orig{0.61)} \\\arxg{(-0.52}, \arxg{0.45)} \\\sdvg{(-0.48}, \sdvg{0.56)} \\\sdxg{(-0.13}, \sdxg{0.65)} \\}   &  \makecell[l]{\orig{0.33}\orig{\phantom{***}} \\\arxg{0.37}\arxg{\phantom{***}} \\\sdvg{0.38}\sdvg{\phantom{***}} \\\sdxg{0.03}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-0.21}, \orig{0.88)} \\\arxg{(-0.1}, \arxg{0.84)} \\\sdvg{(-0.06}, \sdvg{0.82)} \\\sdxg{(-0.39}, \sdxg{0.45)} \\} \\ 
 & & & & \\ 
-\quad Wheels x Distance    &  \makecell[l]{\textbf{-0.09} \\-0.71 \\0.08 \\0.09 \\}   &  \makecell[l]{\textbf{(-1.79, 1.62)} \\(-1.66, 0.24) \\(-1.32, 1.48) \\(-0.88, 1.07) \\}   &  \makecell[l]{\textbf{-1.15} \\-0.49 \\-1.41 \\-0.04 \\}   &  \makecell[l]{\textbf{(-2.89, 0.6)} \\(-1.9, 0.91) \\(-3.35, 0.53) \\(-0.75, 0.66) \\} \\ 
+\quad Wheels x Distance    &  \makecell[l]{\orig{-0.09}\orig{\phantom{***}} \\\arxg{0.08}\arxg{\phantom{***}} \\\sdvg{0.09}\sdvg{\phantom{***}} \\\sdxg{0.19}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-1.79}, \orig{1.62)} \\\arxg{(-1.32}, \arxg{1.48)} \\\sdvg{(-0.88}, \sdvg{1.07)} \\\sdxg{(-1.07}, \sdxg{1.44)} \\}   &  \makecell[l]{\orig{-1.15}\orig{\phantom{***}} \\\arxg{-1.41}\arxg{\phantom{***}} \\\sdvg{-0.04}\sdvg{\phantom{***}} \\\sdxg{-0.13}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-2.89}, \orig{0.6)} \\\arxg{(-3.35}, \arxg{0.53)} \\\sdvg{(-0.75}, \sdvg{0.66)} \\\sdxg{(-1.36}, \sdxg{1.11)} \\} \\ 
 & & & & \\ 
-\quad Walk x Distance    &  \makecell[l]{\textbf{-0.02} \\0.18 \\0.17 \\-0.63 \\}   &  \makecell[l]{\textbf{(-0.62, 0.58)} \\(-0.15, 0.51) \\(-0.33, 0.68) \\(-1.28, 0.02) \\}   &  \makecell[l]{\textbf{0.03} \\-0.22 \\-0.04 \\-0.08 \\}   &  \makecell[l]{\textbf{(-0.42, 0.48)} \\(-0.53, 0.09) \\(-0.42, 0.34) \\(-0.44, 0.28) \\} \\ 
+\quad Walk x Distance    &  \makecell[l]{\orig{-0.02}\orig{\phantom{***}} \\\arxg{0.17}\arxg{\phantom{***}} \\\sdvg{-0.63}\sdvg{\phantom{***}} \\\sdxg{0.17}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-0.62}, \orig{0.58)} \\\arxg{(-0.33}, \arxg{0.68)} \\\sdvg{(-1.28}, \sdvg{0.02)} \\\sdxg{(-0.24}, \sdxg{0.58)} \\}   &  \makecell[l]{\orig{0.03}\orig{\phantom{***}} \\\arxg{-0.04}\arxg{\phantom{***}} \\\sdvg{-0.08}\sdvg{\phantom{***}} \\\sdxg{0.66}\sdxvb{***} \\}   &  \makecell[l]{\orig{(-0.42}, \orig{0.48)} \\\arxg{(-0.42}, \arxg{0.34)} \\\sdvg{(-0.44}, \sdvg{0.28)} \\\sdxg{(0.3}, \sdxg{1.02)} \\} \\ 
 
       \bottomrule
       {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
       \end{tabular}
       \end{small}
-      \caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      \caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \label{tab:table3a}
       \end{center}
       \end{table}
+      \setlength{\fboxsep}{3pt}
     

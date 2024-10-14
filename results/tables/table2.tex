@@ -1,4 +1,5 @@
 
+      \setlength{\fboxsep}{0pt}
       \begin{table}
       \begin{center}
       \begin{small}
@@ -9,17 +10,18 @@
           & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
           & \textbf{N (\%)} & \textbf{Distance (IQR)} & \textbf{N (\%)} & \textbf{Distance (IQR)} \\
       \midrule
-    Car      &  \makecell[l]{\textbf{170 (24\%)} \\169 (24\%) \\182 (26\%) \\177 (25\%) \\}      &  \makecell[l]{\textbf{3133 (3945)} \\3532 (4155) \\3758 (3915) \\7602 (8467) \\}      &  \makecell[l]{\textbf{71 (10\%)} \\70 (10\%) \\58 (8\%) \\95 (13\%) \\}      &  \makecell[l]{\textbf{3615 (3896)} \\2615 (4607) \\3910 (3800) \\3934 (7362) \\} \\ \cline{2-5}
-Public      &  \makecell[l]{\textbf{230 (32\%)} \\232 (33\%) \\212 (30\%) \\221 (31\%) \\}      &  \makecell[l]{\textbf{4782 (4296)} \\4676 (3960) \\4973 (4193) \\5690 (8320) \\}      &  \makecell[l]{\textbf{245 (34\%)} \\245 (34\%) \\252 (35\%) \\210 (29\%) \\}      &  \makecell[l]{\textbf{4996 (4033)} \\5296 (3600) \\5140 (3686) \\2249 (5174) \\} \\ \cline{2-5}
-Wheels      &  \makecell[l]{\textbf{34 (5\%)} \\36 (5\%) \\31 (4\%) \\96 (13\%) \\}      &  \makecell[l]{\textbf{1366 (2211)} \\1097 (1254) \\1356 (1378) \\6671 (8472) \\}      &  \makecell[l]{\textbf{28 (4\%)} \\30 (4\%) \\14 (2\%) \\97 (14\%) \\}      &  \makecell[l]{\textbf{1444 (2369)} \\1236 (2263) \\2235 (3245) \\2741 (5282) \\} \\ \cline{2-5}
-Walk      &  \makecell[l]{\textbf{279 (39\%)} \\279 (39\%) \\278 (39\%) \\219 (31\%) \\}      &  \makecell[l]{\textbf{799 (789)} \\789 (797) \\805 (795) \\5498 (8697) \\}      &  \makecell[l]{\textbf{369 (52\%)} \\368 (52\%) \\379 (53\%) \\311 (44\%) \\}      &  \makecell[l]{\textbf{973 (1043)} \\952 (996) \\954 (1062) \\2374 (6068) \\} \\ \cline{2-5}
-      Total       & \makecell[l]{\textbf{713 (100\%)} \\716 (100\%) \\703 (99\%) \\713 (100\%) \\} &       & \makecell[l]{\textbf{713 (100\%)} \\713 (100\%) \\703 (99\%) \\713 (100\%) \\} & \\ 
+    Car      &  \makecell[l]{\orig{170} \orig{(24\%)} \\\arxg{182} \arxg{(26\%)} \\\sdvg{177} \sdvg{(25\%)} \\\sdxg{169} \sdxg{(24\%)} \\}      &  \makecell[l]{\orig{3133} \orig{(3945)} \\\arxb{3758} \arxg{(3915)} \\\sdvvb{7602} \sdvvb{(8467)} \\\sdxb{3754} \sdxg{(4215)} \\}      &  \makecell[l]{\orig{71} \orig{(10\%)} \\\arxb{58} \arxb{(8\%)} \\\sdvb{95} \sdvb{(13\%)} \\\sdxg{70} \sdxg{(10\%)} \\}      &  \makecell[l]{\orig{3615} \orig{(3896)} \\\arxg{3910} \arxg{(3800)} \\\sdvg{3934} \sdvvb{(7362)} \\\sdxb{2584} \sdxg{(3560)} \\} \\ \cline{2-5}
+Public      &  \makecell[l]{\orig{230} \orig{(32\%)} \\\arxg{212} \arxg{(30\%)} \\\sdvg{221} \sdvg{(31\%)} \\\sdxg{232} \sdxg{(33\%)} \\}      &  \makecell[l]{\orig{4782} \orig{(4296)} \\\arxg{4973} \arxg{(4193)} \\\sdvb{5690} \sdvvb{(8320)} \\\sdxg{4712} \sdxg{(4228)} \\}      &  \makecell[l]{\orig{245} \orig{(34\%)} \\\arxg{252} \arxg{(35\%)} \\\sdvg{210} \sdvg{(29\%)} \\\sdxg{245} \sdxg{(34\%)} \\}      &  \makecell[l]{\orig{4996} \orig{(4033)} \\\arxg{5140} \arxg{(3686)} \\\sdvvb{2249} \sdvb{(5174)} \\\sdxg{5011} \sdxg{(4097)} \\} \\ \cline{2-5}
+Wheels      &  \makecell[l]{\orig{34} \orig{(5\%)} \\\arxg{31} \arxg{(4\%)} \\\sdvvb{96} \sdvvb{(13\%)} \\\sdxg{36} \sdxg{(5\%)} \\}      &  \makecell[l]{\orig{1366} \orig{(2211)} \\\arxg{1356} \arxvb{(1378)} \\\sdvvb{6671} \sdvvb{(8472)} \\\sdxb{1094} \sdxg{(2251)} \\}      &  \makecell[l]{\orig{28} \orig{(4\%)} \\\arxb{14} \arxvb{(2\%)} \\\sdvvb{97} \sdvvb{(14\%)} \\\sdxg{30} \sdxg{(4\%)} \\}      &  \makecell[l]{\orig{1444} \orig{(2369)} \\\arxvb{2235} \arxb{(3245)} \\\sdvvb{2741} \sdvvb{(5282)} \\\sdxg{1337} \sdxvb{(1376)} \\} \\ \cline{2-5}
+Walk      &  \makecell[l]{\orig{279} \orig{(39\%)} \\\arxg{278} \arxg{(39\%)} \\\sdvb{219} \sdvb{(31\%)} \\\sdxg{279} \sdxg{(39\%)} \\}      &  \makecell[l]{\orig{799} \orig{(789)} \\\arxg{805} \arxg{(795)} \\\sdvvb{5498} \sdvvb{(8697)} \\\sdxg{787} \sdxg{(737)} \\}      &  \makecell[l]{\orig{369} \orig{(52\%)} \\\arxg{379} \arxg{(53\%)} \\\sdvb{311} \sdvb{(44\%)} \\\sdxg{368} \sdxg{(52\%)} \\}      &  \makecell[l]{\orig{973} \orig{(1043)} \\\arxg{954} \arxg{(1062)} \\\sdvvb{2374} \sdvvb{(6068)} \\\sdxg{960} \sdxg{(1037)} \\} \\ \cline{2-5}
+      Total       & \makecell[l]{\textbf{713 (100\%)} \\703 (99\%) \\713 (100\%) \\716 (100\%) \\} &       & \makecell[l]{\textbf{713 (100\%)} \\703 (99\%) \\713 (100\%) \\713 (100\%) \\} & \\ 
 
       \bottomrule
       \end{tabular}
       \end{small}
-      \caption{Table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \caption{Table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
       \label{tab:table2}
       \end{center}
       \end{table}
+      \setlength{\fboxsep}{3pt}
     
