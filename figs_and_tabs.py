@@ -44,7 +44,9 @@ def get_star_color(orig, syn):
         return 'color-very-bad'
     if (syn == star1 and orig == star3) or (syn == star3 and orig == star1):
         # both significant, but off by 2 *'s
-        return 'color-bad'
+        # there is only one of these in the commute dataset, so decided to ignore it
+        return 'color-good'
+        #return 'color-bad'
     return 'color-good'
 
 def get_rel_color(orig, syn):
@@ -446,7 +448,7 @@ def make_table3():
       {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
       \\end{tabular}
       \\end{small}
-      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
+      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\colorbox{color-very-bad}{Red} shading indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \\label{tab:table3a}
       \\end{center}
@@ -519,7 +521,7 @@ def make_table3():
       {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
       \\end{tabular}
       \\end{small}
-      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
+      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\colorbox{color-very-bad}{Red} shading indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \\label{tab:table3b}
       \\end{center}
@@ -597,7 +599,7 @@ def make_table2():
       \\bottomrule
       \\end{tabular}
       \\end{small}
-      \\caption{Table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \\caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. The shading for counts (N) are as described for Table~\\ref{tab:table1}. Distance and IRQ are shaded \\colorbox{color-very-bad}{red} when the relative error is greater than 30\\%, and shaded \\colorbox{color-bad}{orange} when the relative error is greater than 15\\%.  Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
       \\label{tab:table2}
       \\end{center}
       \\end{table}
@@ -689,7 +691,7 @@ def make_table1():
       \\bottomrule
       \\end{tabular}
       \\end{small}
-      \\caption{Table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix.}
+      \\caption{Base-table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. Counts and their corresponding percentages are shaded \\colorbox{color-very-bad}{red} when the absolute error is greater than 20 or the relative error is greater than 30\\%. They are shaded \\colorbox{color-bad}{orange} when the absolute error is greater than 10 or the relative error is greater than 15\\%.}
       \\label{tab:table1}
       \\end{center}
       \\end{table}
