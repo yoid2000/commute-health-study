@@ -1,41 +1,53 @@
 # Commuting Health Paper
 
-Repo for testing synthetic data to see if it is fit for purpose for doing the analysis in the paper "Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian schoolchildren: a nationwide cross-sectional study". (A copy of the paper is in the papers directory.)
+This repo contains the code used to produce the data, figures, and tables for the paper "Data Anonymization for Open Science: A Case Study", by Paul Francis, Gregor Jurak, Bojan Leskosek, Thierry Meurers, Karen Otte, and Fabian Praßer.
+
+The paper takes the original data from a base study, anonymized it using three different anonymization tools (ARX 2-anonymity, SDV CTGAN, and SynDiffix), and then determines whether the scientific conclusions of the original paper still hold when the anonymized data is used. 
+
+The base paper for this study is "Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian school children: a nationwide cross-sectional study" by Gregor Jurak, Maroje Soric, Vedrana Sember, Sasa Djuric, Gregor Starc, Marjeta Kovac, and Bojan Leskosek.
+
+A copy of the base study is at papers/commute.pdf. It can be found online at:
 
 https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-021-10326-6
 
-## Datasets
+## Original data
 
-CommData.csv contains synthetic versions of the full dataset used for the paper. These were produced from the original data by SynDiffix. They can be used to develop synthesis scripts, after which the scripts can be run on the original data by authorized persons.
+The original data is not publicly available due to privacy reasons. Please contact Bojan Leskosek at Bojan.Leskosek@fsp.uni-lj.si if you are interested in the original data. (Note this is not a promise to give you the data.)
 
-### Columns in the commute health data
+CommDataSyn.csv is a synthetic version of the original data. It can be used for testing purposes, but is not used in any evaluation.
 
- * VO2max: The health measure (Oxygen uptake for the shuttle run test and other factors) 56.7335978100438
- * CommToSch: Transport mode to school "car"
- * CommHome: Transport mode from school "car"
- * gender: male or female
- * age: a float 12.3242803444478
- * MVPAsqrt: Self-reported physical activity level (from survey) 25.6904651573303
- * DistLog2Home 15.4460170879173
- * DistLog2ToSch 15.4460170879173
- * DistFromHome 44639
- * DistFromSchool 44639
+The true original data should be placed in CommDataOrig.csv. 
+
+# Synthetic data
+
+The directories ARX, SDV, and SynDiffix contain the code to generate the synthetic data for the respective tools. The README files in those directories contain more information.
+
+The synthetic data for ARX and SDV can be found in the following locations respectively:
+
+ARX/datasets/syn_dataset.csv and syn_dataset.parquet
+
+SDV/datasets/syn_dataset.csv and syn_dataset.parquet
+
+SynDiffix is unique in that it produces multiple datasets when it anonymizes. The datasets are written into a zip file known as a SynDiffix blob. The blob is placed in a directory defined by the environment variable 
+
+The different datasets contain different columns, and the basic idea is that the dataset with only the columns needed for any given analytic purpose are used. This dataset will have the best accuracy for the analytic task. 
+
+The R script CommCode.R does the linear regression on the data. It uses two of the SynDiffix synthetic data files (one for each direction of commute), located at:
+
+synDiffix\datasets\sdx_toHome_target_VO2max.csv
+
+synDiffix\datasets\sdx_toSchool_target_VO2max.csv
 
 
- VO2max’= constant + commuting group + gender + MVPA + age + commuting group × gender + commuting group × distance
 
 
-## Paper script
+## Workflow
+
+
+
+
 
 The script CommCode.R does the analysis and generates the figure from the paper. Note that since CommData.csv is not the original data, the plot produced is slightly different from that of the original paper.
-
-## Useful scripts
-
-Rdata2csv.R: Creates a csv from from the Rdata. From this we can synthesize. Edit the file name before running.
-
-csv2Rdata.R: Creates an Rdata file from the csv. Edit the file name before running.
-
-Can run, for instance, with `Rscript Rdata2csv.R` in the vscode terminal
 
 ## Build SynDiffix synthetic data
 
