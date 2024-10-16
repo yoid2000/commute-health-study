@@ -92,29 +92,3 @@ results/tables/table3b.tex
 (Note that these table numbers map to those of the original study paper.)
 
 `figs_and_tabs.py` also produces the file `figs_and_tabs.tex`. This is a main latex file that can be compiled to produce `figs_and_tabs.pdf` as a convenient way of viewing all of the figures and tables.
-
-
-
-
-
-
-
-The script CommCode.R does the analysis and generates the figure from the paper. Note that since CommData.csv is not the original data, the plot produced is slightly different from that of the original paper.
-
-## Build SynDiffix synthetic data
-
-### Tools needed
-
-We are using the github repo `syndiffix_tools` to help manage the building and retrieval of SynDiffix datasets. (Note that, unlike most synthetic data tools, SynDiffix generates multiple dataset.)
-
-Install with:
-
-`python -m pip install git+https://github.com/diffix/syndiffix_tools.git`
-
-(Running this in a venv is highly recommended.)
-
-## Miscellaneous notes
-
-Can this be done from the synthetic data?
-
-> A post-hoc power analysis showed that, given the number of individuals included in this analysis (N = 713), number of predictors in the models (N = 6) and an alpha value set at 0.05, we had sufficient power (beta=0.81) to detect small effect size (f = 0.14).
