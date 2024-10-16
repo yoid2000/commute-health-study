@@ -16,7 +16,44 @@
 
 \definecolor{color-bad}{rgb}{1, 0.9, 0.8}
 \definecolor{color-very-bad}{rgb}{1, 0.7, 0.7}
-\definecolor{color-abit}{rgb}{1, 1, 0.8}
+\definecolor{color-abit}{rgb}{1, 1, 0.8}      % legacy, not used
+\definecolor{color-good}{rgb}{1, 1, 1}     % this is white
+
+
+\newcommand{\completeexample}[1]{%
+  \textbf{\textit{\uline{\textcolor{color-very-bad}{\colorbox{color-bad}{#1}}}}}%
+}
+\newcommand{\orig}[1]{%
+  \textbf{\textcolor{black}{\colorbox{color-good}{#1}}}%
+}
+\newcommand{\arxg}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-good}{#1}}}%
+}
+\newcommand{\arxb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-bad}{#1}}}%
+}
+\newcommand{\arxvb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-very-bad}{#1}}}%
+}
+\newcommand{\sdvg}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-good}{#1}}}%
+}
+\newcommand{\sdvb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-bad}{#1}}}%
+}
+\newcommand{\sdvvb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-very-bad}{#1}}}%
+}
+\newcommand{\sdxg}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-good}{#1}}}%
+}
+\newcommand{\sdxb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-bad}{#1}}}%
+}
+\newcommand{\sdxvb}[1]{%
+  \textnormal{\textcolor{black}{\colorbox{color-very-bad}{#1}}}%
+}
+
 
 
 \begin{document}

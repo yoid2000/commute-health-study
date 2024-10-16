@@ -60,7 +60,7 @@ def export_results(anonymeter_results):
 
 
 if __name__ == "__main__":
-    filename_original = r"../CommData.csv"
+    filename_original = r"../CommDataSyn.csv"
 
     df_original = pd.read_csv(filename_original)
     subset, holdout = split_dataset(df_original)

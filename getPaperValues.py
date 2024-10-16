@@ -10,16 +10,12 @@ import matplotlib.pyplot as plt
 pp = pprint.PrettyPrinter(indent=4)
 
 paper_values = []
-baseDir = os.environ['COMMUTE_HEALTH_PATH']
-print(f"setting baseDir to {baseDir}")
-
-synDir = os.path.join(baseDir, 'tmTables', 'syn')
-blobPath = os.path.join(baseDir, 'commute.sdxblob.zip')
+blobPath = os.path.join('synDiffix', 'datasets')
 if not os.path.exists(blobPath):
     sys.exit(f"ERROR: Blob file {blobPath} does not exist")
 
-sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=baseDir, cache_df_in_memory=True, force=True)
-df_orig = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=blobPath, cache_df_in_memory=True, force=True)
+df_orig = pd.read_csv('CommDataOrig.csv', index_col=False)
 print(list(df_orig.columns))
 df_orig = df_orig.loc[:, ~df_orig.columns.str.contains('^Unnamed')]
 total_rows = len(df_orig)
@@ -435,61 +431,3 @@ for column in df_summ.columns:
         print(f"Number of distinct values: {len(distinct_values)}")
 
 do_checks(df_summ)
-
-
-# Make a basic boxplot for all of the normalized error values
-columns = ['arx_norm_err', 'sdv_norm_err', 'sdx_norm_err']
-sns.boxplot(data=df_summ[columns])
-plt.xlabel('')
-plt.ylabel('Normalized Error')
-plt.savefig(os.path.join('results', 'plots', 'norm_err.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err.pdf'))
-plt.close()
-
-# Make a basic boxplot for all of the count error values
-columns = ['arx_abs_err', 'sdv_abs_err', 'sdx_abs_err']
-sns.boxplot(data=df_summ[columns])
-plt.xlabel('')
-plt.ylabel('Count Error')
-plt.savefig(os.path.join('results', 'plots', 'count_err.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'count_err.pdf'))
-plt.close()
-
-groups = ['count', 'distance_median', 'distance_iqr']
-columns = ['arx_abs_err', 'sdv_abs_err', 'sdx_abs_err']
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Normalized Error for Tables 1 and 2')
-plt.savefig(os.path.join('results', 'plots', 'norm_err_tab1_tab2.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab1_tab2.pdf'))
-plt.close()
-
-groups = ['count', 'distance_median', 'distance_iqr']
-columns = ['arx_abs_err', 'sdv_abs_err', 'sdx_abs_err']
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Absolute Error for Tables 1 and 2')
-plt.savefig(os.path.join('results', 'plots', 'abs_err_tab1_tab2.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'abs_err_tab1_tab2.pdf'))
-plt.close()
-
-groups = ['coefficient', 'fit']
-columns = ['arx_norm_err', 'sdv_norm_err', 'sdx_norm_err']
-fig, axs = plt.subplots(1, 2, figsize=(10, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Normalized Error for Table 3 and Figure 1')
-plt.savefig(os.path.join('results', 'plots', 'norm_err_tab3_fig1.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab3_fig1.pdf'))
-plt.close()
