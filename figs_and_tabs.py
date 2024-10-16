@@ -11,13 +11,10 @@ import numpy as np
 def write_table(table, name):
     with open(os.path.join('results', 'tables', name), 'w') as f:
         f.write(table)
-    with open(os.path.join('submission', 'tables', name), 'w') as f:
-        f.write(table)
 
 def my_savefig(plt, name):
     plt.savefig(os.path.join('results', 'tables', f'{name}.png'))
     plt.savefig(os.path.join('results', 'tables', 'figs', f'{name}.pdf'))
-    plt.savefig(os.path.join('submission', 'figs', f'{name}.pdf'))
 
 def get_count_color(orig, syn):
     if not isinstance(syn, (int, float, complex, np.number)):
@@ -105,11 +102,9 @@ def set_prt_class(df):
     return df
 
 # Get the original and synthetic data
-baseDir = os.environ['COMMUTE_HEALTH_PATH']
-print(f"setting baseDir to {baseDir}")
-synDir = os.path.join(baseDir, 'tmTables', 'syn')
-sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=baseDir, cache_df_in_memory=True, force=True)
-df_orig = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+blobDir = os.path.join('synDiffix', 'datasets')
+sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=blobDir, cache_df_in_memory=True, force=True)
+df_orig = pd.read_csv('CommDataOrig.csv', index_col=False)
 print(list(df_orig.columns))
 df_orig = df_orig.loc[:, ~df_orig.columns.str.contains('^Unnamed')]
 total_rows = len(df_orig)
@@ -120,7 +115,6 @@ df_arx = pd.read_parquet(os.path.join('ARX', 'datasets', 'syn_dataset.parquet'))
 # Copy the figures made with CommCode.R to the results/tables/figs directory
 for filename in ['r_orig_plot.png', 'r_arx_plot.png', 'r_sdv_plot.png', 'r_sdx_plot.png']:
     shutil.copy(os.path.join('results', filename), os.path.join('results', 'tables', 'figs', filename))
-    shutil.copy(os.path.join('results', filename), os.path.join('submission', 'figs', filename))
 
 def change_modes(df):
     changes = [['car','Car'], ['public','Public'], ['wheels','Wheels'], ['walk','Walk']]
@@ -806,7 +800,44 @@ doc = '''\\documentclass{article}
 
 \\definecolor{color-bad}{rgb}{1, 0.9, 0.8}
 \\definecolor{color-very-bad}{rgb}{1, 0.7, 0.7}
-\\definecolor{color-abit}{rgb}{1, 1, 0.8}
+\\definecolor{color-abit}{rgb}{1, 1, 0.8}      % legacy, not used
+\\definecolor{color-good}{rgb}{1, 1, 1}     % this is white
+
+
+\\newcommand{\\completeexample}[1]{%
+  \\textbf{\\textit{\\uline{\\textcolor{color-very-bad}{\\colorbox{color-bad}{#1}}}}}%
+}
+\\newcommand{\\orig}[1]{%
+  \\textbf{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\arxg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\arxb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\arxvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+\\newcommand{\\sdvg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\sdvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\sdvvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+\\newcommand{\\sdxg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\sdxb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\sdxvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+
 
 
 \\begin{document}

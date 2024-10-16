@@ -24,24 +24,76 @@ The directories ARX, SDV, and SynDiffix contain the code to generate the synthet
 
 The synthetic data for ARX and SDV can be found in the following locations respectively:
 
+```
 ARX/datasets/syn_dataset.csv and syn_dataset.parquet
-
 SDV/datasets/syn_dataset.csv and syn_dataset.parquet
+```
 
-SynDiffix is unique in that it produces multiple datasets when it anonymizes. The datasets are written into a zip file known as a SynDiffix blob. The blob is placed in a directory defined by the environment variable 
+SynDiffix is unique in that it produces multiple datasets when it anonymizes. The datasets are written into a zip file known as a SynDiffix blob. The blob can be found at:
+
+`synDiffix/datasets/commute.sdxblob.zip`
 
 The different datasets contain different columns, and the basic idea is that the dataset with only the columns needed for any given analytic purpose are used. This dataset will have the best accuracy for the analytic task. 
 
 The R script CommCode.R does the linear regression on the data. It uses two of the SynDiffix synthetic data files (one for each direction of commute), located at:
 
+```
 synDiffix\datasets\sdx_toHome_target_VO2max.csv
-
 synDiffix\datasets\sdx_toSchool_target_VO2max.csv
+```
 
+Because there is no R extension to read a SynDiffix blob, these two files are extracted using the script:
 
-
+`synDiffix/files_from_blob.py`
 
 ## Workflow
+
+Execute the R script `CommCode.R`:
+
+`Rscript CommCode.R` if vscode terminal.
+
+This generates eight files. They are named:
+
+```
+results/r_xxx_plot.png
+results/r_xxx.json
+```
+
+where xxx can be one of `orig`, `arx`, `sdv`, and `sdx`. The plots are displayed in the paper.
+
+Execute:
+
+`python getPaperValues.py`
+
+This reads in the `json` files produced by `CommCode.R` as will as the original and synthetic data files. It generates the following files:
+
+```
+results/paper_values.csv
+results/paper_values.json
+```
+
+(These two files actually contain the same data, but in the two different formats.)
+
+Execute:
+
+`python figs_and_tabs.py`
+
+This reads in `paper_values.json` as well as the synthetic and original data, and produces all of the remaining figures and tables used in the paper (plus some additional plots and tables not used in the paper). The output if placed in `results/tables/`. 
+
+The figures are placed in `results/tables/figs`. The tables are placed in:
+
+```
+results/tables/table1.tex
+results/tables/table2.tex
+results/tables/table3a.tex
+results/tables/table3b.tex
+```
+
+(Note that these table numbers map to those of the original study paper.)
+
+`figs_and_tabs.py` also produces the file `figs_and_tabs.tex`. This is a main latex file that can be compiled to produce `figs_and_tabs.pdf` as a convenient way of viewing all of the figures and tables.
+
+
 
 
 
