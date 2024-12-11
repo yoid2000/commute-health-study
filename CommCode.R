@@ -8,7 +8,6 @@ runComputation <- function(commDataPath2Sch, commDataPath2Home, dataPath, plotPa
     library(ggplot2)
     library(cowplot)
 
-    #dd <- read.csv("CommData.csv")
     dd2s <- read.csv(commDataPath2Sch)
     # If dd2s$DistFromHome is in dd2s, the convert it to log
     if ("DistFromHome" %in% colnames(dd2s)) {
