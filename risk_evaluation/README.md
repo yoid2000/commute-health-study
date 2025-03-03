@@ -1,0 +1,7 @@
+This folder contains the code used to run the Anonymeter-style risk evaluation.
+
+Anonymeter requires that the original data be split into "original" and "control" portions. The original portion is used to generate the synthetic data. The control portion is used as part of the evaluation (it establishes a privacy-neutral baseline). The file `prepare_original_control-py` reads in the full original data, and splits it into its "original and "control" portions. These are named `CommDataOrig_original.csv` and `CommDataOrig_control.csv` respectively.
+
+Anonymeter requires that the synthetic data be generated from the original portion (`CommDataOrig_original.csv`). These are stored in this folder (`risk_evaluation`) as `arx_syn.csv`, `sdv_syn.csv`, and `commute_anonymeter.sdxblob.zip` for ARX, SDV, and SynDiffix respectively. To do this, each of the three anonymization mechanisms generates synthetic data accordingly. For ARX, the input and output files used in the java command described in the associated `ARX/README.md` are modified as needed. For SDV, the code at `SDV/build_ctgan_for_anonymeter.py` is used, and for SynDiffix, the code at `synDiffix/build_sdx_for_anonymeter.py` is used.
+
+The Anonymeter risk analysis for all three methods is run with `run_anonymeter_attacks.py`. This produces the output at `results.json`. The code `make_latex.py` simply reads in `results.json` and makes it into a latex table `risk_results.tex`.

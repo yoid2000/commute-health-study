@@ -162,6 +162,8 @@ cython_debug/
 
 CommDataOrig.Rdata
 CommDataOrig.csv
+CommDataOrig_control.csv
+CommDataOrig_original.csv
 /.project
 
 

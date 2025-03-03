@@ -1,0 +1,38 @@
+{
+    "ARX": {
+        "VO2max": {
+            "value": 0.139,
+            "confidence_low": 0.0,
+            "confidence_high": 0.338
+        },
+        "MVPAsqrt": {
+            "value": 0.131,
+            "confidence_low": 0.023,
+            "confidence_high": 0.239
+        }
+    },
+    "SDV": {
+        "VO2max": {
+            "value": 0.0,
+            "confidence_low": 0.0,
+            "confidence_high": 0.123
+        },
+        "MVPAsqrt": {
+            "value": 0.031,
+            "confidence_low": 0.0,
+            "confidence_high": 0.106
+        }
+    },
+    "SynDiffix": {
+        "VO2max": {
+            "value": 0.017,
+            "confidence_low": 0.0,
+            "confidence_high": 0.248
+        },
+        "MVPAsqrt": {
+            "value": 0.042,
+            "confidence_low": 0.0,
+            "confidence_high": 0.123
+        }
+    }
+}
