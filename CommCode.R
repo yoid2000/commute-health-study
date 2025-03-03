@@ -6,8 +6,8 @@
 
 runComputation <- function(commDataPath2Sch, commDataPath2Home, dataPath, plotPath) {
     library(ggplot2)
+    library(cowplot)
 
-    #dd <- read.csv("CommData.csv")
     dd2s <- read.csv(commDataPath2Sch)
     # If dd2s$DistFromHome is in dd2s, the convert it to log
     if ("DistFromHome" %in% colnames(dd2s)) {
@@ -63,8 +63,16 @@ runComputation <- function(commDataPath2Sch, commDataPath2Home, dataPath, plotPa
     pred.w.clim <- predict(m, new, interval = "confidence")
     pd <- position_dodge(0.3) # move them .05 to the left and right
     q=cbind(new, pred.w.clim)
-    p1=ggplot(q, aes(x=CommToSch, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
-    geom_line(position=pd) +   geom_point(position=pd) +ylim(40,60)+ xlab("Commuting mode (from home to school)") + ylab("VO2max (predicted at mode median distance)")
+    q$CommToSch <- factor(q$CommToSch, levels = c("car", "public", "walk", "wheels"))
+    q$gender <- factor(q$gender, levels = c("male", "female"))
+    p1=ggplot(q, aes(x=CommToSch, y=fit, colour=gender)) +
+        geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
+        geom_line(position=pd) +
+        geom_point(position=pd) +
+        ylim(39,57) +
+        xlab("Commuting mode (from home to school)") +
+        ylab("VO2max (predicted at mode median distance)") +
+        theme(legend.position = "none")
 
     df_conf_2s <- data.frame(
     CommToSch = q$CommToSch,
@@ -106,12 +114,35 @@ runComputation <- function(commDataPath2Sch, commDataPath2Home, dataPath, plotPa
     pred.w.clim <- predict(m, new, interval = "confidence")
     pd <- position_dodge(0.3) # move them .05 to the left and right
     q=cbind(new, pred.w.clim)
-    p2=ggplot(q, aes(x=CommHome, y=fit, colour=gender)) +  geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
-    geom_line(position=pd) +   geom_point(position=pd)+ylim(40,60) + xlab("Commuting mode (from school to home)") + ylab("VO2max (predicted at mode median distance)")
-    png(plotPath, 20, 10, units="cm", res=600)
-    library(gridExtra)
-    grid.arrange(p1, p2, ncol=2)
+    q$CommHome <- factor(q$CommHome, levels = c("car", "public", "walk", "wheels"))
+    q$gender <- factor(q$gender, levels = c("male", "female"))
+    p2=ggplot(q, aes(x=CommHome, y=fit, colour=gender)) +
+        geom_errorbar(aes(ymin=lwr, ymax=upr), width=.1, position=pd) +
+        geom_line(position=pd) +
+        geom_point(position=pd) +
+        ylim(39,57) +
+        xlab("Commuting mode (from school to home)") +
+        ylab(NULL) +
+        guides(colour = guide_legend(title = NULL))  # Remove the legend title
+    # Extract the legend from p2
+    legend <- get_legend(p2)
+    # Remove the legend from p2
+    p2 <- p2 + theme(legend.position = "none")
+
+    # Combine the plots and the legend
+    combined_plot <- plot_grid(
+        p1, p2, legend,
+        ncol = 3,
+        rel_widths = c(1, 1, 0.2)  # Adjust the relative widths as needed
+    )
+    # Save the combined plot
+    png(plotPath, width = 20, height = 10, units = "cm", res = 600)
+    print(combined_plot)
     dev.off()
+
+    #library(gridExtra)
+    #grid.arrange(p1, p2, ncol=2)
+    #dev.off()
 
     df_conf_2h <- data.frame(
     CommHome = q$CommHome,
@@ -138,6 +169,6 @@ print("Done with original ---------------------------------------")
 runComputation("SDV/datasets/syn_dataset.csv", "SDV/datasets/syn_dataset.csv", "results/r_sdv.json", "results/r_sdv_plot.png")
 print("Done with SDV ---------------------------------------")
 runComputation("ARX/datasets/syn_dataset.csv", "ARX/datasets/syn_dataset.csv", "results/r_arx.json", "results/r_arx_plot.png")
-print("Done with SDV ---------------------------------------")
+print("Done with ARX ---------------------------------------")
 runComputation("synDiffix/datasets/sdx_toSchool_target_VO2max.csv", "synDiffix/datasets/sdx_toHome_target_VO2max.csv", "results/r_sdx.json", "results/r_sdx_plot.png")
-print("Done with SDV ---------------------------------------")
+print("Done with SynDiffix ---------------------------------------")

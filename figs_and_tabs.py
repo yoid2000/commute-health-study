@@ -3,7 +3,7 @@ import os
 import shutil
 import subprocess
 import matplotlib.pyplot as plt
-from syndiffix_tools.tables_reader import TablesReader
+from syndiffix import SyndiffixBlobReader
 
 import pandas as pd
 import numpy as np
@@ -11,17 +11,76 @@ import numpy as np
 def write_table(table, name):
     with open(os.path.join('results', 'tables', name), 'w') as f:
         f.write(table)
-    with open(os.path.join('submission', 'tables', name), 'w') as f:
-        f.write(table)
 
 def my_savefig(plt, name):
     plt.savefig(os.path.join('results', 'tables', f'{name}.png'))
     plt.savefig(os.path.join('results', 'tables', 'figs', f'{name}.pdf'))
-    plt.savefig(os.path.join('submission', 'figs', f'{name}.pdf'))
 
+def get_count_color(orig, syn):
+    if not isinstance(syn, (int, float, complex, np.number)):
+        return 'color-very-bad'
+    abs_err = abs(orig - syn)
+    rel_err = abs_err / max(abs(orig), abs(syn))
+    if abs_err < 5 or rel_err < 0.05:
+        return 'color-good'
+    elif abs_err < 10 or rel_err < 0.15:
+        return 'color-good'
+        #return 'color-abit'
+    elif abs_err < 20 or rel_err < 0.3:
+        return 'color-bad'
+    else:
+        return 'color-very-bad'
+
+star0 = '\phantom{***}'
+star1 = '*\phantom{**}'
+star2 = '**\phantom{*}'
+star3 = '***'
+def get_star_color(orig, syn):
+    if (syn == star0 and orig != star0) or (syn != star0 and orig == star0):
+        # one is significant and the other is not
+        return 'color-very-bad'
+    if (syn == star1 and orig == star3) or (syn == star3 and orig == star1):
+        # both significant, but off by 2 *'s
+        # there is only one of these in the commute dataset, so decided to ignore it
+        return 'color-good'
+        #return 'color-bad'
+    return 'color-good'
+
+def get_rel_color(orig, syn):
+    if not isinstance(syn, (int, float, complex, np.number)):
+        return 'color-very-bad'
+    rel_err = abs(orig-syn) / max(abs(orig), abs(syn))
+    if rel_err < 0.05:
+        return 'color-good'
+    elif rel_err < 0.15:
+        return 'color-good'
+        #return 'color-abit'
+    elif rel_err < 0.3:
+        return 'color-bad'
+    else:
+        return 'color-very-bad'
+
+macros = [
+    {'method': 'orig_val', 'color': 'color-good', 'macro': 'orig'},
+    {'method': 'arx_val', 'color': 'color-good', 'macro': 'arxg'},
+    {'method': 'arx_val', 'color': 'color-bad', 'macro': 'arxb'},
+    {'method': 'arx_val', 'color': 'color-very-bad', 'macro': 'arxvb'},
+    {'method': 'sdv_val', 'color': 'color-good', 'macro': 'sdvg'},
+    {'method': 'sdv_val', 'color': 'color-bad', 'macro': 'sdvb'},
+    {'method': 'sdv_val', 'color': 'color-very-bad', 'macro': 'sdvvb'},
+    {'method': 'sdx_val', 'color': 'color-good', 'macro': 'sdxg'},
+    {'method': 'sdx_val', 'color': 'color-bad', 'macro': 'sdxb'},
+    {'method': 'sdx_val', 'color': 'color-very-bad', 'macro': 'sdxvb'},
+]
+
+def get_macro(method, color):
+    for macro in macros:
+        if macro['method'] == method and macro['color'] == color:
+            return macro['macro']
+    return 'orig'
 
 def set_prt_class(df):
-    xx = ['orig', 'sdx', 'arx', 'sdv']
+    xx = ['orig', 'arx', 'sdv', 'sdx']
     # Initialize the new columns
     for x in xx:
         df[f'{x}_p'] = -1
@@ -43,11 +102,9 @@ def set_prt_class(df):
     return df
 
 # Get the original and synthetic data
-baseDir = os.environ['COMMUTE_HEALTH_PATH']
-print(f"setting baseDir to {baseDir}")
-synDir = os.path.join(baseDir, 'tmTables', 'syn')
-tr = TablesReader(dir_path=synDir)
-df_orig = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+blobDir = os.path.join('synDiffix', 'datasets')
+sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=blobDir, cache_df_in_memory=True, force=True)
+df_orig = pd.read_csv('CommDataOrig.csv', index_col=False)
 print(list(df_orig.columns))
 df_orig = df_orig.loc[:, ~df_orig.columns.str.contains('^Unnamed')]
 total_rows = len(df_orig)
@@ -56,9 +113,8 @@ df_sdv = pd.read_parquet(os.path.join('SDV', 'datasets', 'syn_dataset.parquet'))
 df_arx = pd.read_parquet(os.path.join('ARX', 'datasets', 'syn_dataset.parquet'))
 
 # Copy the figures made with CommCode.R to the results/tables/figs directory
-for filename in ['r_orig_plot.png', 'r_sdx_plot.png', 'r_arx_plot.png', 'r_sdv_plot.png']:
+for filename in ['r_orig_plot.png', 'r_arx_plot.png', 'r_sdv_plot.png', 'r_sdx_plot.png']:
     shutil.copy(os.path.join('results', filename), os.path.join('results', 'tables', 'figs', filename))
-    shutil.copy(os.path.join('results', filename), os.path.join('submission', 'figs', filename))
 
 def change_modes(df):
     changes = [['car','Car'], ['public','Public'], ['wheels','Wheels'], ['walk','Walk']]
@@ -73,7 +129,7 @@ df = set_prt_class(df)
 df_filtered = df[df['val_type'] == 'prt']
 pd.set_option('display.max_columns', None)
 print(df_filtered.head(5))
-methods = ['orig_val', 'sdx_val', 'arx_val', 'sdv_val']
+methods = ['orig_val', 'arx_val', 'sdv_val', 'sdx_val']
 
 df = change_modes(df)
 df_sdv = change_modes(df_sdv)
@@ -96,24 +152,25 @@ def make_vo2max_grid():
         \hspace{0.0\textwidth}
         \begin{subfigure}[b]{0.48\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{figs/r_sdx_plot.png}
-            \caption{SynDiffix Plot}
-            \label{fig:r_sdx_plot}
-        \end{subfigure}
-        \vfill
-        \begin{subfigure}[b]{0.48\textwidth}
-            \centering
             \includegraphics[width=\textwidth]{figs/r_arx_plot.png}
             \caption{ARX Plot}
             \label{fig:r_arx_plot}
         \end{subfigure}
-        \hspace{0.0\textwidth}
+        \vfill
         \begin{subfigure}[b]{0.48\textwidth}
             \centering
             \includegraphics[width=\textwidth]{figs/r_sdv_plot.png}
             \caption{SDV Plot}
             \label{fig:r_sdv_plot}
         \end{subfigure}
+        \hspace{0.0\textwidth}
+        \begin{subfigure}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/r_sdx_plot.png}
+            \caption{SynDiffix Plot}
+            \label{fig:r_sdx_plot}
+        \end{subfigure}
+
         \caption{Comparison of the VO2max data. Here we see that ARX matches very closely with the original data. SynDiffix is quite close for female, but for reasons I don't understand yet, does somewhat bad for the car commute for males. Otherwise, though SynDiffix is pretty good. SDV is again quite bad. What will be important is whether the correct conclusions can be drown from the data in spite of the error.
         }
         \label{fig:comparison_plots}
@@ -126,15 +183,15 @@ def make_vo2max_grid():
 def make_figure_median_plots():
     # These are the columns we'll use for the syndiffix plots
     working_columns = ['CommToSch', 'DistFromHome']
-    df_sdx = tr.get_best_syn_df(columns=working_columns, target=None)
+    df_sdx = sbr.read(columns=working_columns, target_column=None)
     df_sdx = change_modes(df_sdx)
 
     # Assuming df_orig, df_sdx, df_arx are already defined and modes is a list of CommToSch values
 
     dataframes = {
         'Original': df_orig,
-        'SynDiffix': df_sdx,
         'ARX': df_arx,
+        'SynDiffix': df_sdx,
     }
 
     fig, axs = plt.subplots(1, 5, figsize=(20, 5), sharey=False)
@@ -194,8 +251,8 @@ def make_figure_median_plots():
 def make_abs_err_tab1_tab2():
     groups = ['count', 'distance_median', 'distance_iqr']
     titles = ['Counts', 'Median distances (meters)', 'IQR distances (meters)']
-    columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
-    x_labels = ['SynDiffix', 'ARX', 'SDV']
+    columns = ['arx_abs_err', 'sdv_abs_err', 'sdx_abs_err']
+    x_labels = ['ARX', 'SDV', 'SynDiffix']
 
     fig, axs = plt.subplots(1, 3, figsize=(10, 3), sharey=False)
     for i, group in enumerate(groups):
@@ -223,8 +280,8 @@ def get_low_p(df):
 def make_norm_err_tab3_fig1():
     groups = ['coefficient', 'custom', 'fit']
     titles = ['Coefficient (all)', 'Coefficient (p <= 0.05)', 'Fit']
-    columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
-    x_labels = ['SynDiffix', 'ARX', 'SDV']
+    columns = ['arx_norm_err', 'sdv_norm_err', 'sdx_norm_err']
+    x_labels = ['ARX', 'SDV', 'SynDiffix']
     fig, axs = plt.subplots(1, len(groups), figsize=(9, 3), sharey=False)
     for i, group in enumerate(groups):
         if group == 'custom':
@@ -277,6 +334,13 @@ def make_table3():
         if len(df2) != 1:
             print(f'Error: df2 has length {len(df2)}, {mode}, {dir}, {val_type2}')
         cell = ' \\makecell[l]{'
+        val1_orig = df1.iloc[0]['orig_val']
+        val2_orig = df2.iloc[0]['orig_val']
+        if val_type2 == 'prt':
+            if val2_orig <= 0.001: val2_orig = star3
+            elif val2_orig <= 0.01: val2_orig = star2
+            elif val2_orig <= 0.05: val2_orig = star1
+            else: val2_orig = star0
         for method in methods:
             val1 = df1.iloc[0][method]
             val2 = df2.iloc[0][method]
@@ -285,21 +349,26 @@ def make_table3():
                 op = '('                  # open paren
                 cma = ', '                # comma
                 cp = ')'                  # close paren
+            #col1 = get_rel_color(val1_orig, val1)
+            col1 = 'color-good'
+            mac1 = get_macro(method, col1)
             val1 = round(val1, 2)
             if val_type2 == 'prt':
-                if val2 <= 0.001: val2 = '***'
-                elif val2 <= 0.01: val2 = '**'
-                elif val2 <= 0.05: val2 = '*'
-                else: val2 = ''
+                if val2 <= 0.001: val2 = star3
+                elif val2 <= 0.01: val2 = star2
+                elif val2 <= 0.05: val2 = star1
+                else: val2 = star0
+                col2 = get_star_color(val2_orig, val2)
             else:
+                #col2 = get_rel_color(val2_orig, val2)
+                col2 = 'color-good'
                 val2 = round(val2, 2)
-            if method == 'orig_val':
-                cell += f'\\textbf{{{op}{val1}{cma}{val2}{cp}}} \\\\'
-            else:
-                cell += f'{op}{val1}{cma}{val2}{cp} \\\\'
+            mac2 = get_macro(method, col2)
+            cell += f'\\{mac1}{{{op}{val1}}}{cma}\\{mac2}{{{val2}{cp}}} \\\\'
         return cell + '}'
     # ------------------------------------------------------
     table = '''
+      \\setlength{\\fboxsep}{0pt}
       \\begin{table}
       \\begin{center}
       \\begin{small}
@@ -373,16 +442,18 @@ def make_table3():
       {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
       \\end{tabular}
       \\end{small}
-      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\colorbox{color-very-bad}{Red} shading indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \\label{tab:table3a}
       \\end{center}
       \\end{table}
+      \\setlength{\\fboxsep}{3pt}
     '''
     write_table(table, 'table3a.tex')
     # ------------------------------------------------------
     # ------------------------------------------------------
     table = '''
+      \\setlength{\\fboxsep}{0pt}
       \\begin{table}
       \\begin{center}
       \\begin{small}
@@ -444,11 +515,12 @@ def make_table3():
       {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
       \\end{tabular}
       \\end{small}
-      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\colorbox{color-very-bad}{Red} shading indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \\label{tab:table3b}
       \\end{center}
       \\end{table}
+      \\setlength{\\fboxsep}{3pt}
     '''
     write_table(table, 'table3b.tex')
     # ------------------------------------------------------
@@ -469,21 +541,25 @@ def make_table2():
         if len(df2) != 1:
             print(f'Error: df2 has length {len(df2)}, {mode}, {dir}, {val_type2}')
         cell = ' \\makecell[l]{'
+        val1_orig = df1.iloc[0]['orig_val']
+        val2_orig = df2.iloc[0]['orig_val']
         for method in methods:
             p = '\\%' if val_type2 == 'percent' else ''
             val1 = df1.iloc[0][method]
+            col1 = get_count_color(val1_orig, val1) if val_type2 == 'percent' else get_rel_color(val1_orig, val1)
             if p == '\\%': col_totals[method][dir][0] += val1
             val1 = int(val1)
+            mac1 = get_macro(method, col1)
             val2 = df2.iloc[0][method]
+            col2 = get_rel_color(val2_orig, val2)
+            mac2 = get_macro(method, col2)
             if p == '\\%': col_totals[method][dir][1] += val2
             val2 = round(val2)
-            if method == 'orig_val':
-                cell += f'\\textbf{{{val1} ({val2}{p})}} \\\\'
-            else:
-                cell += f'{val1} ({val2}{p}) \\\\'
+            cell += f'\\{mac1}{{{val1}}} \\{mac2}{{({val2}{p})}} \\\\'
         return cell + '}'
 
     table = '''
+      \\setlength{\\fboxsep}{0pt}
       \\begin{table}
       \\begin{center}
       \\begin{small}
@@ -517,10 +593,11 @@ def make_table2():
       \\bottomrule
       \\end{tabular}
       \\end{small}
-      \\caption{Table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \\caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. The shading for counts (N) are as described for Table~\\ref{tab:table1}. Distance and IRQ are shaded \\colorbox{color-very-bad}{red} when the relative error is greater than 30\\%, and shaded \\colorbox{color-bad}{orange} when the relative error is greater than 15\\%.  Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
       \\label{tab:table2}
       \\end{center}
       \\end{table}
+      \\setlength{\\fboxsep}{3pt}
     '''
     write_table(table, 'table2.tex')
 
@@ -540,8 +617,11 @@ def make_table1():
         if len(df_percent) != 1:
             print(f'Error: df_percent has length {len(df_percent)}, {row_mode}, {col_mode}')
         cell = ' \\makecell[l]{'
+        count_orig = df_count.iloc[0]['orig_val']
         for method in methods:
             count = df_count.iloc[0][method]
+            col_count = get_count_color(count_orig, count)
+            mac = get_macro(method, col_count)
             row_totals[method][CNT] += count
             col_totals[method][col_mode][CNT] += count
             count = int(count)
@@ -549,13 +629,11 @@ def make_table1():
             row_totals[method][PCT] += percent
             col_totals[method][col_mode][PCT] += percent
             percent = round(percent, 1)
-            if method == 'orig_val':
-                cell += f'\\textbf{{{count} ({percent}\\%)}} \\\\'
-            else:
-                cell += f'{count} ({percent}\\%) \\\\'
+            cell += f'\\{mac}{{{count} ({percent}\\%)}} \\\\'
         return cell[:-3] + '}'
 
     table = '''
+      \\setlength{\\fboxsep}{0pt}
       \\begin{table}
       \\begin{center}
       \\begin{small}
@@ -607,10 +685,11 @@ def make_table1():
       \\bottomrule
       \\end{tabular}
       \\end{small}
-      \\caption{Table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV.}
+      \\caption{Base-table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. Counts and their corresponding percentages are shaded \\colorbox{color-very-bad}{red} when the absolute error is greater than 20 or the relative error is greater than 30\\%. They are shaded \\colorbox{color-bad}{orange} when the absolute error is greater than 10 or the relative error is greater than 15\\%.}
       \\label{tab:table1}
       \\end{center}
       \\end{table}
+      \\setlength{\\fboxsep}{3pt}
     '''
     write_table(table, 'table1.tex')
 
@@ -618,7 +697,7 @@ def make_p_table():
     count_prt = (df['val_type'] == 'prt').sum()
     count_small_p = ((df['val_type'] == 'prt') & (df['orig_p'] > 0)).sum()
     count_big_p = count_prt - count_small_p
-    xx = ['sdx', 'arx', 'sdv']
+    xx = ['arx', 'sdv', 'sdx']
     pdata = {}
     for x in xx:
         small_match = ((df['orig_p'] > 0) & (df[f'{x}_p'] > 0)).sum()
@@ -639,12 +718,13 @@ def make_p_table():
             'small_off_2_per': round(100 * (small_off_2 / count_small_p)),
         }
     table = '''
+      \\setlength{\\fboxsep}{0pt}
       \\begin{table}
       \\begin{center}
       \\begin{small}
       \\begin{tabular}{llll}
       \\toprule
-        & SDX & ARX & SDV \\\\
+        & ARX & SDV & SynDiffix \\\\
       \\midrule
     '''
     table += f'    Of the original {count_small_p} significant p-values, method is also significat '
@@ -676,6 +756,7 @@ def make_p_table():
       \\label{tab:p_table}
       \\end{center}
       \\end{table}
+      \\setlength{\\fboxsep}{3pt}
     '''
     write_table(table, 'p_table.tex')
 
@@ -711,10 +792,52 @@ doc = '''\\documentclass{article}
 \\usepackage{caption}
 \\usepackage{subcaption}
 \\usepackage{longtable}
+\\usepackage[dvipsnames]{xcolor}
 
 
 \\graphicspath{{figs/}}
 \\DeclareGraphicsExtensions{.png,.pdf}
+
+\\definecolor{color-bad}{rgb}{1, 0.9, 0.8}
+\\definecolor{color-very-bad}{rgb}{1, 0.7, 0.7}
+\\definecolor{color-abit}{rgb}{1, 1, 0.8}      % legacy, not used
+\\definecolor{color-good}{rgb}{1, 1, 1}     % this is white
+
+
+\\newcommand{\\completeexample}[1]{%
+  \\textbf{\\textit{\\uline{\\textcolor{color-very-bad}{\\colorbox{color-bad}{#1}}}}}%
+}
+\\newcommand{\\orig}[1]{%
+  \\textbf{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\arxg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\arxb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\arxvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+\\newcommand{\\sdvg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\sdvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\sdvvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+\\newcommand{\\sdxg}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-good}{#1}}}%
+}
+\\newcommand{\\sdxb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-bad}{#1}}}%
+}
+\\newcommand{\\sdxvb}[1]{%
+  \\textnormal{\\textcolor{black}{\\colorbox{color-very-bad}{#1}}}%
+}
+
 
 
 \\begin{document}

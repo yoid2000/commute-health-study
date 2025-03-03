@@ -83,6 +83,7 @@ def inference_attack(synthetic, holdout, df_original):
 
 
 def singlingout_attack(synthetic, holdout, df_original, mode="univariate"):
+
     evaluator = SinglingOutEvaluator(ori=df_original,
                                      syn=synthetic,
                                      control=holdout,

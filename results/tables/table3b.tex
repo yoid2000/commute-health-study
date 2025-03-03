@@ -1,4 +1,5 @@
 
+      \setlength{\fboxsep}{0pt}
       \begin{table}
       \begin{center}
       \begin{small}
@@ -11,27 +12,28 @@
         & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
       \midrule
     \textbf{Gender} & & & & \\ 
-\quad Males    &  \makecell[l]{\textbf{7.97***} \\7.5*** \\8.19*** \\0.29 \\}   &  \makecell[l]{\textbf{(6.75, 9.19)} \\(6.45, 8.55) \\(7.2, 9.18) \\(-1.66, 2.25) \\}   &  \makecell[l]{\textbf{7.58***} \\7.94*** \\7.45*** \\-0.36 \\}   &  \makecell[l]{\textbf{(6.52, 8.63)} \\(7.01, 8.87) \\(6.6, 8.29) \\(-1.99, 1.27) \\} \\ 
+\quad Males    &  \makecell[l]{\orig{7.97}\orig{***} \\\arxg{8.19}\arxg{***} \\\sdvg{0.29}\sdvvb{\phantom{***}} \\\sdxg{7.27}\sdxg{***} \\}   &  \makecell[l]{\orig{(6.75}, \orig{9.19)} \\\arxg{(7.2}, \arxg{9.18)} \\\sdvg{(-1.66}, \sdvg{2.25)} \\\sdxg{(6.11}, \sdxg{8.44)} \\}   &  \makecell[l]{\orig{7.58}\orig{***} \\\arxg{7.45}\arxg{***} \\\sdvg{-0.36}\sdvvb{\phantom{***}} \\\sdxg{8.26}\sdxg{***} \\}   &  \makecell[l]{\orig{(6.52}, \orig{8.63)} \\\arxg{(6.6}, \arxg{8.29)} \\\sdvg{(-1.99}, \sdvg{1.27)} \\\sdxg{(7.31}, \sdxg{9.2)} \\} \\ 
 \quad Females (ref) & & & & \\ 
 \multicolumn{5}{l}{\textbf{Interaction Commuting group x Gender}} \\ 
-\quad Car x Gender    &  \makecell[l]{\textbf{-2.2*} \\-0.42 \\-2.32** \\-2.75 \\}   &  \makecell[l]{\textbf{(-4.16, -0.24)} \\(-2.14, 1.29) \\(-3.86, -0.77) \\(-5.66, 0.16) \\}   &  \makecell[l]{\textbf{-2.63*} \\1.68 \\-2.3* \\0.41 \\}   &  \makecell[l]{\textbf{(-5.23, -0.03)} \\(-0.68, 4.04) \\(-4.59, -0.01) \\(-2.97, 3.78) \\} \\ 
+\quad Car x Gender    &  \makecell[l]{\orig{-2.2}\orig{*\phantom{**}} \\\arxg{-2.32}\arxg{**\phantom{*}} \\\sdvg{-2.75}\sdvvb{\phantom{***}} \\\sdxg{-0.35}\sdxvb{\phantom{***}} \\}   &  \makecell[l]{\orig{(-4.16}, \orig{-0.24)} \\\arxg{(-3.86}, \arxg{-0.77)} \\\sdvg{(-5.66}, \sdvg{0.16)} \\\sdxg{(-2.17}, \sdxg{1.48)} \\}   &  \makecell[l]{\orig{-2.63}\orig{*\phantom{**}} \\\arxg{-2.3}\arxg{*\phantom{**}} \\\sdvg{0.41}\sdvvb{\phantom{***}} \\\sdxg{-4.21}\sdxg{**\phantom{*}} \\}   &  \makecell[l]{\orig{(-5.23}, \orig{-0.03)} \\\arxg{(-4.59}, \arxg{-0.01)} \\\sdvg{(-2.97}, \sdvg{3.78)} \\\sdxg{(-6.97}, \sdxg{-1.44)} \\} \\ 
 & & & & \\ 
-\quad Public x Males    &  \makecell[l]{\textbf{-2.0*} \\-0.18 \\-2.56*** \\-1.69 \\}   &  \makecell[l]{\textbf{(-3.81, -0.2)} \\(-1.71, 1.35) \\(-4.05, -1.07) \\(-4.46, 1.07) \\}   &  \makecell[l]{\textbf{-1.35} \\-1.08 \\-1.53* \\-2.18 \\}   &  \makecell[l]{\textbf{(-2.99, 0.3)} \\(-2.53, 0.37) \\(-2.83, -0.22) \\(-4.77, 0.4) \\} \\ 
+\quad Public x Males    &  \makecell[l]{\orig{-2.0}\orig{*\phantom{**}} \\\arxg{-2.56}\arxg{***} \\\sdvg{-1.69}\sdvvb{\phantom{***}} \\\sdxg{-0.5}\sdxvb{\phantom{***}} \\}   &  \makecell[l]{\orig{(-3.81}, \orig{-0.2)} \\\arxg{(-4.05}, \arxg{-1.07)} \\\sdvg{(-4.46}, \sdvg{1.07)} \\\sdxg{(-2.16}, \sdxg{1.16)} \\}   &  \makecell[l]{\orig{-1.35}\orig{\phantom{***}} \\\arxg{-1.53}\arxvb{*\phantom{**}} \\\sdvg{-2.18}\sdvg{\phantom{***}} \\\sdxg{-1.88}\sdxvb{*\phantom{**}} \\}   &  \makecell[l]{\orig{(-2.99}, \orig{0.3)} \\\arxg{(-2.83}, \arxg{-0.22)} \\\sdvg{(-4.77}, \sdvg{0.4)} \\\sdxg{(-3.35}, \sdxg{-0.41)} \\} \\ 
 & & & & \\ 
-\quad Wheels x Males    &  \makecell[l]{\textbf{-1.95} \\-0.68 \\-4.06 \\-0.17 \\}   &  \makecell[l]{\textbf{(-7.49, 3.6)} \\(-4.17, 2.81) \\(-10.16, 2.05) \\(-3.71, 3.38) \\}   &  \makecell[l]{\textbf{-3.09} \\-2.73 \\nan \\0.16 \\}   &  \makecell[l]{\textbf{(-9.31, 3.12)} \\(-7.11, 1.66) \\(nan, nan) \\(-3.25, 3.56) \\} \\ 
+\quad Wheels x Males    &  \makecell[l]{\orig{-1.95}\orig{\phantom{***}} \\\arxg{-4.06}\arxg{\phantom{***}} \\\sdvg{-0.17}\sdvg{\phantom{***}} \\\sdxg{0.05}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-7.49}, \orig{3.6)} \\\arxg{(-10.16}, \arxg{2.05)} \\\sdvg{(-3.71}, \sdvg{3.38)} \\\sdxg{(-3.38}, \sdxg{3.47)} \\}   &  \makecell[l]{\orig{-3.09}\orig{\phantom{***}} \\\arxg{nan}\arxg{\phantom{***}} \\\sdvg{0.16}\sdvg{\phantom{***}} \\\sdxg{nan}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-9.31}, \orig{3.12)} \\\arxg{(nan}, \arxg{nan)} \\\sdvg{(-3.25}, \sdvg{3.56)} \\\sdxg{(nan}, \sdxg{nan)} \\} \\ 
 \quad Walk x Males (ref) & & & & \\ 
 \textbf{Covariates} & & & & \\ 
-\quad MVPA    &  \makecell[l]{\textbf{0.08***} \\0.2*** \\0.08*** \\-0.06** \\}   &  \makecell[l]{\textbf{(0.03, 0.12)} \\(0.16, 0.24) \\(0.04, 0.12) \\(-0.11, -0.02) \\}   &  \makecell[l]{\textbf{0.07***} \\0.15*** \\0.07*** \\-0.06** \\}   &  \makecell[l]{\textbf{(0.03, 0.11)} \\(0.11, 0.19) \\(0.03, 0.12) \\(-0.11, -0.01) \\} \\ 
+\quad MVPA    &  \makecell[l]{\orig{0.08}\orig{***} \\\arxg{0.08}\arxg{***} \\\sdvg{-0.06}\sdvg{**\phantom{*}} \\\sdxg{0.17}\sdxg{***} \\}   &  \makecell[l]{\orig{(0.03}, \orig{0.12)} \\\arxg{(0.04}, \arxg{0.12)} \\\sdvg{(-0.11}, \sdvg{-0.02)} \\\sdxg{(0.13}, \sdxg{0.22)} \\}   &  \makecell[l]{\orig{0.07}\orig{***} \\\arxg{0.07}\arxg{***} \\\sdvg{-0.06}\sdvg{**\phantom{*}} \\\sdxg{0.14}\sdxg{***} \\}   &  \makecell[l]{\orig{(0.03}, \orig{0.11)} \\\arxg{(0.03}, \arxg{0.12)} \\\sdvg{(-0.11}, \sdvg{-0.01)} \\\sdxg{(0.09}, \sdxg{0.18)} \\} \\ 
 & & & & \\ 
-\quad Age    &  \makecell[l]{\textbf{0.43*} \\0.34 \\0.53** \\-0.11 \\}   &  \makecell[l]{\textbf{(0.0, 0.85)} \\(-0.03, 0.7) \\(0.14, 0.92) \\(-0.64, 0.42) \\}   &  \makecell[l]{\textbf{0.4} \\0.5** \\0.55** \\-0.08 \\}   &  \makecell[l]{\textbf{(-0.02, 0.82)} \\(0.13, 0.87) \\(0.17, 0.93) \\(-0.61, 0.45) \\} \\ 
+\quad Age    &  \makecell[l]{\orig{0.43}\orig{*\phantom{**}} \\\arxg{0.53}\arxg{**\phantom{*}} \\\sdvg{-0.11}\sdvvb{\phantom{***}} \\\sdxg{0.66}\sdxg{**\phantom{*}} \\}   &  \makecell[l]{\orig{(0.0}, \orig{0.85)} \\\arxg{(0.14}, \arxg{0.92)} \\\sdvg{(-0.64}, \sdvg{0.42)} \\\sdxg{(0.26}, \sdxg{1.06)} \\}   &  \makecell[l]{\orig{0.4}\orig{\phantom{***}} \\\arxg{0.55}\arxvb{**\phantom{*}} \\\sdvg{-0.08}\sdvg{\phantom{***}} \\\sdxg{-0.05}\sdxg{\phantom{***}} \\}   &  \makecell[l]{\orig{(-0.02}, \orig{0.82)} \\\arxg{(0.17}, \arxg{0.93)} \\\sdvg{(-0.61}, \sdvg{0.45)} \\\sdxg{(-0.43}, \sdxg{0.33)} \\} \\ 
 
       \bottomrule
       {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
       \end{tabular}
       \end{small}
-      \caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. Each group of four presents the data in order of Original (bold), SynDiffix, ARX, and SDV. 
+      \caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \colorbox{color-very-bad}{Red} shading indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original (bold), ARX, SDV, and SynDiffix. 
       }
       \label{tab:table3b}
       \end{center}
       \end{table}
+      \setlength{\fboxsep}{3pt}
     

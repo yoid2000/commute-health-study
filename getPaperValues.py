@@ -1,7 +1,8 @@
 import os
+import sys
 import pandas as pd
 import json
-from syndiffix_tools.tables_reader import TablesReader
+from syndiffix import SyndiffixBlobReader
 import pprint
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -9,13 +10,12 @@ import matplotlib.pyplot as plt
 pp = pprint.PrettyPrinter(indent=4)
 
 paper_values = []
-baseDir = os.environ['COMMUTE_HEALTH_PATH']
-print(f"setting baseDir to {baseDir}")
+blobPath = os.path.join('synDiffix', 'datasets')
+if not os.path.exists(blobPath):
+    sys.exit(f"ERROR: Blob file {blobPath} does not exist")
 
-synDir = os.path.join(baseDir, 'tmTables', 'syn')
-
-tr = TablesReader(dir_path=synDir)
-df_orig = pd.read_csv(os.path.join(baseDir, 'CommDataOrig.csv'), index_col=False)
+sbr = SyndiffixBlobReader(blob_name='commute', path_to_dir=blobPath, cache_df_in_memory=True, force=True)
+df_orig = pd.read_csv('CommDataOrig.csv', index_col=False)
 print(list(df_orig.columns))
 df_orig = df_orig.loc[:, ~df_orig.columns.str.contains('^Unnamed')]
 total_rows = len(df_orig)
@@ -34,9 +34,9 @@ df_arx = pd.read_parquet(os.path.join('ARX', 'datasets', 'syn_dataset.parquet'))
 
 dataset_info = {
     'orig': {'df': df_orig, 'val': 'orig_val'},
-    'sdv': {'df': df_sdv, 'val': 'sdv_val'},
     'arx': {'df': df_arx, 'val': 'arx_val'},
-    'sdx': {'df': None, 'tr': tr, 'val': 'sdx_val'},
+    'sdv': {'df': df_sdv, 'val': 'sdv_val'},
+    'sdx': {'df': None, 'sbr': sbr, 'val': 'sdx_val'},
 }
 
 def do_checks(df):
@@ -93,14 +93,12 @@ def do_checks(df):
 def get_dataset(dataset, columns, target):
     if dataset_info[dataset]['df'] is not None:
         return dataset_info[dataset]['df'][columns]
-    tr = dataset_info[dataset]['tr']
-    df_syn = tr.get_best_syn_df(columns=columns, target=target)
+    sbr = dataset_info[dataset]['sbr']
+    df_syn = sbr.read(columns=columns, target_column=target)
     if df_syn is None:
-        print(f"ERROR: Could not find a dataset for {columns}, target")
-        a=1/0
+        sys.exit(f"ERROR: Could not find a dataset for {columns}, target")
     if list(df_syn[columns]).sort() != columns.sort():
-        print(f"ERROR: Columns in df_syn {list(df_syn[columns])} do not match expected columns {columns}")
-        a=1/0
+        sys.exit(f"ERROR: Columns in df_syn {list(df_syn[columns])} do not match expected columns {columns}")
     return df_syn
 
 def init_row():
@@ -173,12 +171,10 @@ def find_fig1_row(context, tab_column, tab_sub_column, tab_row, tab_sub_row, val
     for row in paper_values:
         if row['context'] == context and row['tab_column'] == tab_column and row['tab_row'] == tab_row and row['val_type'] == val_type and row['tab_sub_column'] == tab_sub_column and row['tab_sub_row'] == tab_sub_row:
             if match is not None:
-                print(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
-                a=1/0
+                sys.exit(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
             match = row
     if match is None:
-        print(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
-        a=1/0
+        sys.exit(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}, {tab_sub_column}, {tab_sub_row}")
     return match
 
 def find_tab3_row(context, tab_column, tab_row, val_type):
@@ -186,12 +182,10 @@ def find_tab3_row(context, tab_column, tab_row, val_type):
     for row in paper_values:
         if row['context'] == context and row['tab_column'] == tab_column and row['tab_row'] == tab_row and row['val_type'] == val_type:
             if match is not None:
-                print(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}")
-                a=1/0
+                sys.exit(f"ERROR: Multiple matches for {context}, {tab_column}, {tab_row}, {val_type}")
             match = row
     if match is None:
-        print(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}")
-        a=1/0
+        sys.exit(f"ERROR: No match for {context}, {tab_column}, {tab_row}, {val_type}")
     return match
 
 def populate_figure1(data, dset):
@@ -437,61 +431,3 @@ for column in df_summ.columns:
         print(f"Number of distinct values: {len(distinct_values)}")
 
 do_checks(df_summ)
-
-
-# Make a basic boxplot for all of the normalized error values
-columns = ['sdx_norm_err', 'arx_norm_err', 'sdv_norm_err']
-sns.boxplot(data=df_summ[columns])
-plt.xlabel('')
-plt.ylabel('Normalized Error')
-plt.savefig(os.path.join('results', 'plots', 'norm_err.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err.pdf'))
-plt.close()
-
-# Make a basic boxplot for all of the count error values
-columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
-sns.boxplot(data=df_summ[columns])
-plt.xlabel('')
-plt.ylabel('Count Error')
-plt.savefig(os.path.join('results', 'plots', 'count_err.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'count_err.pdf'))
-plt.close()
-
-groups = ['count', 'distance_median', 'distance_iqr']
-columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Normalized Error for Tables 1 and 2')
-plt.savefig(os.path.join('results', 'plots', 'norm_err_tab1_tab2.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab1_tab2.pdf'))
-plt.close()
-
-groups = ['count', 'distance_median', 'distance_iqr']
-columns = ['sdx_abs_err', 'arx_abs_err', 'sdv_abs_err']
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Absolute Error for Tables 1 and 2')
-plt.savefig(os.path.join('results', 'plots', 'abs_err_tab1_tab2.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'abs_err_tab1_tab2.pdf'))
-plt.close()
-
-groups = ['coefficient', 'fit']
-columns = ['sdv_norm_err', 'arx_norm_err', 'sdx_norm_err']
-fig, axs = plt.subplots(1, 2, figsize=(10, 5), sharey=False)
-for i, group in enumerate(groups):
-    df_filtered = df_summ[df_summ['val_type'] == group]
-    data_to_plot = df_filtered[columns].dropna()
-    axs[i].boxplot(data_to_plot, tick_labels=columns)
-    axs[i].set_title(group)
-plt.suptitle('Normalized Error for Table 3 and Figure 1')
-plt.savefig(os.path.join('results', 'plots', 'norm_err_tab3_fig1.png'))
-plt.savefig(os.path.join('results', 'plots', 'pdf', 'norm_err_tab3_fig1.pdf'))
-plt.close()
