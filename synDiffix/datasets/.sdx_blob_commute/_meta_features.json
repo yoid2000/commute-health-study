@@ -1,0 +1,582 @@
+{
+    "VO2max": {
+        "valid": true,
+        "features": [
+            "CommHome",
+            "gender",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool",
+            "CommToSch"
+        ],
+        "k": 6,
+        "k_features": [
+            "CommHome",
+            "gender",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            -0.92,
+            -0.38,
+            -0.41,
+            -0.29,
+            -0.37,
+            -0.28,
+            -0.3
+        ],
+        "cumulative_score_std": [
+            0.2,
+            0.15,
+            0.13,
+            0.11,
+            0.16,
+            0.08,
+            0.1
+        ],
+        "encoded_scores": {
+            "features": [
+                "CommHome",
+                "gender",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool",
+                "CommToSch"
+            ],
+            "k": 6,
+            "k_features": [
+                "CommHome",
+                "gender",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                -0.92,
+                -0.38,
+                -0.41,
+                -0.29,
+                -0.37,
+                -0.28,
+                -0.3
+            ],
+            "cumulative_score_std": [
+                0.2,
+                0.15,
+                0.13,
+                0.11,
+                0.16,
+                0.08,
+                0.1
+            ]
+        }
+    },
+    "CommToSch": {
+        "valid": true,
+        "features": [
+            "CommHome",
+            "VO2max",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool",
+            "gender"
+        ],
+        "k": 6,
+        "k_features": [
+            "CommHome",
+            "VO2max",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            0.52,
+            0.67,
+            0.67,
+            0.65,
+            0.66,
+            0.68,
+            0.67
+        ],
+        "cumulative_score_std": [
+            0.04,
+            0.14,
+            0.1,
+            0.11,
+            0.12,
+            0.11,
+            0.11
+        ],
+        "encoded_scores": {
+            "features": [
+                "CommHome",
+                "VO2max",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool",
+                "gender"
+            ],
+            "k": 6,
+            "k_features": [
+                "CommHome",
+                "VO2max",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                0.52,
+                0.67,
+                0.67,
+                0.65,
+                0.66,
+                0.68,
+                0.67
+            ],
+            "cumulative_score_std": [
+                0.04,
+                0.14,
+                0.1,
+                0.11,
+                0.12,
+                0.11,
+                0.11
+            ]
+        }
+    },
+    "CommHome": {
+        "valid": true,
+        "features": [
+            "CommToSch",
+            "VO2max",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool",
+            "gender"
+        ],
+        "k": 6,
+        "k_features": [
+            "CommToSch",
+            "VO2max",
+            "age",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            0.6,
+            0.63,
+            0.67,
+            0.69,
+            0.69,
+            0.69,
+            0.68
+        ],
+        "cumulative_score_std": [
+            0.26,
+            0.27,
+            0.26,
+            0.26,
+            0.26,
+            0.27,
+            0.26
+        ],
+        "encoded_scores": {
+            "features": [
+                "CommToSch",
+                "VO2max",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool",
+                "gender"
+            ],
+            "k": 6,
+            "k_features": [
+                "CommToSch",
+                "VO2max",
+                "age",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                0.6,
+                0.63,
+                0.67,
+                0.69,
+                0.69,
+                0.69,
+                0.68
+            ],
+            "cumulative_score_std": [
+                0.26,
+                0.27,
+                0.26,
+                0.26,
+                0.26,
+                0.27,
+                0.26
+            ]
+        }
+    },
+    "gender": {
+        "valid": true,
+        "features": [
+            "VO2max",
+            "age",
+            "DistFromSchool",
+            "MVPAsqrt",
+            "DistFromHome",
+            "CommToSch",
+            "CommHome"
+        ],
+        "k": 3,
+        "k_features": [
+            "VO2max",
+            "age",
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            0.72,
+            0.72,
+            0.73,
+            0.7,
+            0.7,
+            0.7,
+            0.71
+        ],
+        "cumulative_score_std": [
+            0.02,
+            0.03,
+            0.03,
+            0.03,
+            0.04,
+            0.04,
+            0.05
+        ],
+        "encoded_scores": {
+            "features": [
+                "VO2max",
+                "age",
+                "DistFromSchool",
+                "MVPAsqrt",
+                "DistFromHome",
+                "CommToSch",
+                "CommHome"
+            ],
+            "k": 3,
+            "k_features": [
+                "VO2max",
+                "age",
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                0.72,
+                0.72,
+                0.73,
+                0.7,
+                0.7,
+                0.7,
+                0.71
+            ],
+            "cumulative_score_std": [
+                0.02,
+                0.03,
+                0.03,
+                0.03,
+                0.04,
+                0.04,
+                0.05
+            ]
+        }
+    },
+    "age": {
+        "valid": true,
+        "features": [
+            "CommToSch",
+            "gender",
+            "VO2max",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool",
+            "CommHome"
+        ],
+        "k": 6,
+        "k_features": [
+            "CommToSch",
+            "gender",
+            "VO2max",
+            "MVPAsqrt",
+            "DistFromHome",
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            -1.08,
+            -1.14,
+            -1.09,
+            -0.98,
+            -0.95,
+            -0.91,
+            -0.93
+        ],
+        "cumulative_score_std": [
+            0.24,
+            0.23,
+            0.09,
+            0.18,
+            0.18,
+            0.16,
+            0.17
+        ],
+        "encoded_scores": {
+            "features": [
+                "CommToSch",
+                "gender",
+                "VO2max",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool",
+                "CommHome"
+            ],
+            "k": 6,
+            "k_features": [
+                "CommToSch",
+                "gender",
+                "VO2max",
+                "MVPAsqrt",
+                "DistFromHome",
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                -1.08,
+                -1.14,
+                -1.09,
+                -0.98,
+                -0.95,
+                -0.91,
+                -0.93
+            ],
+            "cumulative_score_std": [
+                0.24,
+                0.23,
+                0.09,
+                0.18,
+                0.18,
+                0.16,
+                0.17
+            ]
+        }
+    },
+    "MVPAsqrt": {
+        "valid": true,
+        "features": [
+            "DistFromSchool",
+            "VO2max",
+            "age",
+            "DistFromHome",
+            "CommHome",
+            "gender",
+            "CommToSch"
+        ],
+        "k": 1,
+        "k_features": [
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            -0.96,
+            -1.04,
+            -1.1,
+            -0.97,
+            -1.08,
+            -1.15,
+            -1.13
+        ],
+        "cumulative_score_std": [
+            0.26,
+            0.31,
+            0.46,
+            0.47,
+            0.36,
+            0.35,
+            0.4
+        ],
+        "encoded_scores": {
+            "features": [
+                "DistFromSchool",
+                "VO2max",
+                "age",
+                "DistFromHome",
+                "CommHome",
+                "gender",
+                "CommToSch"
+            ],
+            "k": 1,
+            "k_features": [
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                -0.96,
+                -1.04,
+                -1.1,
+                -0.97,
+                -1.08,
+                -1.15,
+                -1.13
+            ],
+            "cumulative_score_std": [
+                0.26,
+                0.31,
+                0.46,
+                0.47,
+                0.36,
+                0.35,
+                0.4
+            ]
+        }
+    },
+    "DistFromHome": {
+        "valid": true,
+        "features": [
+            "DistFromSchool",
+            "MVPAsqrt",
+            "age",
+            "VO2max",
+            "CommHome",
+            "CommToSch",
+            "gender"
+        ],
+        "k": 1,
+        "k_features": [
+            "DistFromSchool"
+        ],
+        "cumulative_score": [
+            0.97,
+            0.96,
+            0.94,
+            0.94,
+            0.94,
+            0.93,
+            0.94
+        ],
+        "cumulative_score_std": [
+            0.03,
+            0.04,
+            0.03,
+            0.04,
+            0.03,
+            0.04,
+            0.04
+        ],
+        "encoded_scores": {
+            "features": [
+                "DistFromSchool",
+                "MVPAsqrt",
+                "age",
+                "VO2max",
+                "CommHome",
+                "CommToSch",
+                "gender"
+            ],
+            "k": 1,
+            "k_features": [
+                "DistFromSchool"
+            ],
+            "cumulative_score": [
+                0.97,
+                0.96,
+                0.94,
+                0.94,
+                0.94,
+                0.93,
+                0.94
+            ],
+            "cumulative_score_std": [
+                0.03,
+                0.04,
+                0.03,
+                0.04,
+                0.03,
+                0.04,
+                0.04
+            ]
+        }
+    },
+    "DistFromSchool": {
+        "valid": true,
+        "features": [
+            "DistFromHome",
+            "CommToSch",
+            "MVPAsqrt",
+            "age",
+            "VO2max",
+            "CommHome",
+            "gender"
+        ],
+        "k": 1,
+        "k_features": [
+            "DistFromHome"
+        ],
+        "cumulative_score": [
+            0.97,
+            0.96,
+            0.96,
+            0.96,
+            0.96,
+            0.96,
+            0.94
+        ],
+        "cumulative_score_std": [
+            0.03,
+            0.04,
+            0.03,
+            0.04,
+            0.03,
+            0.03,
+            0.04
+        ],
+        "encoded_scores": {
+            "features": [
+                "DistFromHome",
+                "CommToSch",
+                "MVPAsqrt",
+                "age",
+                "VO2max",
+                "CommHome",
+                "gender"
+            ],
+            "k": 1,
+            "k_features": [
+                "DistFromHome"
+            ],
+            "cumulative_score": [
+                0.97,
+                0.96,
+                0.96,
+                0.96,
+                0.96,
+                0.96,
+                0.94
+            ],
+            "cumulative_score_std": [
+                0.03,
+                0.04,
+                0.03,
+                0.04,
+                0.03,
+                0.03,
+                0.04
+            ]
+        }
+    }
+}

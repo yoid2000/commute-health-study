@@ -1,0 +1,6 @@
+{
+    "singularity_low_threshold": 5,
+    "range_low_threshold": 15,
+    "precision_limit_row_fraction": 10000,
+    "precision_limit_depth_threshold": 15
+}

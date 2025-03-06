@@ -1,0 +1,16 @@
+{
+    "low_count_params": {
+        "low_threshold": 3,
+        "layer_sd": 1.0,
+        "low_mean_gap": 2.0
+    },
+    "outlier_count": {
+        "lower": 2,
+        "upper": 5
+    },
+    "top_count": {
+        "lower": 2,
+        "upper": 5
+    },
+    "layer_noise_sd": 1.0
+}

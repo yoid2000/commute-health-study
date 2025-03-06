@@ -1,0 +1,7 @@
+{
+    "sample_size": 1000,
+    "default_max_weight": 15.0,
+    "ml_max_weight": 15.0,
+    "merge_threshold": 0.1,
+    "solver_alpha": 0.01
+}

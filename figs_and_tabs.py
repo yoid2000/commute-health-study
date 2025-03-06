@@ -73,11 +73,22 @@ macros = [
     {'method': 'sdx_val', 'color': 'color-very-bad', 'macro': 'sdxvb'},
 ]
 
-def get_macro(method, color):
+def get_macro_color(method, color):
     for macro in macros:
         if macro['method'] == method and macro['color'] == color:
             return macro['macro']
     return 'orig'
+
+def get_macro_font(method, color):
+    if color == 'color-good':
+        return 'textnormal'
+    elif color == 'color-bad':
+        return 'textit'
+    elif color == 'color-very-bad':
+        return 'textbf'
+    else:
+        print(f'Error: color {color} not recognized')
+        quit()
 
 def set_prt_class(df):
     xx = ['orig', 'arx', 'sdv', 'sdx']
@@ -323,7 +334,7 @@ def make_figure_abs_err():
     '''
     write_table(figure, 'abs_err_tab1_tab2.tex')
 
-def make_table3():
+def make_table3_font():
     dirs = ['From home to school', 'From school to home']
 
     def make_cell(mode, dir, val_type1, val_type2):
@@ -349,9 +360,6 @@ def make_table3():
                 op = '('                  # open paren
                 cma = ', '                # comma
                 cp = ')'                  # close paren
-            #col1 = get_rel_color(val1_orig, val1)
-            col1 = 'color-good'
-            mac1 = get_macro(method, col1)
             val1 = round(val1, 2)
             if val_type2 == 'prt':
                 if val2 <= 0.001: val2 = star3
@@ -360,11 +368,208 @@ def make_table3():
                 else: val2 = star0
                 col2 = get_star_color(val2_orig, val2)
             else:
-                #col2 = get_rel_color(val2_orig, val2)
                 col2 = 'color-good'
                 val2 = round(val2, 2)
-            mac2 = get_macro(method, col2)
-            cell += f'\\{mac1}{{{op}{val1}}}{cma}\\{mac2}{{{val2}{cp}}} \\\\'
+            mac1 = get_macro_font(method, col2)
+            cell += f'\\{mac1}{{{op}{val1}{cma}{val2}{cp}}} \\\\'
+        return cell + '}'
+    # ------------------------------------------------------
+    table = '''
+      \\setlength{\\fboxsep}{0pt}
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllll}
+      \\toprule
+        \\textbf{Variables}
+          & \\multicolumn{4}{l}{\\textbf{Adjusted model}} \\\\ \\cline{2-5}
+        & \\multicolumn{2}{l}{\\textbf{From home to school}} 
+          & \\multicolumn{2}{l}{\\textbf{From school to home}} \\\\ \\cline{2-3} \\cline{4-5}
+        & \\textbf{Coefficient} & \\textbf{95\\% CI} & \\textbf{Coefficient} & \\textbf{95\\% CI} \\\\
+      \\midrule
+    '''
+    table += '\\textbf{Constant} '
+    table += f'   & {make_cell("Constant", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Constant", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Constant", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Constant", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Commuting group}} \\\\ \n'
+    table += '\\quad Car '
+    table += f'   & {make_cell("Car", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public '
+    table += f'   & {make_cell("Public", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels '
+    table += f'   & {make_cell("Wheels", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Walk (ref) & & & & \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Interaction Commuting group x Distance}} \\\\ \n'
+    table += '\\quad Car x Distance '
+    table += f'   & {make_cell("Car x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public x Distance '
+    table += f'   & {make_cell("Public x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels x Distance '
+    table += f'   & {make_cell("Wheels x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Walk x Distance '
+    table += f'   & {make_cell("Walk x Distance", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Walk x Distance", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '''
+      \\bottomrule
+      {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
+      \\end{tabular}
+      \\end{small}
+      \\caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \\label{tab:table3a}
+      \\end{center}
+      \\end{table}
+      \\setlength{\\fboxsep}{3pt}
+    '''
+    write_table(table, 'table3a_font.tex')
+    # ------------------------------------------------------
+    # ------------------------------------------------------
+    table = '''
+      \\setlength{\\fboxsep}{0pt}
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllll}
+      \\toprule
+        \\textbf{Variables}
+          & \\multicolumn{4}{l}{\\textbf{Adjusted model}} \\\\ \\cline{2-5}
+        & \\multicolumn{2}{l}{\\textbf{From home to school}} 
+          & \\multicolumn{2}{l}{\\textbf{From school to home}} \\\\ \\cline{2-3} \\cline{4-5}
+        & \\textbf{Coefficient} & \\textbf{95\\% CI} & \\textbf{Coefficient} & \\textbf{95\\% CI} \\\\
+      \\midrule
+    '''
+    table += '\\textbf{Gender} & & & & \\\\ \n'
+    table += '\\quad Males '
+    table += f'   & {make_cell("Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Females (ref) & & & & \\\\ \n'
+    table += '\\multicolumn{5}{l}{\\textbf{Interaction Commuting group x Gender}} \\\\ \n'
+    table += '\\quad Car x Gender '
+    table += f'   & {make_cell("Car x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Car x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Car x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Public x Males '
+    table += f'   & {make_cell("Public x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Public x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Public x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Wheels x Males '
+    table += f'   & {make_cell("Wheels x Males", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Wheels x Males", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '\\quad Walk x Males (ref) & & & & \\\\ \n'
+    table += '\\textbf{Covariates} & & & & \\\\ \n'
+    table += '\\quad MVPA '
+    table += f'   & {make_cell("MVPA", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("MVPA", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("MVPA", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("MVPA", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '& & & & \\\\ \n'
+    table += '\\quad Age '
+    table += f'   & {make_cell("Age", dirs[0], "coefficient", "prt")}'
+    table += f'   & {make_cell("Age", dirs[0], "ci_low", "ci_high")}'
+    table += f'   & {make_cell("Age", dirs[1], "coefficient", "prt")}'
+    table += f'   & {make_cell("Age", dirs[1], "ci_low", "ci_high")}'
+    table += ' \\\\ \n'
+    table += '''
+      \\bottomrule
+      {\\footnotesize * p $\\leq$ 0.05, \\quad** p $\\leq$ 0.01, \\quad*** p $\\leq$ 0.001}
+      \\end{tabular}
+      \\end{small}
+      \\caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \\textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \\label{tab:table3b}
+      \\end{center}
+      \\end{table}
+      \\setlength{\\fboxsep}{3pt}
+    '''
+    write_table(table, 'table3b_font.tex')
+    # ------------------------------------------------------
+
+def make_table3_color():
+    dirs = ['From home to school', 'From school to home']
+
+    def make_cell(mode, dir, val_type1, val_type2):
+        df1 = df[(df['context'] == 'Table 3') & (df['tab_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type1)]
+        if len(df1) != 1:
+            print(f'Error: df1 has length {len(df1)}, {mode}, {dir}, {val_type1}')
+        df2 = df[(df['context'] == 'Table 3') & (df['tab_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type2)]
+        if len(df2) != 1:
+            print(f'Error: df2 has length {len(df2)}, {mode}, {dir}, {val_type2}')
+        cell = ' \\makecell[l]{'
+        val1_orig = df1.iloc[0]['orig_val']
+        val2_orig = df2.iloc[0]['orig_val']
+        if val_type2 == 'prt':
+            if val2_orig <= 0.001: val2_orig = star3
+            elif val2_orig <= 0.01: val2_orig = star2
+            elif val2_orig <= 0.05: val2_orig = star1
+            else: val2_orig = star0
+        for method in methods:
+            val1 = df1.iloc[0][method]
+            val2 = df2.iloc[0][method]
+            op = cma = cp = ''
+            if val_type1 == 'ci_low':
+                op = '('                  # open paren
+                cma = ', '                # comma
+                cp = ')'                  # close paren
+            val1 = round(val1, 2)
+            if val_type2 == 'prt':
+                if val2 <= 0.001: val2 = star3
+                elif val2 <= 0.01: val2 = star2
+                elif val2 <= 0.05: val2 = star1
+                else: val2 = star0
+                col2 = get_star_color(val2_orig, val2)
+            else:
+                col2 = 'color-good'
+                val2 = round(val2, 2)
+            mac1 = get_macro_color(method, col2)
+            cell += f'\\{mac1}{{{op}{val1}{cma}{val2}{cp}}} \\\\'
         return cell + '}'
     # ------------------------------------------------------
     table = '''
@@ -449,7 +654,7 @@ def make_table3():
       \\end{table}
       \\setlength{\\fboxsep}{3pt}
     '''
-    write_table(table, 'table3a.tex')
+    write_table(table, 'table3a_color.tex')
     # ------------------------------------------------------
     # ------------------------------------------------------
     table = '''
@@ -522,10 +727,10 @@ def make_table3():
       \\end{table}
       \\setlength{\\fboxsep}{3pt}
     '''
-    write_table(table, 'table3b.tex')
+    write_table(table, 'table3b_color.tex')
     # ------------------------------------------------------
 
-def make_table2():
+def make_table2_font():
     dirs = ['From home to school', 'From school to home']
     col_totals = {}
     for method in methods:
@@ -549,10 +754,83 @@ def make_table2():
             col1 = get_count_color(val1_orig, val1) if val_type2 == 'percent' else get_rel_color(val1_orig, val1)
             if p == '\\%': col_totals[method][dir][0] += val1
             val1 = int(val1)
-            mac1 = get_macro(method, col1)
+            mac1 = get_macro_font(method, col1)
             val2 = df2.iloc[0][method]
             col2 = get_rel_color(val2_orig, val2)
-            mac2 = get_macro(method, col2)
+            mac2 = get_macro_font(method, col2)
+            if p == '\\%': col_totals[method][dir][1] += val2
+            val2 = round(val2)
+            cell += f'\\{mac1}{{{val1}}} \\{mac2}{{({val2}{p})}} \\\\'
+        return cell + '}'
+
+    table = '''
+      \\setlength{\\fboxsep}{0pt}
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllll}
+      \\toprule
+        \\multirow{2}{*}{\\makecell[l]{\\textbf{Commuting}\\\\\\textbf{group}}}
+          & \\multicolumn{2}{l}{\\textbf{From home to school}}
+          & \\multicolumn{2}{l}{\\textbf{From school to home}} \\\\ \\cline{2-3} \\cline{4-5}
+          & \\textbf{N (\\%)} & \\textbf{Distance (IQR)} & \\textbf{N (\\%)} & \\textbf{Distance (IQR)} \\\\
+      \\midrule
+    '''
+    for mode in modes:
+        table += f'{mode}'
+        table += f'      & {make_cell(mode, dirs[0], "count", "percent")}'
+        table += f'      & {make_cell(mode, dirs[0], "distance_median", "distance_iqr")}'
+        table += f'      & {make_cell(mode, dirs[1], "count", "percent")}'
+        table += f'      & {make_cell(mode, dirs[1], "distance_median", "distance_iqr")}'
+        table += ' \\\\ \\cline{2-5}\n'
+    cells = ['','']
+    for i, dir in enumerate(dirs):
+        cells[i] += '      & \\makecell[l]{'
+        for method in methods:
+            cells[i] += f'{int(col_totals[method][dir][0])} ({round(col_totals[method][dir][1])}\\%) \\\\'
+        cells[i] += '}'
+    table += '      Total ' + cells[0] + ' & ' + cells[1] + ' & \\\\ \n'
+
+    table += '''
+      \\bottomrule
+      \\end{tabular}
+      \\end{small}
+      \\caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. The shading for counts (N) are as described for Table~\\ref{tab:table1}. Distance and IRQ are \\textbf{bold font} when the relative error is greater than 30\\%, and \\textit{italics} when the relative error is greater than 15\\%.  Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \\label{tab:table2}
+      \\end{center}
+      \\end{table}
+      \\setlength{\\fboxsep}{3pt}
+    '''
+    write_table(table, 'table2_font.tex')
+
+def make_table2_color():
+    dirs = ['From home to school', 'From school to home']
+    col_totals = {}
+    for method in methods:
+        col_totals[method] = {}
+        for dir in dirs:
+            col_totals[method][dir] = [0,0]
+
+    def make_cell(mode, dir, val_type1, val_type2):
+        df1 = df[(df['context'] == 'Table 2') & (df['tab_sub_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type1)]
+        if len(df1) != 1:
+            print(f'Error: df1 has length {len(df1)}, {mode}, {dir}, {val_type1}')
+        df2 = df[(df['context'] == 'Table 2') & (df['tab_sub_row'] == mode) & (df['tab_column'] == dir) & (df['val_type'] == val_type2)]
+        if len(df2) != 1:
+            print(f'Error: df2 has length {len(df2)}, {mode}, {dir}, {val_type2}')
+        cell = ' \\makecell[l]{'
+        val1_orig = df1.iloc[0]['orig_val']
+        val2_orig = df2.iloc[0]['orig_val']
+        for method in methods:
+            p = '\\%' if val_type2 == 'percent' else ''
+            val1 = df1.iloc[0][method]
+            col1 = get_count_color(val1_orig, val1) if val_type2 == 'percent' else get_rel_color(val1_orig, val1)
+            if p == '\\%': col_totals[method][dir][0] += val1
+            val1 = int(val1)
+            mac1 = get_macro_color(method, col1)
+            val2 = df2.iloc[0][method]
+            col2 = get_rel_color(val2_orig, val2)
+            mac2 = get_macro_color(method, col2)
             if p == '\\%': col_totals[method][dir][1] += val2
             val2 = round(val2)
             cell += f'\\{mac1}{{{val1}}} \\{mac2}{{({val2}{p})}} \\\\'
@@ -599,9 +877,9 @@ def make_table2():
       \\end{table}
       \\setlength{\\fboxsep}{3pt}
     '''
-    write_table(table, 'table2.tex')
+    write_table(table, 'table2_color.tex')
 
-def make_table1():
+def make_table1_font():
     CNT = 0
     PCT = 1
     col_totals = {}
@@ -621,7 +899,90 @@ def make_table1():
         for method in methods:
             count = df_count.iloc[0][method]
             col_count = get_count_color(count_orig, count)
-            mac = get_macro(method, col_count)
+            mac = get_macro_font(method, col_count)
+            row_totals[method][CNT] += count
+            col_totals[method][col_mode][CNT] += count
+            count = int(count)
+            percent = df_percent.iloc[0][method]
+            row_totals[method][PCT] += percent
+            col_totals[method][col_mode][PCT] += percent
+            percent = round(percent, 1)
+            cell += f'\\{mac}{{{count} ({percent}\\%)}} \\\\'
+        return cell[:-3] + '}'
+
+    table = '''
+      \\setlength{\\fboxsep}{0pt}
+      \\begin{table}
+      \\begin{center}
+      \\begin{small}
+      \\begin{tabular}{lllllll}
+      \\toprule
+        & \\multirow{2}{*}{\\makecell[l]{\\textbf{Commuting}\\\\\\textbf{Modes}}}
+          & \\multicolumn{5}{l}{\\textbf{Commuting from school}} \\\\ \\cline{3-7}
+        & & Car & Public & Wheels & Walk & Total \\\\
+      \\midrule
+        \\multirow{5}{*}{\\makecell[l]{\\textbf{Commuting}\\\\\\textbf{to school}}}
+    '''
+
+    for row_mode in modes:
+        row_totals = {}
+        for method in methods:
+            row_totals[method] = [0,0]
+        table += f'& {row_mode}'
+        for col_mode in modes:
+            table += f'      & {make_cell(row_mode, col_mode)}'
+        table += '      & \\makecell[l]{'
+        for method in methods:
+            table += f'{int(row_totals[method][CNT])} ({round(row_totals[method][PCT], 1)}\\%) \\\\'
+        table += '} \\\\ \\cline{2-7}\n'
+    final_totals = {}
+    for method in methods:
+        final_totals[method] = [0,0]
+    table += '& Total'
+    for col_mode in modes:
+        table += '      & \\makecell[l]{'
+        for method in methods:
+            final_totals[method][CNT] += col_totals[method][col_mode][CNT]
+            final_totals[method][PCT] += col_totals[method][col_mode][PCT]
+            table += f'{int(col_totals[method][col_mode][CNT])} ({round(col_totals[method][col_mode][PCT], 1)}\\%) \\\\'
+        table += '}'
+    table += '      & \\makecell[l]{'
+    for method in methods:
+        table += f'{int(final_totals[method][CNT])} ({round(final_totals[method][PCT], 1)}\\%)  \\\\'
+    table += '} \\\\ \n'
+    table += '''
+      \\bottomrule
+      \\end{tabular}
+      \\end{small}
+      \\caption{Base-table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. Counts and their corresponding percentages are \\textbf{bold font} when the absolute error is greater than 20 or the relative error is greater than 30\\%. They are \\textit{italic} when the absolute error is greater than 10 or the relative error is greater than 15\\%.}
+      \\label{tab:table1}
+      \\end{center}
+      \\end{table}
+      \\setlength{\\fboxsep}{3pt}
+    '''
+    write_table(table, 'table1_font.tex')
+
+def make_table1_color():
+    CNT = 0
+    PCT = 1
+    col_totals = {}
+    for method in methods:
+        col_totals[method] = {}
+        for mode in modes:
+            col_totals[method][mode] = [0,0]
+    def make_cell(row_mode, col_mode):
+        df_count = df[(df['context'] == 'Table 1') & (df['tab_sub_column'] == col_mode) & (df['tab_sub_row'] == row_mode) & (df['val_type'] == 'count')]
+        if len(df_count) != 1:
+            print(f'Error: df_count has length {len(df_count)}, {row_mode}, {col_mode}')
+        df_percent = df[(df['context'] == 'Table 1') & (df['tab_sub_column'] == col_mode) & (df['tab_sub_row'] == row_mode) & (df['val_type'] == 'percent')]
+        if len(df_percent) != 1:
+            print(f'Error: df_percent has length {len(df_percent)}, {row_mode}, {col_mode}')
+        cell = ' \\makecell[l]{'
+        count_orig = df_count.iloc[0]['orig_val']
+        for method in methods:
+            count = df_count.iloc[0][method]
+            col_count = get_count_color(count_orig, count)
+            mac = get_macro_color(method, col_count)
             row_totals[method][CNT] += count
             col_totals[method][col_mode][CNT] += count
             count = int(count)
@@ -691,7 +1052,7 @@ def make_table1():
       \\end{table}
       \\setlength{\\fboxsep}{3pt}
     '''
-    write_table(table, 'table1.tex')
+    write_table(table, 'table1_color.tex')
 
 def make_p_table():
     count_prt = (df['val_type'] == 'prt').sum()
@@ -772,9 +1133,12 @@ figs_tabs = [
     'median_plots'
 ]
 
-make_table1()
-make_table2()
-make_table3()
+make_table1_color()
+make_table1_font()
+make_table2_color()
+make_table2_font()
+make_table3_color()
+make_table3_font()
 make_p_table()
 make_figure_abs_err()
 make_figure_median_plots()
