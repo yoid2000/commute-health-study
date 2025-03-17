@@ -1,0 +1,1169 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}  % For advanced math commands
+\usepackage{makecell}
+\usepackage{booktabs}
+\usepackage[numbers]{natbib}
+\usepackage{tabularx}  % For flexible tables
+\usepackage{multirow}
+\usepackage[left=2cm,right=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref} 
+\usepackage[dvipsnames]{xcolor}
+\usepackage{soul}
+\usepackage{ulem}  % For underlining
+\usepackage{pifont}  % For special symbols
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+
+\newif\ifcolor
+%\colortrue
+\colorfalse
+
+\definecolor{color-bad}{rgb}{1, 0.9, 0.8}
+\definecolor{color-very-bad}{rgb}{1, 0.7, 0.7}
+\definecolor{color-abit}{rgb}{1, 1, 0.8}      % legacy, not used
+\definecolor{color-good}{rgb}{1, 1, 1}     % this is white
+
+\ifcolor
+  \newcommand{\cmark}{\textcolor{green}{\ding{51}}}  % Green checkmark
+  \newcommand{\xmark}{\textcolor{red}{\ding{55}}}    % Red cross
+  \newcommand{\omark}{\textcolor{yellow}{\ding{109}}} % Yellow circle
+\else
+  \newcommand{\cmark}{\textbf{O }}
+  \newcommand{\xmark}{\textbf{X }}
+  \newcommand{\omark}{? }
+\fi
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+% Generic command for table cell highlighting
+\newcommand{\definehighlight}[2]{%
+  \expandafter\newcommand\csname #1\endcsname[1]{%
+    \begingroup
+    \leavevmode
+    \tikz[baseline={(X.base)}]{
+      \node[rectangle, 
+        rounded corners=1mm, 
+        draw=#2!250,
+        fill=#2!100,
+        inner xsep=0.5mm, 
+        inner ysep=0.5mm, 
+        text height=1.5ex, 
+        text depth=0.25ex,
+      ] (X) {\strut##1};
+    }
+    \endgroup
+  }
+}
+
+% Generic command for caption highlights
+\newcommand{\definecaptionhighlight}[2]{%
+  \expandafter\newcommand\csname #1\endcsname[1]{%
+    \begingroup
+    \tcbox[
+      colframe=#2!250,
+      colback=#2!100,
+      boxrule=0.5pt,
+      arc=1mm,
+      boxsep=1pt,
+      left=1pt, right=1pt,
+      top=0.5pt, bottom=0.5pt,
+      on line
+    ]{##1}
+    \endgroup
+  }
+}
+
+\newcommand{\completeexample}[1]{%
+  \textbf{\textit{\uline{\textcolor{color-very-bad}{\colorbox{color-bad}{#1}}}}}%
+}
+
+\newcommand{\orig}[1]{\textbf{#1}}
+
+\newcommand{\arxg}[1]{#1} % Noop
+\definehighlight{arxb}{color-bad}
+\definehighlight{arxvb}{color-very-bad}
+
+\newcommand{\sdvg}[1]{#1} % Noop
+\definehighlight{sdvb}{color-bad}
+\definehighlight{sdvvb}{color-very-bad}
+
+\newcommand{\sdxg}[1]{#1} % Noop
+\definehighlight{sdxb}{color-bad}
+\definehighlight{sdxvb}{color-very-bad}
+
+\newcommand{\captiong}[1]{#1} % Noop
+\definecaptionhighlight{captionb}{color-bad}
+\definecaptionhighlight{captionvb}{color-very-bad}
+
+% Define custom TODO commands for each person with different colors
+\newcommand{\TODO}[3]{\textcolor{#1}{\textbf{TODO[#2]: #3}}}
+\newcommand{\TODOpf}[1]{\TODO{Magenta}{PF}{#1}}
+\newcommand{\TODObl}[1]{\TODO{blue}{BL}{#1}}
+\newcommand{\TODOko}[1]{\TODO{purple}{KO}{#1}}
+\newcommand{\TODOtm}[1]{\TODO{orange}{TM}{#1}}
+\newcommand{\TODOfp}[1]{\TODO{ForestGreen}{FP}{#1}}
+\newcommand{\TODOall}[1]{\TODO{red}{ALL}{#1}}
+
+%\newcommand{\mycite}[1]{\cite{#1}}
+\newcommand{\mycite}[1]{[#1]}
+\newcommand{\myref}[1]{\ref{#1}}
+
+\graphicspath{{figs/}}
+\DeclareGraphicsExtensions{.png,.pdf}
+
+\definecolor{lightyellow}{rgb}{1.0, 1.0, 0.8}
+%\sethlcolor{lightyellow}    % Use 'white' to remove the highlight
+\sethlcolor{white}
+
+\title{Data Anonymization for Open Science: A Case Study}
+
+%\author[1,*]{Paul Francis}
+%\author[2]{Gregor Jurak}
+%\author[2]{Bojan Leskošek}
+%\author[3]{Karen Otte}
+%\author[3]{Fabian Prasser}
+%\affil[1]{MPI-SWS, Kaiserslautern, 67663, Germany}
+%\affil[2]{University of Ljubljana, Faculty of Sports, Ljubljana, 1000, Slovenia}
+%\affil[3]{Berlin Institute of Health @ Charité - Universitätsmedizin Berlin, Berlin, 10117, Germany}
+%
+%\affil[*]{francis@mpi-sws.org}
+
+
+\date{} % Suppress the date
+% Scientific Data: Aabstract 170 words max.; Should describe the data and how it maybe used; no subheadings
+
+% From https://www.nature.com/sdata/publish/submission-guidelines#title_abstract: We recommend the Abstract should not exceed 170 words. It should not include references and should succinctly describe the data and how it may be used but should not make any claims regarding new scientific findings. We recommend URLs for download, or other details on dataset access, are not included. Please do not use sub-headings to break the Abstract into sections.
+% Given this, I think it best to indeed avoid any statements about our results.
+
+\newcommand{\JournalTitle}[1]{#1}
+
+\begin{document}
+\flushbottom
+\maketitle
+\thispagestyle{empty}
+
+Paul Francis\textsuperscript{1,*}, Gregor Jurak\textsuperscript{2}, Bojan Leskošek\textsuperscript{2}, Karen Otte\textsuperscript{3}, Fabian Prasser\textsuperscript{3}
+
+\textsuperscript{1}{MPI-SWS, Kaiserslautern, 67663, Germany}
+
+\textsuperscript{2}{University of Ljubljana, Faculty of Sports, Ljubljana, 1000, Slovenia}
+
+\textsuperscript{3}{Berlin Institute of Health @ Charité - Universitätsmedizin Berlin, Berlin, 10117, Germany}
+
+\textsuperscript{*}{francis@mpi-sws.org}
+
+\section*{Abstract}
+One of many challenges to open science is anonymization of personal data so that it may be shared. This paper presents a case study of the anonymization of a dataset containing cardio-respiratory fitness and commuting patterns for Slovenian school children. It evaluates three different anonymization tools, ARX, SDV, and SynDiffix. The fitness study was selected because its small size (N=713) and generally low statistical significance make it particularly challenging for data anonymization. Unlike most prior anonymization tool evaluations, this paper examines whether the scientific conclusions of the original study would have been supported by the anonymized datasets. It also considers the burden imposed on researchers using the tools both for data generation and data analysis.
+
+% Background & Summary / Introduction
+% This section should provide an overview of the study that generated the data, as well as outlining the potential reuse value of the data. Any previous publications that used these data, in whole or in part, should be cited and briefly summarized. Introductions for Articles and Comments should provide a similar explanation of why the work was performed and any relevant prior art. 
+\section*{Introduction}
+\label{sec:introduction}
+
+A core function of open science is data sharing. In an ideal setting, scientists should be able to easily upload data to a repository which satisfies the FAIR principles, i.e. makes the data findable, accessible, interoperable, and resuable\mycite{1}. Data sharing is challenging even when the data is not personal data\mycite{2}, i.e. does not contain information about individuals. Sharing of personal data is even more challenging\mycite{3} due to stricter and more diverse legal frameworks.
+
+In a data sharing pipeline where personal data is involved, there is often an extra step of data anonymization that historically has required individual attention to each data release, for instance in order to find a good balance between privacy and utility\mycite{4}. At the same time, there are constant advances in data anonymization technology. In recent years for instance, a new generation of synthetic data tools have become available\mycite{5}, both as open source and commercial products.
+
+This study assesses the applicability of a small but representative set of data anonymization tools to an open science personal data sharing scenario. For this, we selected a \textit{base study}, which we tried to replicate using anonymized data. The base study is a research study authored by GJ and BL\mycite{6} with data controlled by them. The study, titled \textit{``Associations of mode and distance of commuting to school with cardiorespiratory fitness in Slovenian school children: a nationwide cross-sectional study''}, is challenging for data anonymization tools due to its small sample size (713 records), the amount and depth of the statistical analyses, and overall few significant results and small effect sizes. These conditions are challenging because the distortion necessarily introduced by anonymization must be small so as not to overwhelm the significance of the data.
+
+The evaluation in this study focuses on three questions:
+
+\begin{enumerate}
+    \item Would the scientific conclusions of the study have changed if anonymized data were used instead of the original data?
+    \item How difficult would it have been to use the anonymized data for the scientific study?
+    \item How difficult would it have been for non-experts to generate the anonymized data?
+\end{enumerate}
+
+The three anonymization tools evaluated are ARX\mycite{7} (developed by Prasser), SynDiffix\mycite{8} (developed by Francis), and SDV\mycite{9}. All tools are open source software and implement different methods to create anonymized datasets. \hl{
+ARX provides a variety of anonymization mechanisms, with a focus on K-anonymity and it variants (L-diversity etc.). For this study, K-anonymity was used ($K=2$). SDV also offers a variety of mechanisms, but all from the family of AI-based data synthesis techniques that have become popular in recent years}\mycite{5}. \hl{For this study, we used CTGAN. SynDiffix is one of a class of techniques that uses regression trees to automate aggregation, adding suppression and noise to strengthen anonymity. These three methods are representative of three popular approaches to data anonymization: K-anonymity, AI synthesis, and regression trees.} More information about these tools, as well as the procedure used to select them, can be found in the Methods section of this paper.
+
+\hl{To our knowledge, this is the first paper to examine anonymized data quality in the context of a specific scientific study, versus prior work which examines data quality in general terms. Another distinguishing feature of this paper is that it analyses the relative ease of generating anonymized data, which is important in an open science setting. While this paper is narrow in that it only analyzes a single scientific study, we believe that it serves as a blueprint for how to evaluate anonymized data quality.}
+
+\subsection*{\hl{Prior work}}
+
+\hl{The quality and utility of anonymized data has long been studied. It is common to distinguish between general-purpose and special-purpose (or workload-aware) approaches for quantifying anonymized data quality. General-purpose approaches include information loss metrics, like granularity reduction} \mycite{10} or record fidelity \mycite{11}, \hl{as well as resemblance metrics, which can be univariate, e.g. comparing distributions of variables in unprotected vs. anonymized data} \mycite{12}, \hl{or multivariate, e.g. comparing differences in correlation matrices} \mycite{13}. \hl{Another approach is to study how well classifiers can distinguish unprotected and anonymized records} \mycite{14}. \hl{All three anonymization methods in this paper, along with 13 other methods, were compared across a risk assessment as well as seven quality metrics including univariate, 2-marginal, and 3-marginal, linear regression, propensity mean squared error, principal component analysis, and data inconsistencies}\mycite{15}.
+
+\hl{Other prior work proposes that the anonymization mechanisms themselves should be workload aware: they take into account what analysis is going to be done after anonymization} \mycite{16}\mycite{17}. \hl{The quality evaluations in this work are therefore naturally based on the workload analysis.}
+
+
+\hl{All of the quality measures in this prior work, however, are generic in that they do not take into account a specific scientific goal. These generic measures are useful for comparing the quality of different anonymization techniques generally, but they fall short of predicting whether any given scientific conclusion will be correct or not. By contrast, our paper measures quality based on specific scientific conclusions.}
+
+
+%\ifcolor
+  %\input{tables/table1_color}
+%\else
+  %\input{tables/table1_font}
+%\fi
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllllll}
+      \toprule
+        & \multirow{2}{*}{\makecell[l]{\textbf{Commuting}\\\textbf{Modes}}}
+          & \multicolumn{5}{l}{\textbf{Commuting from school}} \\ \cline{3-7}
+        & & Car & Public & Wheels & Walk & Total \\
+      \midrule
+        \multirow{5}{*}{\makecell[l]{\textbf{Commuting}\\\textbf{to school}}}
+    & Car      &  \makecell[l]{\textnormal{59 (8.1\%)} \\\textnormal{50 (7.0\%)} \\\textbf{20 (2.8\%)} \\\textnormal{58 (8.1\%)}}      &  \makecell[l]{\textnormal{54 (7.6\%)} \\\textit{72 (10.1\%)} \\\textnormal{48 (6.7\%)} \\\textnormal{54 (7.6\%)}}      &  \makecell[l]{\textnormal{1 (0.1\%)} \\\textnormal{0 (0.0\%)} \\\textit{15 (2.1\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{57 (8.0\%)} \\\textnormal{60 (8.4\%)} \\\textbf{94 (13.2\%)} \\\textnormal{57 (8.0\%)}}      & \makecell[l]{170 (23.8\%) \\182 (25.5\%) \\177 (24.8\%) \\169 (23.7\%) \\} \\ \cline{2-7}
+& Public      &  \makecell[l]{\textnormal{10 (1.4\%)} \\\textnormal{6 (0.8\%)} \\\textbf{37 (5.2\%)} \\\textnormal{8 (1.1\%)}}      &  \makecell[l]{\textnormal{190 (26.6\%)} \\\textnormal{180 (25.2\%)} \\\textbf{69 (9.7\%)} \\\textnormal{194 (27.2\%)}}      &  \makecell[l]{\textnormal{0 (0.0\%)} \\\textnormal{0 (0.0\%)} \\\textbf{34 (4.8\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{30 (4.2\%)} \\\textnormal{26 (3.6\%)} \\\textbf{81 (11.4\%)} \\\textnormal{30 (4.2\%)}}      & \makecell[l]{230 (32.3\%) \\212 (29.7\%) \\221 (31.0\%) \\232 (32.5\%) \\} \\ \cline{2-7}
+& Wheels      &  \makecell[l]{\textnormal{0 (0.0\%)} \\\textnormal{0 (0.0\%)} \\\textbf{20 (2.8\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{0 (0.0\%)} \\\textnormal{0 (0.0\%)} \\\textbf{23 (3.2\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{27 (3.8\%)} \\\textit{14 (2.0\%)} \\\textit{13 (1.8\%)} \\\textnormal{29 (4.1\%)}}      &  \makecell[l]{\textnormal{7 (1.0\%)} \\\textit{17 (2.4\%)} \\\textbf{40 (5.6\%)} \\\textnormal{6 (0.8\%)}}      & \makecell[l]{34 (4.8\%) \\31 (4.3\%) \\96 (13.5\%) \\35 (4.9\%) \\} \\ \cline{2-7}
+& Walk      &  \makecell[l]{\textnormal{3 (0.4\%)} \\\textnormal{2 (0.3\%)} \\\textit{18 (2.5\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{1 (0.1\%)} \\\textnormal{0 (0.0\%)} \\\textbf{70 (9.8\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{0 (0.0\%)} \\\textnormal{0 (0.0\%)} \\\textbf{35 (4.9\%)} \\\textnormal{0 (0.0\%)}}      &  \makecell[l]{\textnormal{275 (38.6\%)} \\\textnormal{276 (38.7\%)} \\\textbf{96 (13.5\%)} \\\textnormal{279 (39.1\%)}}      & \makecell[l]{279 (39.1\%) \\278 (39.0\%) \\219 (30.7\%) \\279 (39.1\%) \\} \\ \cline{2-7}
+& Total      & \makecell[l]{71 (10.0\%) \\58 (8.1\%) \\95 (13.3\%) \\66 (9.3\%) \\}      & \makecell[l]{245 (34.4\%) \\252 (35.3\%) \\210 (29.5\%) \\248 (34.8\%) \\}      & \makecell[l]{28 (3.9\%) \\14 (2.0\%) \\97 (13.6\%) \\29 (4.1\%) \\}      & \makecell[l]{369 (51.8\%) \\379 (53.2\%) \\311 (43.6\%) \\372 (52.2\%) \\}      & \makecell[l]{713 (100.0\%)  \\703 (98.6\%)  \\713 (100.0\%)  \\715 (100.3\%)  \\} \\ 
+
+      \bottomrule
+      \end{tabular}
+      \end{small}
+      \caption{Base-table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. Counts and their corresponding percentages are \textbf{bold font} when the absolute error is greater than 20 or the relative error is greater than 30\%. They are \textit{italic} when the absolute error is greater than 10 or the relative error is greater than 15\%.}
+      \label{tab:table1}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    
+
+\section*{Results}
+
+The base study of Jurak et al. investigated whether active commuting has the potential to improve children’s health\mycite{6}. The cardiorespiratory fitness (CRF) of 713 Slovenian school children aged 12 to 15 years, was determined with a 20-m shuttle run test to estimate their maximal oxygen uptake (VO$_2$max). Moreover, information was collected on their distance from home to school and whether the commute was done by walking, wheels (e.g., bicycle or skateboard), public transport or car in both directions. The study found that commuting distance minimally affected CRF, except in the Car group, where children living closer to school had significantly lower CRF than those farther away. The study recommends targeting car-driven children within walking or cycling distance of school with interventions promoting active transport. The original paper presented its results in three tables and one figure which we refer to as base-tables and base-figure. This study replicates these base-tables and base-figure, but in such a way that the the original data and the data for the three anonymized datasets are combined for easy comparison.
+
+The following sections discuss the similarities and differences between the anonymized and original data, and comment on the extent to which the conclusions of the original paper still hold given the anonymized data.
+
+\subsection*{Commute modes and distances (Base-tables 1 and 2 from the original paper)}
+
+The original and anonymized data for base-tables 1 and 2 explored the types of commuting in school children and the commute distances traveled. These are given in this paper's Tables 1 and 2 respectively\mycite{18}. 
+
+Among the three anonymization methods, SynDiffix most closely reproduced original counts and percentages for cross-tabulation of commuting modes (Table 1), with only one deviating record in the cross table. It is closely followed by ARX which showed up to 18 deviations, while SDV provides large differences of up to 179 different commute mode counts in the cross table. Nevertheless, the basic description of these results in original paper, i.e. that active commuting is more frequent in the direction from school to home than in other direction, still holds, but this may be a coincidence in case of SDV as it substantially over- or underestimates the frequencies for both modes of active commuting (walking and wheels). Note also that the anonymized table of ARX contains 1.4\% fewer rows (703 versus 713) due to suppression of rare records.
+
+Similar results were found for commuting distance (Table~2). Here also SDV performs badly, hugely over- or underestimating the distance in most of the table cells, both in central tendency (median) and variability (IQR) of the data. SynDiffix and ARX perform much better, but still with large errors in some of the table cells, especially in cells with low frequencies, e.g. SynDiffix substantially underestimates the median distance of car commuting from school to home (3615$\rightarrow$2584) and ARX overestimates the distance of wheels commuting in same direction (1444$\rightarrow$2235). The verbal description of this results from original paper, i.e. that active commuting groups (Walk, Wheels) typically live
+close to school, still holds in case of SynDiffix and ARX, but not in case of SDV.
+
+%\begin{quotation}
+%\color{blue}
+%
+%Participants more often used active commuting from
+%school (56\%) than to school (44\%). Males and females
+%were choosing active commuting equally often, though
+%the notable difference was that females preferred to walk and males preferred to use wheels transport. The Walk
+%group had the lowest and Public group had the highest
+%median distance from home to school (Table~2).
+%
+%Note that, commuting to school may represent a relatively small amount of total PA of Slovenian children
+%compared to their all other daily physical activities, as
+%the active commuting groups (Walk Wheels) typically
+%live close to school (Table 2).
+%
+%\end{quotation}
+
+%\ifcolor
+  %\input{tables/table2_color}
+%\else
+  %\input{tables/table2_font}
+%\fi
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \multirow{2}{*}{\makecell[l]{\textbf{Commuting}\\\textbf{group}}}
+          & \multicolumn{2}{l}{\textbf{From home to school}}
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+          & \textbf{N (\%)} & \textbf{Distance (IQR)} & \textbf{N (\%)} & \textbf{Distance (IQR)} \\
+      \midrule
+    Car      &  \makecell[l]{\textnormal{170} \textnormal{(24\%)} \\\textnormal{182} \textnormal{(26\%)} \\\textnormal{177} \textnormal{(25\%)} \\\textnormal{169} \textnormal{(24\%)} \\}      &  \makecell[l]{\textnormal{3133} \textnormal{(3945)} \\\textit{3758} \textnormal{(3915)} \\\textbf{7602} \textbf{(8467)} \\\textit{3754} \textnormal{(4215)} \\}      &  \makecell[l]{\textnormal{71} \textnormal{(10\%)} \\\textit{58} \textit{(8\%)} \\\textit{95} \textit{(13\%)} \\\textnormal{70} \textnormal{(10\%)} \\}      &  \makecell[l]{\textnormal{3615} \textnormal{(3896)} \\\textnormal{3910} \textnormal{(3800)} \\\textnormal{3934} \textbf{(7362)} \\\textit{2584} \textnormal{(3560)} \\} \\ \cline{2-5}
+Public      &  \makecell[l]{\textnormal{230} \textnormal{(32\%)} \\\textnormal{212} \textnormal{(30\%)} \\\textnormal{221} \textnormal{(31\%)} \\\textnormal{232} \textnormal{(33\%)} \\}      &  \makecell[l]{\textnormal{4782} \textnormal{(4296)} \\\textnormal{4973} \textnormal{(4193)} \\\textit{5690} \textbf{(8320)} \\\textnormal{4712} \textnormal{(4228)} \\}      &  \makecell[l]{\textnormal{245} \textnormal{(34\%)} \\\textnormal{252} \textnormal{(35\%)} \\\textnormal{210} \textnormal{(29\%)} \\\textnormal{245} \textnormal{(34\%)} \\}      &  \makecell[l]{\textnormal{4996} \textnormal{(4033)} \\\textnormal{5140} \textnormal{(3686)} \\\textbf{2249} \textit{(5174)} \\\textnormal{5011} \textnormal{(4097)} \\} \\ \cline{2-5}
+Wheels      &  \makecell[l]{\textnormal{34} \textnormal{(5\%)} \\\textnormal{31} \textnormal{(4\%)} \\\textbf{96} \textbf{(13\%)} \\\textnormal{36} \textnormal{(5\%)} \\}      &  \makecell[l]{\textnormal{1366} \textnormal{(2211)} \\\textnormal{1356} \textbf{(1378)} \\\textbf{6671} \textbf{(8472)} \\\textit{1094} \textnormal{(2251)} \\}      &  \makecell[l]{\textnormal{28} \textnormal{(4\%)} \\\textit{14} \textbf{(2\%)} \\\textbf{97} \textbf{(14\%)} \\\textnormal{30} \textnormal{(4\%)} \\}      &  \makecell[l]{\textnormal{1444} \textnormal{(2369)} \\\textbf{2235} \textit{(3245)} \\\textbf{2741} \textbf{(5282)} \\\textnormal{1337} \textbf{(1376)} \\} \\ \cline{2-5}
+Walk      &  \makecell[l]{\textnormal{279} \textnormal{(39\%)} \\\textnormal{278} \textnormal{(39\%)} \\\textit{219} \textit{(31\%)} \\\textnormal{279} \textnormal{(39\%)} \\}      &  \makecell[l]{\textnormal{799} \textnormal{(789)} \\\textnormal{805} \textnormal{(795)} \\\textbf{5498} \textbf{(8697)} \\\textnormal{787} \textnormal{(737)} \\}      &  \makecell[l]{\textnormal{369} \textnormal{(52\%)} \\\textnormal{379} \textnormal{(53\%)} \\\textit{311} \textit{(44\%)} \\\textnormal{368} \textnormal{(52\%)} \\}      &  \makecell[l]{\textnormal{973} \textnormal{(1043)} \\\textnormal{954} \textnormal{(1062)} \\\textbf{2374} \textbf{(6068)} \\\textnormal{960} \textnormal{(1037)} \\} \\ \cline{2-5}
+      Total       & \makecell[l]{713 (100\%) \\703 (99\%) \\713 (100\%) \\716 (100\%) \\} &       & \makecell[l]{713 (100\%) \\703 (99\%) \\713 (100\%) \\713 (100\%) \\} & \\ 
+
+      \bottomrule
+      \end{tabular}
+      \end{small}
+      \caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. The bold/italic fonts for counts (N) are as described for Table 1. Distance and IRQ are \textbf{bold font} when the relative error is greater than 30\%, and \textit{italics} when the relative error is greater than 15\%.  Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \label{tab:table2}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    
+
+% To make the tables a bit easier to read I suggest to add a rightmost column, repeatedly containing "Original", "ARX", "SDV", "SynDiffix" .... so that it is easier to understand at first glance what a certain number represents.
+
+%\begin{figure}[h!]
+%    \begin{center}
+%        \includegraphics[width=0.85\linewidth]{abs_err_tab1_tab2}
+%        \caption{Absolute error of the three anonymization methods for the counts and distances in Tables~ 1  and 2. Each box plot data point is taken from a single cell in Tables~\ref{tab:table1} and 2.
+%        }
+%        \label{fig:abs_err_tab1_tab2}
+%    \end{center}
+%\end{figure}
+
+\textbf{*** FIGURE 1 GOES HERE ***}
+
+The absolute errors of the cross-table counts from Table 1 and the distance values in Tables from 2 are visualized in the boxplots of Figure 1.
+
+%\ifcolor
+  %\input{tables/table3a_color}
+  %\input{tables/table3b_color}
+%\else
+  %\input{tables/table3a_font}
+  %\input{tables/table3b_font}
+%\fi
+
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \textbf{Variables}
+          & \multicolumn{4}{l}{\textbf{Adjusted model}} \\ \cline{2-5}
+        & \multicolumn{2}{l}{\textbf{From home to school}} 
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+        & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
+      \midrule
+    \textbf{Constant}    &  \makecell[l]{\textnormal{36.42***} \\\textnormal{33.19***} \\\textnormal{56.08***} \\\textnormal{27.94***} \\}   &  \makecell[l]{\textnormal{(28.17, 44.67)} \\\textnormal{(25.82, 40.56)} \\\textnormal{(45.07, 67.09)} \\\textnormal{(20.74, 35.14)} \\}   &  \makecell[l]{\textnormal{36.63***} \\\textnormal{35.36***} \\\textnormal{49.18***} \\\textnormal{32.89***} \\}   &  \makecell[l]{\textnormal{(29.11, 44.15)} \\\textnormal{(28.65, 42.07)} \\\textnormal{(40.44, 57.91)} \\\textnormal{(26.25, 39.54)} \\} \\ 
+\multicolumn{5}{l}{\textbf{Commuting group}} \\ 
+\quad Car    &  \makecell[l]{\textnormal{-6.49\phantom{***}} \\\textnormal{-7.28\phantom{***}} \\\textnormal{-9.17\phantom{***}} \\\textnormal{-2.18\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-15.92, 2.94)} \\\textnormal{(-15.49, 0.92)} \\\textnormal{(-21.3, 2.95)} \\\textnormal{(-9.25, 4.88)} \\}   &  \makecell[l]{\textnormal{-15.13*\phantom{**}} \\\textnormal{-17.72**\phantom{*}} \\\textbf{2.4\phantom{***}} \\\textnormal{-12.67*\phantom{**}} \\}   &  \makecell[l]{\textnormal{(-26.88, -3.39)} \\\textnormal{(-29.65, -5.8)} \\\textnormal{(-6.44, 11.24)} \\\textnormal{(-22.82, -2.52)} \\} \\ 
+& & & & \\ 
+\quad Public    &  \makecell[l]{\textnormal{-0.08\phantom{***}} \\\textnormal{3.21\phantom{***}} \\\textnormal{-6.17\phantom{***}} \\\textnormal{-0.15\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-9.06, 8.9)} \\\textnormal{(-4.59, 11.01)} \\\textnormal{(-16.67, 4.32)} \\\textnormal{(-6.37, 6.07)} \\}   &  \makecell[l]{\textnormal{-3.19\phantom{***}} \\\textnormal{-4.08\phantom{***}} \\\textnormal{-2.57\phantom{***}} \\\textbf{8.71**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(-11.27, 4.88)} \\\textnormal{(-10.99, 2.84)} \\\textnormal{(-9.06, 3.92)} \\\textnormal{(2.72, 14.71)} \\} \\ 
+& & & & \\ 
+\quad Wheels    &  \makecell[l]{\textnormal{3.0\phantom{***}} \\\textnormal{3.88\phantom{***}} \\\textnormal{-8.69\phantom{***}} \\\textnormal{3.23\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-16.24, 22.25)} \\\textnormal{(-11.83, 19.58)} \\\textnormal{(-23.52, 6.14)} \\\textnormal{(-10.68, 17.13)} \\}   &  \makecell[l]{\textnormal{15.66\phantom{***}} \\\textnormal{17.16\phantom{***}} \\\textnormal{1.48\phantom{***}} \\\textnormal{10.7\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-4.09, 35.41)} \\\textnormal{(-4.9, 39.22)} \\\textnormal{(-7.47, 10.44)} \\\textnormal{(-3.6, 24.99)} \\} \\ 
+\quad Walk (ref) & & & & \\ 
+\multicolumn{5}{l}{\textbf{Interaction Commuting group x Distance}} \\ 
+\quad Car x Distance    &  \makecell[l]{\textnormal{0.58\phantom{***}} \\\textbf{0.79**\phantom{*}} \\\textnormal{0.35\phantom{***}} \\\textnormal{0.42\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.04, 1.2)} \\\textnormal{(0.24, 1.34)} \\\textnormal{(-0.35, 1.06)} \\\textnormal{(-0.08, 0.91)} \\}   &  \makecell[l]{\textnormal{1.25**\phantom{*}} \\\textnormal{1.38**\phantom{*}} \\\textbf{-0.28\phantom{***}} \\\textnormal{2.06***} \\}   &  \makecell[l]{\textnormal{(0.34, 2.17)} \\\textnormal{(0.44, 2.33)} \\\textnormal{(-0.94, 0.37)} \\\textnormal{(1.19, 2.93)} \\} \\ 
+& & & & \\ 
+\quad Public x Distance    &  \makecell[l]{\textnormal{0.06\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{0.04\phantom{***}} \\\textnormal{0.26\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.49, 0.61)} \\\textnormal{(-0.52, 0.45)} \\\textnormal{(-0.48, 0.56)} \\\textnormal{(-0.13, 0.65)} \\}   &  \makecell[l]{\textnormal{0.33\phantom{***}} \\\textnormal{0.37\phantom{***}} \\\textnormal{0.38\phantom{***}} \\\textnormal{0.03\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.21, 0.88)} \\\textnormal{(-0.1, 0.84)} \\\textnormal{(-0.06, 0.82)} \\\textnormal{(-0.39, 0.45)} \\} \\ 
+& & & & \\ 
+\quad Wheels x Distance    &  \makecell[l]{\textnormal{-0.09\phantom{***}} \\\textnormal{0.08\phantom{***}} \\\textnormal{0.09\phantom{***}} \\\textnormal{0.19\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-1.79, 1.62)} \\\textnormal{(-1.32, 1.48)} \\\textnormal{(-0.88, 1.07)} \\\textnormal{(-1.07, 1.44)} \\}   &  \makecell[l]{\textnormal{-1.15\phantom{***}} \\\textnormal{-1.41\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{-0.13\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-2.89, 0.6)} \\\textnormal{(-3.35, 0.53)} \\\textnormal{(-0.75, 0.66)} \\\textnormal{(-1.36, 1.11)} \\} \\ 
+& & & & \\ 
+\quad Walk x Distance    &  \makecell[l]{\textnormal{-0.02\phantom{***}} \\\textnormal{0.17\phantom{***}} \\\textnormal{-0.63\phantom{***}} \\\textnormal{0.17\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.62, 0.58)} \\\textnormal{(-0.33, 0.68)} \\\textnormal{(-1.28, 0.02)} \\\textnormal{(-0.24, 0.58)} \\}   &  \makecell[l]{\textnormal{0.03\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{-0.08\phantom{***}} \\\textbf{0.66***} \\}   &  \makecell[l]{\textnormal{(-0.42, 0.48)} \\\textnormal{(-0.42, 0.34)} \\\textnormal{(-0.44, 0.28)} \\\textnormal{(0.3, 1.02)} \\} \\ 
+
+      \bottomrule
+      {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
+      \end{tabular}
+      \end{small}
+      \caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \label{tab:table3a}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \textbf{Variables}
+          & \multicolumn{4}{l}{\textbf{Adjusted model}} \\ \cline{2-5}
+        & \multicolumn{2}{l}{\textbf{From home to school}} 
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+        & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
+      \midrule
+    \textbf{Gender} & & & & \\ 
+\quad Males    &  \makecell[l]{\textnormal{7.97***} \\\textnormal{8.19***} \\\textbf{0.29\phantom{***}} \\\textnormal{7.27***} \\}   &  \makecell[l]{\textnormal{(6.75, 9.19)} \\\textnormal{(7.2, 9.18)} \\\textnormal{(-1.66, 2.25)} \\\textnormal{(6.11, 8.44)} \\}   &  \makecell[l]{\textnormal{7.58***} \\\textnormal{7.45***} \\\textbf{-0.36\phantom{***}} \\\textnormal{8.26***} \\}   &  \makecell[l]{\textnormal{(6.52, 8.63)} \\\textnormal{(6.6, 8.29)} \\\textnormal{(-1.99, 1.27)} \\\textnormal{(7.31, 9.2)} \\} \\ 
+\quad Females (ref) & & & & \\ 
+\multicolumn{5}{l}{\textbf{Interaction Commuting group x Gender}} \\ 
+\quad Car x Gender    &  \makecell[l]{\textnormal{-2.2*\phantom{**}} \\\textnormal{-2.32**\phantom{*}} \\\textbf{-2.75\phantom{***}} \\\textbf{-0.35\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-4.16, -0.24)} \\\textnormal{(-3.86, -0.77)} \\\textnormal{(-5.66, 0.16)} \\\textnormal{(-2.17, 1.48)} \\}   &  \makecell[l]{\textnormal{-2.63*\phantom{**}} \\\textnormal{-2.3*\phantom{**}} \\\textbf{0.41\phantom{***}} \\\textnormal{-4.21**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(-5.23, -0.03)} \\\textnormal{(-4.59, -0.01)} \\\textnormal{(-2.97, 3.78)} \\\textnormal{(-6.97, -1.44)} \\} \\ 
+& & & & \\ 
+\quad Public x Males    &  \makecell[l]{\textnormal{-2.0*\phantom{**}} \\\textnormal{-2.56***} \\\textbf{-1.69\phantom{***}} \\\textbf{-0.5\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-3.81, -0.2)} \\\textnormal{(-4.05, -1.07)} \\\textnormal{(-4.46, 1.07)} \\\textnormal{(-2.16, 1.16)} \\}   &  \makecell[l]{\textnormal{-1.35\phantom{***}} \\\textbf{-1.53*\phantom{**}} \\\textnormal{-2.18\phantom{***}} \\\textbf{-1.88*\phantom{**}} \\}   &  \makecell[l]{\textnormal{(-2.99, 0.3)} \\\textnormal{(-2.83, -0.22)} \\\textnormal{(-4.77, 0.4)} \\\textnormal{(-3.35, -0.41)} \\} \\ 
+& & & & \\ 
+\quad Wheels x Males    &  \makecell[l]{\textnormal{-1.95\phantom{***}} \\\textnormal{-4.06\phantom{***}} \\\textnormal{-0.17\phantom{***}} \\\textnormal{0.05\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-7.49, 3.6)} \\\textnormal{(-10.16, 2.05)} \\\textnormal{(-3.71, 3.38)} \\\textnormal{(-3.38, 3.47)} \\}   &  \makecell[l]{\textnormal{-3.09\phantom{***}} \\\textnormal{nan\phantom{***}} \\\textnormal{0.16\phantom{***}} \\\textnormal{nan\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-9.31, 3.12)} \\\textnormal{(nan, nan)} \\\textnormal{(-3.25, 3.56)} \\\textnormal{(nan, nan)} \\} \\ 
+\quad Walk x Males (ref) & & & & \\ 
+\textbf{Covariates} & & & & \\ 
+\quad MVPA    &  \makecell[l]{\textnormal{0.08***} \\\textnormal{0.08***} \\\textnormal{-0.06**\phantom{*}} \\\textnormal{0.17***} \\}   &  \makecell[l]{\textnormal{(0.03, 0.12)} \\\textnormal{(0.04, 0.12)} \\\textnormal{(-0.11, -0.02)} \\\textnormal{(0.13, 0.22)} \\}   &  \makecell[l]{\textnormal{0.07***} \\\textnormal{0.07***} \\\textnormal{-0.06**\phantom{*}} \\\textnormal{0.14***} \\}   &  \makecell[l]{\textnormal{(0.03, 0.11)} \\\textnormal{(0.03, 0.12)} \\\textnormal{(-0.11, -0.01)} \\\textnormal{(0.09, 0.18)} \\} \\ 
+& & & & \\ 
+\quad Age    &  \makecell[l]{\textnormal{0.43*\phantom{**}} \\\textnormal{0.53**\phantom{*}} \\\textbf{-0.11\phantom{***}} \\\textnormal{0.66**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(0.0, 0.85)} \\\textnormal{(0.14, 0.92)} \\\textnormal{(-0.64, 0.42)} \\\textnormal{(0.26, 1.06)} \\}   &  \makecell[l]{\textnormal{0.4\phantom{***}} \\\textbf{0.55**\phantom{*}} \\\textnormal{-0.08\phantom{***}} \\\textnormal{-0.05\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.02, 0.82)} \\\textnormal{(0.17, 0.93)} \\\textnormal{(-0.61, 0.45)} \\\textnormal{(-0.43, 0.33)} \\} \\ 
+
+      \bottomrule
+      {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
+      \end{tabular}
+      \end{small}
+      \caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \label{tab:table3b}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    
+
+
+% To make the tables a bit easier to read I suggest to add a rightmost column, repeatedly containing "Original", "ARX", "SDV", "SynDiffix" .... so that it is easier to understand at first glance what a certain number represents.
+
+%\begin{figure}
+%    \begin{center}
+%        \includegraphics[width=0.65\linewidth]{norm_err_tab3_fig1}
+%        \caption{Normalized error for coefficients in Tables~3 and 4, and Fit (V0$_2$max predicted at mode for median distance) for Figure~\ref{fig:comparison_plots}. Normalized error $E$ is computed as $E = \frac{\left| \text{O} - \text{A} \right|}{\max\left( \left| \text{O} \right|, \left| \text{A} \right| \right)}$, where $O$ is the original value and $A$ is the anonymized value. The middle plot displays normalized error only for the datapoints in Tables~3 and 4 where the original coefficient is significant.
+%        }
+%        \label{fig:abs_err_tab3_tab4}
+%    \end{center}
+%\end{figure}
+
+\textbf{*** FIGURE 2 GOES HERE ***}
+
+\subsection*{Statistical significance of regression coefficients (Base-table 3 from the original paper)}
+
+The original and anonymized data for base-table 3 are given is this paper's Tables~3 and 4 (the data is spread over two tables for formatting purposes)\mycite{18}. The primary purpose of base-table 3 is to indicate statistical significance. As such, those entries where the original data is significant and the anonymized data is not, or vice versa, are highlighted in red. In total, there are 3 such mismatches for ARX, 8 for SDV, and 5 for SynDiffix.
+
+Several differences were found in statistics of linear prediction models based on original data and the data produced by all three anonymization methods (Tables~3 and 4). In the original models predicting VO2max, the constant (intercept), the predictors Gender and MVPA, and the derived Car × Gender interaction term were statistically significant in both directions of commuting. This also holds for all parameters in the SynDiffix and ARX models, except for the Car x Gender parameter in the SynDiffix model, which is not significant in one of the directions of commuting. The Gender parameter in the SDV model was found to be non-significant, despite being highly significant (p$\leq$.001) in the three other models.
+
+Note that only the SDV method provides estimate for Wheels x Males interaction parameter in the school to home direction models. ARX and SynDiffix suppressed this data as part of anonymization because there were so few datapoints.
+%
+The normalized error for coefficients in Tables 3 and 4 is illustrated in Figure 2.
+
+%\begin{quotation}
+%\color{blue}
+%Linear regression models (Table 3) was used to evaluate
+%the effects of commuting group and distance on CRF,
+%adjusted for gender, age, and MVPA. Two models were
+%constructed for each direction, one from home to school
+%and one from school to home.
+%
+%When commuting from school to home, both the main
+%effect of commuting group and its interaction with
+%distance were significant (P = 0.013 and P = 0.028,
+%respectively). Compared to the Walk group as a reference (and holding values of the other predictors in the
+%model equal), the Car group had a significantly lower
+%predicted value of CRF (B = -15.14, P = 0.012). Similarly,
+%the Car group was the only one where distance of travel
+%was related to CRF having significant difference to the
+%reference (Walk) group; namely, the participants with
+%larger car travel distance had higher predicted VO 2 max
+%(B = 1.25, P = 0.007). Although overall interaction of commuting group with gender was not significant (P = 0.12),
+%the largest sample difference between males and females
+%was observed in the reference group (Walk), but it was
+%only significant in the Car group (B = -2.63, P = 0.048).
+%
+%When commuting from home to school neither main
+%effect of commuting group, nor it’s interactions with
+%gender and commuting distance were significant.
+%\end{quotation}
+
+\subsection*{Stratification of children's cardiorespiratory fitness (Base-figure 1 from the original paper)}
+
+The plot for base-figure 1 is given in this paper's Figure 3, which replicates the plot from the original paper as well as gives the corresponding plots for the three anonymized datasets.
+In male children, point predictions and prediction intervals in the original paper are quite closely matched with the ones from ARX and SynDiffix, but not with SDV. 
+In female children, original statistics are most closely matched by ARX, followed SynDiffix and then by SDV.
+SDV gives similar results for male and female children, although they are clearly separated in the original data. SDV performs worst also in estimating prediction interval widths, which are very similar for both sexes, although being quite different in the original plot. ARX and SynDiffix produce interval widths that are more similar to original, but still differ in some cases, e.g. being too narrow in case of walk commuting in ARX and too narrow in females' wheels commuting from school to home in both ARX and SynDiffix.
+
+%\begin{quotation}
+%    \color{blue}
+%Commuting groups and gender adjusted marginal
+%means with 95% prediction intervals of CRF were calculated at commuting group median street distance from
+%home to school and vice versa.
+%
+%In males, (Fig. 1, red symbols) the Car group deviated
+%the most having the lowest predicted VO 2 max, while the
+%Wheels group had the highest predicted VO 2 max, with
+%the overall difference between participants in these two
+%commuting groups reaching 4.3 and 5.1 ml/min/kg
+%(commuting to and from school, respectively). The predicted VO 2 max in the Car group was also significantly
+%lower than in the Walk group in both directions, while
+%with in the Public group it differed only in the school to
+%home direction.
+%
+%In females, differences in CRF between commuting
+%groups were in general smaller than in males with
+%prediction intervals of all four groups overlapping for
+%both directions of commuting. However, the Wheels
+%group still showed the highest predicted values of CRF,
+%although this difference did not reach statistical significance, due to a very low number of female participants
+%choosing this mode of transport. In males, the differences in the CRF mean values of commuting groups, together with no overlap of their prediction intervals,
+%showed that besides the Wheels group (for 2.0 and 3.1
+%ml/min/kg), the Walk group (for 1.7 and 3.3 ml/min/kg)
+%and the Public group (for 0.6 and 2.5 ml/min/kg) also
+%had significantly higher predicted CRF than the Car
+%group did (commuting to and from school, respectively).
+%
+%The differences in predicted CRF between boys who
+%walked or cycled to and from school were almost nonexistent (see Fig. 1). This is somewhat surprising and is
+%not in line with previous studies [6, 10, 12, 46]. It may
+%be at least partly attributable to short distances from
+%school to home (median distances were 0.97 and 1.14
+%km in the Walk and the Wheels groups, respectively)
+%and the similar (small) amount of PA, needed for commuting (alone) in those two groups.
+%\end{quotation}
+
+%    \begin{figure}[htbp]
+%        \centering
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{figs/r_orig_plot.png}
+%            \caption{Original Plot}
+%            \label{fig:r_orig_plot}
+%        \end{subfigure}
+%        \hspace{0.0\textwidth}
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{figs/r_arx_plot.png}
+%            \caption{ARX Plot}
+%            \label{fig:r_arx_plot}
+%        \end{subfigure}
+%        \vfill
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{figs/r_sdv_plot.png}
+%            \caption{SDV Plot}
+%            \label{fig:r_sdv_plot}
+%        \end{subfigure}
+%        \hspace{0.0\textwidth}
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{figs/r_sdx_plot.png}
+%            \caption{SynDiffix Plot}
+%            \label{fig:r_sdx_plot}
+%        \end{subfigure}
+%
+%        \caption{Comparison of the VO2max data plots corresponding to the base-figure from the original study.
+%        }
+%        \label{fig:comparison_plots}
+%    \end{figure}
+
+\textbf{*** FIGURE 3 GOES HERE ***}
+
+\subsection*{Comparison of derived scientific insights}
+\label{sec:overall}
+
+% In the following table, use:
+%    \cmark for the green checkmark
+%    \omark for the yellow circle
+%    \xmark for the red X
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabularx}{\textwidth}{Xlll}
+\toprule
+\textbf{Main policy conclusion}  & ARX & SDV & SynDiffix \\
+Children driven by car who live
+within wheels or walk distance from school should be targeted by interventions promoting active transport & \cmark & \xmark & \cmark \\
+\midrule
+\textbf{Descriptive analytics results}  & ARX & SDV & SynDiffix \\
+Overall, 43\% of the participants reported active commuting modes to and from school and an additional 13\%
+only in one direction & \cmark & \xmark & \cmark \\
+Participants more often used active commuting from school (56\%) than to school (44\%) & \cmark & \cmark & \cmark \\
+Males and females were choosing active commuting equally often & \cmark & \cmark & \cmark \\
+Females preferred to walk and males preferred to use wheels transport & \cmark & \xmark & \cmark \\
+The Walk group had the lowest and Public group had the highest median distance from home to school & \cmark & \xmark & \cmark \\
+The active commuting groups (Walk Wheels) typically live close to school & \cmark & \xmark & \cmark \\
+\midrule
+\textbf{CRF-related analytic results}  & ARX & SDV & SynDiffix \\
+When commuting from school to home, both the main effect of commuting group and its interaction with
+distance were significant & \cmark & \xmark & \cmark \\
+The Car group had a significantly lower predicted value of CRF & \cmark & \xmark & \cmark \\
+The Car group was the only one where distance of travel was related to CRF having significant difference to the reference (Walk) group; the participants with larger car travel distance had higher predicted VO2max & \cmark & \xmark & \omark \\
+Overall interaction of commuting group with gender was not significant  & \omark & \cmark & \omark \\
+The largest sample difference between males and females was observed in the reference group (Walk), but it was only significant in the Car group & \omark & \omark & \omark \\
+When commuting from home to school neither main effect of commuting group, nor it’s interactions with
+gender and commuting distance were significant & \omark & \cmark & \cmark \\
+\midrule
+\textbf{Main scientific results}  & ARX & SDV & SynDiffix \\
+The main effect of commuting group on CRF and its interaction with distance were significant in the
+direction from school to home, but not in the opposite direction & \omark & \xmark & \omark \\
+Predicted differences in CRF between commuting groups were moderate and generally higher in males than in females & \cmark & \xmark & \cmark \\
+When comparing commuting group median distance from school to home, males driven by car had around 4 ml/
+min/kg lower predicted CRF than those who walked or used wheels commuting (e.g., bicycle, skateboard) & \omark & \xmark & \omark \\
+
+
+
+\bottomrule
+\end{tabularx}
+\caption{This table summarizes the ability of each anonymization method to result in the same analytic conclusion as that of the original data. \cmark means that the correct conclusion is reached, \xmark means that an incorrect conclusion is reached, and \omark is inconclusive.}
+\label{tab:summary}
+\end{small}
+\end{center}
+\end{table}
+
+Table 5 summarizes the ability of each anonymization method to produce the same analytic conclusions as those of the base paper. It presents the set of statements made in the base paper, and evaluates whether the statement would be supported (\cmark), negated (\xmark), or neither supported nor negated (\omark).
+
+As mentioned, besides the specific scientific statements, the paper suggests a policy intervention: that active transport should be promoted for children who use passive transport, but live within walking or biking distance to school. We regard this as the most important conclusion of the paper, and it is supported by ARX and SynDiffix, but would have been negated by SDV.
+
+The base paper starts with a number of simple statistical observations about the data (descriptive analytic results). Both ARX and SynDiffix support all six of these observations, while SDV negates four of them. 
+
+The main analytic thrust of the paper is the linear regression analysis of (CRF). Here, the performance of ARX and SynDiffix is less good. While none of the statement were negated, about half of the statements were not supported. While this would not have prevented the main policy conclusions from having been reached, the overall quality of the study would have suffered by using either anonymization technique.
+
+\subsection*{Usability of the anonymization tools and data}
+
+To enable data sharing in an open science environment, processes are needed that allow scientists to conveniently create and share safe data. As scientists already tend to be undermotivated to share data\mycite{2}, it is hence beneficial if the anonymization step places as little additional burden on scientists as possible. Ideally, there should be little or no extra work required by data collectors or operators of repository systems to anonymize data and prepare them for sharing.
+
+In terms of protected data generation, SynDiffix is the easiest to use of all methods studied here due to its simplicity and lack of configuration need. Using ARX, in contrast, requires expertise on the various anonymization methods that it supports, as well as substantial configuration efforts to generate a protected data table of sufficient quality. SDV is easier to use than ARX since it provides default configurations and code templates, but nevertheless requires that a decision about which SDV tool to use, and requires configuration of datatypes. However, in terms of data analysis, SynDiffix places an extra burden on the analyst, in that they need to understand that different tables need to be generated for different analytic tasks. Neither ARX nor SDV have this additional burden: the generated tables can be used as is. 
+
+In general, any anonymization technique requires that the analyst understands the extent to which data has been distorted, and requires that they compensate for that distortion. This always creates additional burden. Since the anonymization process in ARX is typically explainable and deterministic, and the present distortions are visible in univariate and bivariate statistics, they might be easier to understand. In contrast, typical synthetic data generation involves randomness and it is often not clear how the internal structure of the data might have changed, even if uni- and bivariate distributions appear to be similar. 
+
+\subsection*{\hl{Risk Evaluation}}
+
+\hl{All three of the data anonymization methods studied in this paper have strong privacy properties. K-anonymity is a well-established technique that has been in use for more than two decades} \mycite{19}. \hl{AI-based synthetic data tools like CTGAN are offered commercially. Like K-anonymity, SynDiffix uses the mechanisms of aggregation and suppression, and additionally adds noise.}
+
+\hl{Here we demonstrate the strong privacy properties of the three methods with respect to the commuting dataset using the attribute inference privacy metric from the Anonymeter tool}\mycite{20} (https://github.com/statice/anonymeter). \hl{In an attribute inference, an attacker knows several attributes of a person known to be in a dataset, and then tries to predict an unknown attribute from the released anonymized data. Anonymeter makes this prediction by finding the microdata record in the anonymized data that most closely matches the known attributes, and predicting the unknown attribute from that record.} 
+
+\hl{Anonymeter measures the \textit{improvement} of the predictions over a statistical baseline. For example, the statistical baseline precision for predicting sex would be 50\%, assuming an even distribution of male and female. Anonymeter establishes the statistical baseline by making inference predictions on records that have been removed from the dataset prior to anonymization. Any prediction success on these records is only statistical in nature, and does not represent a loss of individual privacy.
+}
+
+\hl{Anonymeter measures Risk as $R=P_{atk}-P_{base}/1-P_{base}$, where $P_{atk}$ is the prediction precision of records in the dataset, and $P_{base}$ is the precision of records not in the dataset. For example, if the baseline precision for predicting sex is $P_{base}=0.5$, and the attack precision is $P_{atk}=0.75$, then the improvement, or Risk, is $R=0.5$. Any Risk below 0.5 can be regarded as strongly anonymous. When $P_{base}$ is low, then $R=0.5$ leaves substantial uncertainty on the part of the attacker, or equivalently, substantial deniability on the part of the victim. When $P_{base}$ is high, the attacker in any event has little uncertainty, and a Risk of 0.5 represents only a modest improvement. Furthermore, a high baseline implies an attribute that is common in the dataset population and therefore unlikely to be a sensitive attribute.}
+
+\hl{For our measure, we removed 100 records from the dataset to establish the baseline, and re-anonymized the remaining 613 records. We assumed that the attacker knows the victim's gender, age, and commuting distance and mode in both directions. These are all potentially publicly-known attributes. The unknown attributes being predicted are V02max and MVPAsqrt. In evaluating SynDiffix, the two tables with only the known attributes are unknown attribute were used. Table} 6 \hl{presents the Risk scores and the 95\% confidence intervals. In all cases, even the high confidence bound is well below the strong privacy Risk threshold of 0.5.}
+
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{rcccc}
+\toprule
+Method & \multicolumn{2}{c}{VO2max} & \multicolumn{2}{c}{MVPAsqrt} \\ 
+ & Risk & (CI low, CI high) & Risk & (CI low, CI high) \\ 
+\midrule
+ARX & 0.139 & (0.0, 0.338) & 0.131 & (0.023, 0.239) \\ 
+SDV & 0.0 & (0.0, 0.123) & 0.031 & (0.0, 0.106) \\ 
+SynDiffix & 0.017 & (0.0, 0.248) & 0.042 & (0.0, 0.123) \\ 
+\bottomrule
+\end{tabular}
+\end{small}
+\caption{Privacy risk scores and 95\% confidence intervals. Any risk score below 0.5 can be regarded as having very strong anonymity.}
+\label{tab:risk_eval}
+\end{center}
+\end{table}
+
+
+\section*{Discussion, \hl{conclusions, and future work}}
+
+In this paper, we compared the suitability of three tools for data anonymization (ARX, SDV and SynDiffix) for use in a public health study in Slovenia. Our study distinguishes itself from the large body of literature on this topic by studying in detail whether the individual analytical findings as well as the resulting conclusions would hold when using anonymized instead of the original data. Moreover, we explicitly considered the burden that would be imposed on researchers by applying one of the studied tools to follow open-science principles in our analysis.
+
+Of the three tools, SDV’s data quality was poor and led to many incorrect scientific conclusions.  The data quality of ARX and SynDiffix was good enough to provide definite value. The data generated by both tools supported the main conclusion of the base study (that children within walking or biking commuting distance should not commute with a car), and no incorrect conclusions were drawn. In addition, all of the descriptive analytics (counting and simple statistics) were supported by ARX and SynDiffix. 
+
+Regarding researcher burden for data generation, all three tools require some manual configuration. ARX typically requires configuration of data hierarchies per-column among other configuration choices, which requires expertise to find suitable settings.  SDV requires selection of an algorithm, definition of data types, and potentially other configuration choices. If the dataset is time-series, SynDiffix only requires that the user configures the column that identifies individuals in the dataset. For the fitness dataset, ARX required around 200 lines of code (Java), SDV required 5 lines, and SynDiffix required 2 lines (both Python). Note that ARX is available as a GUI application (Windows, MacOS, or Linux), whereas SDV and SynDiffix require Python.
+
+Regarding researcher burden for data analysis, the output of ARX and SDV can be used as is. SynDiffix generates multiple anonymized datasets, and the analyst must select the one with only the columns necessary for each given analytic task. This can only be done using a SynDiffix blob reader package that runs on Python. For the fitness study, a 22-line Python routine was needed to generate the two datasets used in a R script to generate Figure 3. In the analysis code, an extra line of code is required each time a dataframe is read.
+
+A major limitation of the current study is that it does not truly replicate an open science scenario, whereby an analyst undertakes a scientific analysis purely from anonymized data. In the current study, the analyst had the advantage of hindsight, was already familiar with the raw data and its analysis, and simply replicated an analysis that had already taken place on the raw data. A more realistic study would be to give the anonymized data to a researcher unfamiliar with the data, have them undertake a scientific study from scratch, and then follow up the study with the raw data to determine not only whether the results are correct, but also whether they would have done the analysis differently given the raw data.
+
+Another limitation of this study is that it is based on only one dataset and analysis. \hl{As future work, it would be valuable to undertake additional scientific studies on different datasets, ideally with separate teams working in isolation on the original and anonymized data respectively. It would also be valuable to explore other anonymization methods, or these methods with different parameter settings. In this fashion, we can build up an understanding as to whether current anonymization methods can be used in an open science settings, and what improvements are needed to reach that goal.}
+
+
+
+% The Methods section in Data Descriptors should describe any steps or procedures used in producing the data, including full descriptions of the experimental design, data acquisition and any computational processing. Specific data inputs should be explicitly referenced via our data citation format. See our detailed guidance for providing reproducible methods descriptions in Step 5. Articles should desribe the full scientific process for how the output or study was generated.
+\section*{Methods}
+
+\subsection*{Choice of base study and dataset}
+\label{sec:base-study}
+
+The selection of the base study and corresponding dataset to use for this paper was limited to those in which the authors were involved. Besides the practical matter of having access to the original datasets, the authors of the original studies are in the best position to determine if the anonymized data is fit for purpose. We decided to select a base study where the dataset and the analysis are typical of those used by researchers participating in the SPOZNAJ open science project in Slovenia. Most such datasets are small, consisting of hundreds or a few thousand records. Using a small dataset also challenges the anonymization tools, since the perturbation introduced by anonymization has a proportionally stronger effect on small datasets.
+
+In total, we considered eight studies\mycite{6}\mycite{21}\mycite{22}\mycite{23}\mycite{24}\mycite{25}\mycite{26}\mycite{27}. Of these \mycite{21} \mycite{25} and \mycite{26} had too much data, and the analyses in \mycite{22} and \mycite{27} were less interesting than the others. Of the remaining studies, \mycite{6} was selected in part because it involves a sophisticated analysis technique (linear regression), and in part because it has a mix of significant and non-significant regression coefficients. An important and challenging test of  anonymized data is how well it preserves significance.
+
+
+\subsection*{Choice of anonymized data methods}
+
+Anonymization mechanisms fall into two broad classes. One class aims to \textit{replicate} or \textit{modify} the original data as closely as possible so that statistical statements about the original data are accurate. Another class aims to \textit{behave like} the original data in that they generate data suitable for predictive ML applications, and may even wish to modify the statistics of the data, by for instance creating additional data, possibly with bias added or removed. This latter class is generally referred to as ``synthetic data'', although there is no strict definition of this term\mycite{28}.
+
+There is a long history of open source tools in the replicate class, including sdcMicro\mycite{29} which implements techniques classically used by statistics agencies (swapping, outlier removal, sampling),  ARX\mycite{30} which implements $k$-anonymity\mycite{19} and related techniques among others, Synthpop\mycite{31} which implements the decision tree approach CART\mycite{32} among others, and most recently SynDiffix\mycite{8} which is a multi-table tree-based approach.
+
+Of these, we selected ARX which has demonstrated success particularly in medical domains\mycite{33}\mycite{30}, and SynDiffix which claims high accuracy and ease of use\mycite{15}. The anonymized data generated by both of these tools is row-level data (also known as microdata) that syntactically is equivalent to the original data. In this specific narrow sense, ARX and SynDiffix can be thought of as synthetic data.
+
+%By contrast, sdcMicro requires substantial expertise in statistical disclosure to operate, and Synthpop cannot claim to always protect anonymity.
+
+We wished also to select at least one tool from the behave-like class. These techniques have received considerable attention in recent years since the publication of the CTGAN and TVAE techniques\mycite{34}, and a number of open source and commercial tools are available. We tested both the open source tool Synthetic Data Vault (SDV)\mycite{9} and the commercial product Mostly AI. The two demonstrated similar results for this paper's dataset, so we selected SDV since open source is better for open science.
+
+Note that the anonymized datasets generated for this paper for ARX and SynDiffix were built by the respective authors of those tools. The SDV dataset was generated by Francis.
+
+The procedures used to generate the three anonymized datasets from ARX, SDV, and SynDiffix, are described in the following sections.
+
+\subsection*{ARX}
+\label{sec:method_arx}
+
+\subsubsection*{Overview}
+
+The ARX software is intended to anonymize sensitive personal data and supports a wide variety of privacy models and data transformation methods. It can be used either with a graphical user interface as a standalone software, or by using the Java-based ARX library to perform the data anonymization via code\mycite{33}. ARX allows for fine-grained configuration to implement tailored anonymization procedures and offers a wide variety of options to protect the data while providing high performing optimization algorithms to retain the data utility\mycite{30}. 
+
+\subsubsection*{Anonymized data generation}
+
+To perform the data anonymization, ARX requires dataset-specific configuration. This includes the privacy models to be used and their thresholds as well as domain-generalization hierarchies for the variables that can be used by the software to aggregate data tailored to the scientific research question or as a distance-measure during clustering. Finally the specific transformations to be performed, e.g., suppression, full-domain or local generalization, aggregation, as well as the algorithm used to perform the optimization process need to be specified. Parameters often need to be fine-tuned over several iterations.
+
+For the given dataset, the process was quite straight forward. We chose $k$-Anonymity as a strict privacy model that protects all records and applies to all variables. We chose the threshold $k$=2, because it is the weakest possible parameterization and weaker parameters tend to provide higher utility for small datasets. ARX was configured to perform a clustering process where domain-generalization hierarchies are used to determine distances between values. For categorical variables, a simple domain-generalization hierarchy was designed, grouping "walk" and "wheels" together, because they both indicate movement through physical activity. For continuous variables, the associated domain-generalization hierarchies represented increasingly large intervals. The hierarchy for the "gender" variable simply included a common root node "*" for both genders. In each cluster, categorical values were replaced by the mode of all values in the cluster, while drawing from the distribution within input data if there was no mode, and continuous variables were replaced with the arithmetic mean of all values in the cluster.
+
+We applied the transformations using ARX's local optimization strategy\mycite{30} using the Java library provided by ARX version 3.9.2. The core Java code (i.e. excluding I/O, imports, etc.) for executing the anonymization is around 200 lines. Executing the process took about 2.3 minutes on a laptop with an i5-1135G7 processor running at 2.4GHz and sufficient memory (8GB).
+
+\subsubsection*{Anonymized data usage}
+
+The data anonymization performed by ARX retained the data structure of the original data, therefore no post-processing was needed before use.
+
+\subsection*{Synthetic Data Vault (SDV)}
+\label{sec:method_sdv}
+
+\subsubsection*{Overview}
+
+The Synthetic Data Vault (SDV) is an open source project implementing several synthetic data tools\mycite{9}. SDV offers different tools depending on whether the original table is a single table, multiple tables (relational), or time-series. The single-table case offers several tools, such as Gaussian-Copula, CTGAN, and TVAE. The latter two are promoted by SDV as being suitable for data with a mix of categorical and continuous columns, and the data quality of CTGAN and TVAE is similar\mycite{34}. 
+
+We used SDV's CTGAN tool (Conditional Tabular Generative Adversarial Network) to generate an anonymized dataset.  As the name implies, CTGAN uses a Generative Adversarial Network (GAN) approach\mycite{34}. It runs two neural networks, a \textit{generator} and a \textit{discriminator}. The generator tries to create anonymized datasets that the discriminator cannot distinguish from the original data, while avoiding overfitting.
+
+There are a number of parameters that can be used to fine-tune CTGAN. Most importantly, the metadata description must be correct, especially the labeling of continuous and categorical columns. There are a number of other parameters related to the GAN itself (e.g., enforced minimums and maximums, enforced rounding, number of epochs) that can improve data quality somewhat.
+
+\subsubsection*{Anonymized data generation}
+
+SDV has an option to auto-generate the metadata. We used this option and checked to ensure that the metadata was correct. Since all of the categorical columns in the original dataset are strings, the auto-generated metadata was correct. Since simplicity of operation is an important requirement in an open science environment, we chose to use the default parameter settings. Note that the commercial synthetic data product Mostly AI, which has sophisticated algorithms to automate the selection of models and parameters and in general outperforms SDV's CTGAN\mycite{15}, did not in this case perform better than CTGAN with the default settings. We therefore believe that we could not have improved substantially by tweaking the parameters.
+
+{\small 
+\begin{verbatim}
+    from sdv.metadata import SingleTableMetadata
+    from sdv.single_table import CTGANSynthesizer
+    metadata = SingleTableMetadata()
+    metadata.detect_from_dataframe(df_orig)
+    synthesizer = CTGANSynthesizer(metadata)
+    synthesizer.fit(df_orig)
+    df_syn = synthesizer.sample(num_rows=len(df_orig))
+\end{verbatim}
+}
+
+The core Python code is five lines. We used version 1.14.0 of SDV with the default settings. It took 32 seconds to generate the anonymized data on a laptop with an i7-7820HQ processor running at 2.9GHz and sufficient memory (32GB).
+
+\subsubsection*{Anonymized data usage}
+
+The data anonymization performed by SDV retains the data structure of the original data, therefore no post-processing is needed before use.
+
+\subsection*{SynDiffix}
+\label{sec:method_sdx}
+
+\subsubsection*{Overview}
+
+SynDiffix takes a \textit{multi-table} approach to synthesizing data\mycite{8}. A key characteristic of all data anonymization methods is that accuracy degrades as the number of columns increases. Therefore it is better to synthesize only those columns needed for a given analytic task. Given that there can be thousands of different combinations of columns that analysts may be interested in, a multi-table approach can lead to the generation of thousands of distinct tables. Unlike other anonymized data methods, SynDiffix is designed to maintain anonymity no matter how many anonymized tables are generated.
+
+When SynDiffix synthesizes a table with more than around 5 or 6 columns, SynDiffix partitions the table into a set of sub-tables each with fewer columns, synthesizes each sub-table individually, and then joins the sub-tables back together. Columns within sub-tables are more strongly correlated than columns across sub-tables. Each sub-table has at least one column in common with another sub-table, and these common columns are used for joining.
+
+SynDiffix is implemented in Python, and has two modes of operation, \textit{full-table} mode and \textit{sub-table blob} mode. In full-table mode, the user (data controller or analyst) requests a single table, and SynDiffix returns that table after doing any required partitioning and joining. Full-table mode requires that the original data is available to SynDiffix. Full-table mode uses the \texttt{Synthesizer} class of SynDiffix.
+
+In sub-table blob mode, a single API call is made by the data controller to create the complete set of sub-tables required to generate any table. This set of sub-tables is zipped into a single file which is refered to as a \textit{SynDiffix blob}. The blob may safely be released to the public. Creating the blob uses the \texttt{SyndiffixBlobBuilder} class, and requires access to the original data. Subsequently, an analyst with access to a blob uses the \texttt{SyndiffixBlobReader} class to join and retrieve tables from the blob. The analyst requests a table with the given columns, the blob reader selects the appropriate sub-tables from the blob, joins them together, and returns the table. The original data is not required for this operation.
+
+In either mode, no table-specific configuration is required if the table is not longitudinal or time-series. If the table is, then the column that identifies each individual in the dataset must be specified. No other configuration is necessary.
+
+\subsubsection*{Anonymized data generation}
+
+To generate the blob, the user must write a python script to read in the original data file as a dataframe (\texttt{df\_original} below), and generate and save the blob. Generating the blob required two lines of Python:
+
+{\small
+\begin{verbatim}
+    sbb = SyndiffixBlobBuilder(blob_name, blob_path)
+    sbb.write(df_original)
+\end{verbatim}
+}
+
+This creates a blob from the full original dataframe \texttt{df\_original} and places it in the directory at \texttt{blob\_path} with the name \texttt{blob\_name}.
+ 
+The blob file created from the original data with eight columns and 713 records contains 160 tables, took 81 seconds to build on the same laptop as with ARX, and is 1.4MB in size (zipped).
+
+\subsubsection*{Anonymized data usage}
+
+While creating the blob is simple and automatic and requires no expertise from the controller, using the blob for analytics is unfortunately more complex. For each analytic task, the analyst must request from the blob a table with only the required columns. In addition, if the analytic task is to build a predictive model for a given target column, then the target column should be specified in the blob request. The analyst must be aware of these requirement, and must modify their analysis code to satisfy the requirements. The quality of the data is substantially worse if the analyst instead uses a single full table for all of their analysis.
+
+Recreating the three tables and one plot from the original paper required seven different tables from the blob; 2 with 1 column, 3 with 2 columns, and 2 with 6 columns and a target column (VO$_2$max). In the scripts used for generating the tables and plot, an additional API call to \texttt{SyndiffixBlobReader} was required prior to each analytic task:
+
+{\small
+\begin{verbatim}
+    sbr = SyndiffixBlobReader(blob_name, blob_path)
+    df1 = sbr.read([col1, col2])
+    analytic_task1(df1)
+    df2 = sbr.read([col3, col4, col5, col6], target_column=col5)
+    analytic_task2(df2)
+    ...
+\end{verbatim}
+}
+
+\section*{Author contributions statement}
+
+P.F. generated the SynDiffix and SDV datasets, and generated the paper's tables and figures. K.O. and F.P. generated the ARX dataset. B.L. and G.J. interpreted the validity of the anonymized datasets relative to the original data. P.F. drafted the initial version of the manuscript. All authors reviewed and edited the manuscript.
+
+\section*{Acknowledgements}
+
+F.P. and K.O. acknowledge funding from the German Ministry of Health (project KI-FDZ, grant agreement number 2521DAT01C) and from the German Research Foundation (project NFDI4Health, project number 442326535). This research has been co-financed by  the Horizon Europe programme of the European Union within the framework of the SmartCHANGE project (nº 101080965), and the Slovenian Research and Innovation Agency (Bio-psycho-social research program, nº P5-0142).
+
+\section*{Code Availability}
+
+\noindent \textbf{Accession codes}
+
+The repository at {\small \url{https://github.com/yoid2000/commute-health-study}} contains:
+\begin{itemize}
+    \item The Python code used to generate the SDV and SynDiffix anonymized data. 
+    \item The \texttt{.jar} executable to generate the ARX anonymized data.
+    \item All of the anonymized data.
+    \item The R script and Python code used to generate all of the tables and figures in this paper.
+\end{itemize}
+
+The repository at {\small \url{https://github.com/BIH-MI/commute-health-anonymization}} contains the source code (Java) to generate the ARX anonymized data.
+
+\section*{Data Availability}
+
+The public repository at\mycite{18} contains all of the anonymized data used for this paper. Note that the original pseudonymized data from which the anonymized data was derived is considered personal data and is therefore not publicly available.  \hl{Please contact Bojan Leskosek (bojan.Leskosek@fsp.uni-lj.si). This data may be used for the purpose of studying anonymity, either by sharing the data or by running the anonymization software locally.}
+
+\section*{Competing interests}
+
+The authors declare no competing interests.
+
+%\bibliographystyle{nature}
+
+\begin{thebibliography}{10}
+\urlstyle{rm}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname doiprefix\endcsname\relax\def\doiprefix{DOI: }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+%1
+\bibitem{wilkinson2016fair}
+\bibinfo{author}{Wilkinson, M.~D.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The fair guiding principles for
+  scientific data management and stewardship}}.
+\newblock {\emph{\JournalTitle{Scientific Data}}} \textbf{\bibinfo{volume}{3}},
+  \bibinfo{pages}{1--9} (\bibinfo{year}{2016}).
+
+%2
+\bibitem{borycz2023perceived}
+\bibinfo{author}{Borycz, J.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Perceived benefits of open data are
+  improving but scientists still lack resources, skills, and rewards}}.
+\newblock {\emph{\JournalTitle{Humanities and Social Sciences Communications}}}
+  \textbf{\bibinfo{volume}{10}}, \bibinfo{pages}{1--12} (\bibinfo{year}{2023}).
+
+%3
+\bibitem{guillot2023fair}
+\bibinfo{author}{Guillot, P.}, \bibinfo{author}{B{\o}gsted, M.} \&
+  \bibinfo{author}{Vesteghem, C.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Fair sharing of health data: a
+  systematic review of applicable solutions}}.
+\newblock {\emph{\JournalTitle{Health and Technology}}}
+  \textbf{\bibinfo{volume}{13}}, \bibinfo{pages}{869--882}
+  (\bibinfo{year}{2023}).
+
+%4
+\bibitem{vovk2021anonymization}
+\bibinfo{author}{Vovk, O.}, \bibinfo{author}{Piho, G.} \&
+  \bibinfo{author}{Ross, P.}
+\newblock \bibinfo{title}{Anonymization methods of structured health care data:
+  A literature review}.
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Model and
+  Data Engineering}}, \bibinfo{pages}{175--189}
+  (\bibinfo{organization}{Springer}, \bibinfo{year}{2021}).
+
+%5
+\bibitem{figueira2022survey}
+\bibinfo{author}{Figueira, A.} \& \bibinfo{author}{Vaz, B.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Survey on synthetic data
+  generation, evaluation methods and gans}}.
+\newblock {\emph{\JournalTitle{Mathematics}}} \textbf{\bibinfo{volume}{10}},
+  \bibinfo{pages}{2733} (\bibinfo{year}{2022}).
+
+%6
+\bibitem{jurak2021associations}
+\bibinfo{author}{Jurak, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Associations of mode and distance
+  of commuting to school with cardiorespiratory fitness in slovenian
+  schoolchildren: a nationwide cross-sectional study}}.
+\newblock {\emph{\JournalTitle{BMC Public Health}}}
+  \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{1--10} (\bibinfo{year}{2021}).
+
+%7
+\bibitem{prasser2015putting}
+\bibinfo{author}{Prasser, F.} \& \bibinfo{author}{Kohlmayer, F.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Putting statistical disclosure
+  control into practice: The arx data anonymization tool}}.
+\newblock {\emph{\JournalTitle{Medical Data Privacy Handbook}}}
+  \bibinfo{pages}{111--148} (\bibinfo{year}{2015}).
+
+%8
+\bibitem{francis2023syndiffix}
+\bibinfo{author}{Francis, P.}, \bibinfo{author}{Berneanu, C.} \&
+  \bibinfo{author}{Gashi, E.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Syndiffix: More accurate synthetic
+  structured data}}.
+\newblock {\emph{\JournalTitle{arXiv preprint arXiv:2311.09628}}}
+  (\bibinfo{year}{2023}).
+
+%9
+\bibitem{patki2016synthetic}
+\bibinfo{author}{Patki, N.}, \bibinfo{author}{Wedge, R.} \&
+  \bibinfo{author}{Veeramachaneni, K.}
+\newblock \bibinfo{title}{The synthetic data vault}.
+\newblock In \emph{\bibinfo{booktitle}{2016 IEEE International Conference on
+  Data Science and Advanced Analytics (DSAA)}}, \bibinfo{pages}{399--410}
+  (\bibinfo{organization}{IEEE}, \bibinfo{year}{2016}).
+
+%10
+\bibitem{iyengar2002transforming}
+\bibinfo{author}{Iyengar, V.~S.}
+\newblock \bibinfo{title}{Transforming data to satisfy privacy constraints}.
+\newblock In \emph{\bibinfo{booktitle}{Proceedings of the eighth ACM SIGKDD
+  international conference on Knowledge discovery and data mining}},
+  \bibinfo{pages}{279--288} (\bibinfo{year}{2002}).
+
+%11
+\bibitem{bayardo2005data}
+\bibinfo{author}{Bayardo, R.~J.} \& \bibinfo{author}{Agrawal, R.}
+\newblock \bibinfo{title}{Data privacy through optimal k-anonymization}.
+\newblock In \emph{\bibinfo{booktitle}{21st International conference on data
+  engineering (ICDE'05)}}, \bibinfo{pages}{217--228}
+  (\bibinfo{organization}{IEEE}, \bibinfo{year}{2005}).
+
+%12
+\bibitem{gionis2008k}
+\bibinfo{author}{Gionis, A.} \& \bibinfo{author}{Tassa, T.}
+\newblock \bibinfo{journal}{\bibinfo{title}{k-anonymization with minimal loss
+  of information}}.
+\newblock {\emph{\JournalTitle{IEEE Transactions on Knowledge and Data
+  Engineering}}} \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{206--219}
+  (\bibinfo{year}{2008}).
+
+%13
+\bibitem{lautrup2024systematic}
+\bibinfo{author}{Lautrup, A.~D.}, \bibinfo{author}{Hyrup, T.},
+  \bibinfo{author}{Zimek, A.} \& \bibinfo{author}{Schneider-Kamp, P.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Systematic review of generative
+  modelling tools and utility metrics for fully synthetic tabular data}}.
+\newblock {\emph{\JournalTitle{ACM Computing Surveys}}}
+  \textbf{\bibinfo{volume}{57}}, \bibinfo{pages}{1--38} (\bibinfo{year}{2024}).
+
+%14
+\bibitem{el2021evaluating}
+\bibinfo{author}{El~Emam, K.}, \bibinfo{author}{Mosquera, L.},
+  \bibinfo{author}{Jonker, E.} \& \bibinfo{author}{Sood, H.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Evaluating the utility of synthetic
+  covid-19 case data}}.
+\newblock {\emph{\JournalTitle{JAMIA open}}} \textbf{\bibinfo{volume}{4}},
+  \bibinfo{pages}{ooab012} (\bibinfo{year}{2021}).
+
+%15
+\bibitem{francis2024comparison}
+\bibinfo{author}{Francis, P.}
+\newblock \bibinfo{title}{A comparison of syndiffix multi-table versus
+  single-table synthetic data}.
+\newblock In \emph{\bibinfo{booktitle}{International Conference on Privacy in
+  Statistical Databases}}, \bibinfo{pages}{161--177}
+  (\bibinfo{organization}{Springer}, \bibinfo{year}{2024}).
+
+%16
+\bibitem{lefevre2008workload}
+\bibinfo{author}{LeFevre, K.}, \bibinfo{author}{DeWitt, D.~J.} \&
+  \bibinfo{author}{Ramakrishnan, R.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Workload-aware anonymization
+  techniques for large-scale datasets}}.
+\newblock {\emph{\JournalTitle{ACM Transactions on Database Systems (TODS)}}}
+  \textbf{\bibinfo{volume}{33}}, \bibinfo{pages}{1--47} (\bibinfo{year}{2008}).
+
+%17
+\bibitem{goldsteen2021anonymizing}
+\bibinfo{author}{Goldsteen, A.}, \bibinfo{author}{Ezov, G.},
+  \bibinfo{author}{Shmelkin, R.}, \bibinfo{author}{Moffie, M.} \&
+  \bibinfo{author}{Farkash, A.}
+\newblock \bibinfo{title}{Anonymizing machine learning models}.
+\newblock In \emph{\bibinfo{booktitle}{International Workshop on Data Privacy
+  Management}}, \bibinfo{pages}{121--136} (\bibinfo{organization}{Springer},
+  \bibinfo{year}{2021}).
+
+%18
+\bibitem{figshare2025commute}
+\bibinfo{author}{{ Francis, Paul and Jurak, Gregor and Leskosek, Bojan and
+  Otte, Karen and Prasser, Fabian }}.
+\newblock \bibinfo{title}{{ figshare repo for 'Data Anonymization for Open
+  Science: A Case Study' }}.
+\newblock \bibinfo{howpublished}{\url{
+  https://doi.org/10.6084/m9.figshare.28041242 }} (\bibinfo{year}{2025}).
+
+%19
+\bibitem{sweeney2002k}
+\bibinfo{author}{Sweeney, L.}
+\newblock \bibinfo{journal}{\bibinfo{title}{k-anonymity: A model for protecting
+  privacy}}.
+\newblock {\emph{\JournalTitle{International Journal of Uncertainty, Fuzziness
+  and Knowledge-Based Systems}}} \textbf{\bibinfo{volume}{10}},
+  \bibinfo{pages}{557--570} (\bibinfo{year}{2002}).
+
+%20
+\bibitem{giomi2022unified}
+\bibinfo{author}{Giomi, M.}, \bibinfo{author}{Boenisch, F.},
+  \bibinfo{author}{Wehmeyer, C.} \& \bibinfo{author}{Tasn{\'a}di, B.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A unified framework for quantifying
+  privacy risk in synthetic data}}.
+\newblock {\emph{\JournalTitle{Proceedings on Privacy Enhanced Technologies
+  Symposium PoPETs}}}  (\bibinfo{year}{2023}).
+
+%21
+\bibitem{ortega2023european}
+\bibinfo{author}{Ortega, F.~B.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{European fitness landscape for
+  children and adolescents: updated reference values, fitness maps and country
+  rankings based on nearly 8 million test results from 34 countries gathered by
+  the fitback network}}.
+\newblock {\emph{\JournalTitle{British Journal of Sports Medicine}}}
+  \textbf{\bibinfo{volume}{57}}, \bibinfo{pages}{299--310}
+  (\bibinfo{year}{2023}).
+
+%22
+\bibitem{jurak2021covid}
+\bibinfo{author}{Jurak, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A covid-19 crisis in child physical
+  fitness: creating a barometric tool of public health engagement for the
+  republic of slovenia}}.
+\newblock {\emph{\JournalTitle{Frontiers in Public Health}}}
+  \textbf{\bibinfo{volume}{9}}, \bibinfo{pages}{644235} (\bibinfo{year}{2021}).
+
+%23
+\bibitem{jurak2013long}
+\bibinfo{author}{Jurak, G.}, \bibinfo{author}{Cooper, A.},
+  \bibinfo{author}{Leskosek, B.} \& \bibinfo{author}{Kovac, M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Long-term effects of 4-year
+  longitudinal school-based physical activity intervention on the physical
+  fitness of children and youth during 7-year follow-up assessment}}.
+\newblock {\emph{\JournalTitle{Central European Journal of Public Health}}}
+  \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{190} (\bibinfo{year}{2013}).
+
+%24
+\bibitem{kovavc2013occupational}
+\bibinfo{author}{Kova{\v{c}}, M.}, \bibinfo{author}{Lesko{\v{s}}ek, B.},
+  \bibinfo{author}{Had{\v{z}}i{\'c}, V.} \& \bibinfo{author}{Jurak, G.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Occupational health problems among
+  slovenian physical education teachers}}.
+\newblock {\emph{\JournalTitle{Kinesiology}}} \textbf{\bibinfo{volume}{45}},
+  \bibinfo{pages}{92--100} (\bibinfo{year}{2013}).
+
+%25
+\bibitem{radulovic2022secular}
+\bibinfo{author}{Radulovi{\'c}, A.}, \bibinfo{author}{Jurak, G.},
+  \bibinfo{author}{Lesko{\v{s}}ek, B.}, \bibinfo{author}{Starc, G.} \&
+  \bibinfo{author}{Blagus, R.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Secular trends in physical fitness
+  of slovenian boys and girls aged 7 to 15 years from 1989 to 2019: A
+  population-based study}}.
+\newblock {\emph{\JournalTitle{Scientific Reports}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{10495} (\bibinfo{year}{2022}).
+
+%26
+\bibitem{sember2023secular}
+\bibinfo{author}{Sember, V.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Secular trends in skill-related
+  physical fitness among slovenian children and adolescents from 1983 to
+  2014}}.
+\newblock {\emph{\JournalTitle{Scandinavian Journal of Medicine \& Science in
+  Sports}}} \textbf{\bibinfo{volume}{33}}, \bibinfo{pages}{2323--2339}
+  (\bibinfo{year}{2023}).
+
+%27
+\bibitem{jurak2020slofit}
+\bibinfo{author}{Jurak, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Slofit surveillance system of
+  somatic and motor development of children and adolescents: upgrading the
+  slovenian sports educational chart}}.
+\newblock {\emph{\JournalTitle{Auc Kinanthropologica}}}
+  \textbf{\bibinfo{volume}{56}}, \bibinfo{pages}{28--40}
+  (\bibinfo{year}{2020}).
+
+%28
+\bibitem{stadler2022synthetic}
+\bibinfo{author}{Stadler, T.}, \bibinfo{author}{Oprisanu, B.} \&
+  \bibinfo{author}{Troncoso, C.}
+\newblock \bibinfo{title}{Synthetic data -- anonymisation groundhog day}.
+\newblock In \emph{\bibinfo{booktitle}{31st USENIX Security Symposium (USENIX
+  Security 22)}}, \bibinfo{pages}{1451--1468} (\bibinfo{year}{2022}).
+
+%29
+\bibitem{templ2015statistical}
+\bibinfo{author}{Templ, M.}, \bibinfo{author}{Kowarik, A.} \&
+  \bibinfo{author}{Meindl, B.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Statistical disclosure control for
+  micro-data using the r package sdcmicro}}.
+\newblock {\emph{\JournalTitle{Journal of Statistical Software}}}
+  \textbf{\bibinfo{volume}{67}} (\bibinfo{year}{2015}).
+
+%30
+\bibitem{prasser2020flexible}
+\bibinfo{author}{Prasser, F.}, \bibinfo{author}{Eicher, J.},
+  \bibinfo{author}{Spengler, H.}, \bibinfo{author}{Bild, R.} \&
+  \bibinfo{author}{Kuhn, K.~A.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Flexible data anonymization using
+  arx -— current status and challenges ahead}}.
+\newblock {\emph{\JournalTitle{Software: Practice and Experience}}}
+  \textbf{\bibinfo{volume}{50}}, \bibinfo{pages}{1277--1304}
+  (\bibinfo{year}{2020}).
+
+%31
+\bibitem{nowok2016synthpop}
+\bibinfo{author}{Nowok, B.}, \bibinfo{author}{Raab, G.~M.} \&
+  \bibinfo{author}{Dibben, C.}
+\newblock \bibinfo{journal}{\bibinfo{title}{synthpop: Bespoke creation of
+  synthetic data in r}}.
+\newblock {\emph{\JournalTitle{Journal of Statistical Software}}}
+  \textbf{\bibinfo{volume}{74}}, \bibinfo{pages}{1--26} (\bibinfo{year}{2016}).
+
+%32
+\bibitem{reiter2005using}
+\bibinfo{author}{Reiter, J.~P.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Using cart to generate partially
+  synthetic public use microdata}}.
+\newblock {\emph{\JournalTitle{Journal of Official Statistics}}}
+  \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{441} (\bibinfo{year}{2005}).
+
+%33
+\bibitem{prasser2014arx}
+\bibinfo{author}{Prasser, F.}, \bibinfo{author}{Kohlmayer, F.},
+  \bibinfo{author}{Lautenschl{\"a}ger, R.} \& \bibinfo{author}{Kuhn, K.~A.}
+\newblock \bibinfo{title}{Arx-a comprehensive tool for anonymizing biomedical
+  data}.
+\newblock In \emph{\bibinfo{booktitle}{AMIA Annual Symposium Proceedings}},
+  vol. \bibinfo{volume}{2014}, \bibinfo{pages}{984}
+  (\bibinfo{organization}{American Medical Informatics Association},
+  \bibinfo{year}{2014}).
+
+%34
+\bibitem{xu2019modeling}
+\bibinfo{author}{Xu, L.}, \bibinfo{author}{Skoularidou, M.},
+  \bibinfo{author}{Cuesta-Infante, A.} \& \bibinfo{author}{Veeramachaneni, K.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Modeling tabular data using
+  conditional gan}}.
+\newblock {\emph{\JournalTitle{Advances in Neural Information Processing
+  Systems}}} \textbf{\bibinfo{volume}{32}} (\bibinfo{year}{2019}).
+
+\end{thebibliography}
+
+%\bibliography{bib}
+
+\section*{Figure Legends}
+
+\subsection*{Figure 1:}
+
+Absolute error of the three anonymization methods for the counts and distances in Tables 1  and 2. Each box plot data point is taken from a single cell in Tables 1 and 2.
+
+
+\subsection*{Figure 2:}
+
+Normalized error for coefficients in Tables~3 and 4, and Fit (V0$_2$max predicted at mode for median distance) for Figure 3. Normalized error $E$ is computed as $E = \frac{\left| \text{O} - \text{A} \right|}{\max\left( \left| \text{O} \right|, \left| \text{A} \right| \right)}$, where $O$ is the original value and $A$ is the anonymized value. The middle plot displays normalized error only for the datapoints in Tables~3 and 4 where the original coefficient is significant.
+
+
+\subsection*{Figure 3:}
+
+Comparison of the VO2max data plots corresponding to the base-figure from the original study.
+
+\subsubsection*{Figure 3a: (upper left)}
+
+(a) Original Plot
+
+
+\subsubsection*{Figure 3b: (upper right)}
+
+(b) ARX Plot
+
+\subsubsection*{Figure 3c: (lower left)}
+
+(c) SDV Plot
+
+\subsubsection*{Figure 3d: (lower  right)}
+
+(c) SynDiffix Plot
+
+\end{document}

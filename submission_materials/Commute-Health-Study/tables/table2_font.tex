@@ -1,0 +1,27 @@
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \multirow{2}{*}{\makecell[l]{\textbf{Commuting}\\\textbf{group}}}
+          & \multicolumn{2}{l}{\textbf{From home to school}}
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+          & \textbf{N (\%)} & \textbf{Distance (IQR)} & \textbf{N (\%)} & \textbf{Distance (IQR)} \\
+      \midrule
+    Car      &  \makecell[l]{\textnormal{170} \textnormal{(24\%)} \\\textnormal{182} \textnormal{(26\%)} \\\textnormal{177} \textnormal{(25\%)} \\\textnormal{169} \textnormal{(24\%)} \\}      &  \makecell[l]{\textnormal{3133} \textnormal{(3945)} \\\textit{3758} \textnormal{(3915)} \\\textbf{7602} \textbf{(8467)} \\\textit{3754} \textnormal{(4215)} \\}      &  \makecell[l]{\textnormal{71} \textnormal{(10\%)} \\\textit{58} \textit{(8\%)} \\\textit{95} \textit{(13\%)} \\\textnormal{70} \textnormal{(10\%)} \\}      &  \makecell[l]{\textnormal{3615} \textnormal{(3896)} \\\textnormal{3910} \textnormal{(3800)} \\\textnormal{3934} \textbf{(7362)} \\\textit{2584} \textnormal{(3560)} \\} \\ \cline{2-5}
+Public      &  \makecell[l]{\textnormal{230} \textnormal{(32\%)} \\\textnormal{212} \textnormal{(30\%)} \\\textnormal{221} \textnormal{(31\%)} \\\textnormal{232} \textnormal{(33\%)} \\}      &  \makecell[l]{\textnormal{4782} \textnormal{(4296)} \\\textnormal{4973} \textnormal{(4193)} \\\textit{5690} \textbf{(8320)} \\\textnormal{4712} \textnormal{(4228)} \\}      &  \makecell[l]{\textnormal{245} \textnormal{(34\%)} \\\textnormal{252} \textnormal{(35\%)} \\\textnormal{210} \textnormal{(29\%)} \\\textnormal{245} \textnormal{(34\%)} \\}      &  \makecell[l]{\textnormal{4996} \textnormal{(4033)} \\\textnormal{5140} \textnormal{(3686)} \\\textbf{2249} \textit{(5174)} \\\textnormal{5011} \textnormal{(4097)} \\} \\ \cline{2-5}
+Wheels      &  \makecell[l]{\textnormal{34} \textnormal{(5\%)} \\\textnormal{31} \textnormal{(4\%)} \\\textbf{96} \textbf{(13\%)} \\\textnormal{36} \textnormal{(5\%)} \\}      &  \makecell[l]{\textnormal{1366} \textnormal{(2211)} \\\textnormal{1356} \textbf{(1378)} \\\textbf{6671} \textbf{(8472)} \\\textit{1094} \textnormal{(2251)} \\}      &  \makecell[l]{\textnormal{28} \textnormal{(4\%)} \\\textit{14} \textbf{(2\%)} \\\textbf{97} \textbf{(14\%)} \\\textnormal{30} \textnormal{(4\%)} \\}      &  \makecell[l]{\textnormal{1444} \textnormal{(2369)} \\\textbf{2235} \textit{(3245)} \\\textbf{2741} \textbf{(5282)} \\\textnormal{1337} \textbf{(1376)} \\} \\ \cline{2-5}
+Walk      &  \makecell[l]{\textnormal{279} \textnormal{(39\%)} \\\textnormal{278} \textnormal{(39\%)} \\\textit{219} \textit{(31\%)} \\\textnormal{279} \textnormal{(39\%)} \\}      &  \makecell[l]{\textnormal{799} \textnormal{(789)} \\\textnormal{805} \textnormal{(795)} \\\textbf{5498} \textbf{(8697)} \\\textnormal{787} \textnormal{(737)} \\}      &  \makecell[l]{\textnormal{369} \textnormal{(52\%)} \\\textnormal{379} \textnormal{(53\%)} \\\textit{311} \textit{(44\%)} \\\textnormal{368} \textnormal{(52\%)} \\}      &  \makecell[l]{\textnormal{973} \textnormal{(1043)} \\\textnormal{954} \textnormal{(1062)} \\\textbf{2374} \textbf{(6068)} \\\textnormal{960} \textnormal{(1037)} \\} \\ \cline{2-5}
+      Total       & \makecell[l]{713 (100\%) \\703 (99\%) \\713 (100\%) \\716 (100\%) \\} &       & \makecell[l]{713 (100\%) \\703 (99\%) \\713 (100\%) \\713 (100\%) \\} & \\ 
+
+      \bottomrule
+      \end{tabular}
+      \end{small}
+      \caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. The bold/italic fonts for counts (N) are as described for Table~\ref{tab:table1}. Distance and IRQ are \textbf{bold font} when the relative error is greater than 30\%, and \textit{italics} when the relative error is greater than 15\%.  Note that the original distances median and IQR don't perfectly match those of the original Table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \label{tab:table2}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    

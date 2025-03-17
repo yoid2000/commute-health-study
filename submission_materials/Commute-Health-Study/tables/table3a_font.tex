@@ -1,0 +1,41 @@
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \textbf{Variables}
+          & \multicolumn{4}{l}{\textbf{Adjusted model}} \\ \cline{2-5}
+        & \multicolumn{2}{l}{\textbf{From home to school}} 
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+        & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
+      \midrule
+    \textbf{Constant}    &  \makecell[l]{\textnormal{36.42***} \\\textnormal{33.19***} \\\textnormal{56.08***} \\\textnormal{27.94***} \\}   &  \makecell[l]{\textnormal{(28.17, 44.67)} \\\textnormal{(25.82, 40.56)} \\\textnormal{(45.07, 67.09)} \\\textnormal{(20.74, 35.14)} \\}   &  \makecell[l]{\textnormal{36.63***} \\\textnormal{35.36***} \\\textnormal{49.18***} \\\textnormal{32.89***} \\}   &  \makecell[l]{\textnormal{(29.11, 44.15)} \\\textnormal{(28.65, 42.07)} \\\textnormal{(40.44, 57.91)} \\\textnormal{(26.25, 39.54)} \\} \\ 
+\multicolumn{5}{l}{\textbf{Commuting group}} \\ 
+\quad Car    &  \makecell[l]{\textnormal{-6.49\phantom{***}} \\\textnormal{-7.28\phantom{***}} \\\textnormal{-9.17\phantom{***}} \\\textnormal{-2.18\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-15.92, 2.94)} \\\textnormal{(-15.49, 0.92)} \\\textnormal{(-21.3, 2.95)} \\\textnormal{(-9.25, 4.88)} \\}   &  \makecell[l]{\textnormal{-15.13*\phantom{**}} \\\textnormal{-17.72**\phantom{*}} \\\textbf{2.4\phantom{***}} \\\textnormal{-12.67*\phantom{**}} \\}   &  \makecell[l]{\textnormal{(-26.88, -3.39)} \\\textnormal{(-29.65, -5.8)} \\\textnormal{(-6.44, 11.24)} \\\textnormal{(-22.82, -2.52)} \\} \\ 
+& & & & \\ 
+\quad Public    &  \makecell[l]{\textnormal{-0.08\phantom{***}} \\\textnormal{3.21\phantom{***}} \\\textnormal{-6.17\phantom{***}} \\\textnormal{-0.15\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-9.06, 8.9)} \\\textnormal{(-4.59, 11.01)} \\\textnormal{(-16.67, 4.32)} \\\textnormal{(-6.37, 6.07)} \\}   &  \makecell[l]{\textnormal{-3.19\phantom{***}} \\\textnormal{-4.08\phantom{***}} \\\textnormal{-2.57\phantom{***}} \\\textbf{8.71**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(-11.27, 4.88)} \\\textnormal{(-10.99, 2.84)} \\\textnormal{(-9.06, 3.92)} \\\textnormal{(2.72, 14.71)} \\} \\ 
+& & & & \\ 
+\quad Wheels    &  \makecell[l]{\textnormal{3.0\phantom{***}} \\\textnormal{3.88\phantom{***}} \\\textnormal{-8.69\phantom{***}} \\\textnormal{3.23\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-16.24, 22.25)} \\\textnormal{(-11.83, 19.58)} \\\textnormal{(-23.52, 6.14)} \\\textnormal{(-10.68, 17.13)} \\}   &  \makecell[l]{\textnormal{15.66\phantom{***}} \\\textnormal{17.16\phantom{***}} \\\textnormal{1.48\phantom{***}} \\\textnormal{10.7\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-4.09, 35.41)} \\\textnormal{(-4.9, 39.22)} \\\textnormal{(-7.47, 10.44)} \\\textnormal{(-3.6, 24.99)} \\} \\ 
+\quad Walk (ref) & & & & \\ 
+\multicolumn{5}{l}{\textbf{Interaction Commuting group x Distance}} \\ 
+\quad Car x Distance    &  \makecell[l]{\textnormal{0.58\phantom{***}} \\\textbf{0.79**\phantom{*}} \\\textnormal{0.35\phantom{***}} \\\textnormal{0.42\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.04, 1.2)} \\\textnormal{(0.24, 1.34)} \\\textnormal{(-0.35, 1.06)} \\\textnormal{(-0.08, 0.91)} \\}   &  \makecell[l]{\textnormal{1.25**\phantom{*}} \\\textnormal{1.38**\phantom{*}} \\\textbf{-0.28\phantom{***}} \\\textnormal{2.06***} \\}   &  \makecell[l]{\textnormal{(0.34, 2.17)} \\\textnormal{(0.44, 2.33)} \\\textnormal{(-0.94, 0.37)} \\\textnormal{(1.19, 2.93)} \\} \\ 
+& & & & \\ 
+\quad Public x Distance    &  \makecell[l]{\textnormal{0.06\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{0.04\phantom{***}} \\\textnormal{0.26\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.49, 0.61)} \\\textnormal{(-0.52, 0.45)} \\\textnormal{(-0.48, 0.56)} \\\textnormal{(-0.13, 0.65)} \\}   &  \makecell[l]{\textnormal{0.33\phantom{***}} \\\textnormal{0.37\phantom{***}} \\\textnormal{0.38\phantom{***}} \\\textnormal{0.03\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.21, 0.88)} \\\textnormal{(-0.1, 0.84)} \\\textnormal{(-0.06, 0.82)} \\\textnormal{(-0.39, 0.45)} \\} \\ 
+& & & & \\ 
+\quad Wheels x Distance    &  \makecell[l]{\textnormal{-0.09\phantom{***}} \\\textnormal{0.08\phantom{***}} \\\textnormal{0.09\phantom{***}} \\\textnormal{0.19\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-1.79, 1.62)} \\\textnormal{(-1.32, 1.48)} \\\textnormal{(-0.88, 1.07)} \\\textnormal{(-1.07, 1.44)} \\}   &  \makecell[l]{\textnormal{-1.15\phantom{***}} \\\textnormal{-1.41\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{-0.13\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-2.89, 0.6)} \\\textnormal{(-3.35, 0.53)} \\\textnormal{(-0.75, 0.66)} \\\textnormal{(-1.36, 1.11)} \\} \\ 
+& & & & \\ 
+\quad Walk x Distance    &  \makecell[l]{\textnormal{-0.02\phantom{***}} \\\textnormal{0.17\phantom{***}} \\\textnormal{-0.63\phantom{***}} \\\textnormal{0.17\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.62, 0.58)} \\\textnormal{(-0.33, 0.68)} \\\textnormal{(-1.28, 0.02)} \\\textnormal{(-0.24, 0.58)} \\}   &  \makecell[l]{\textnormal{0.03\phantom{***}} \\\textnormal{-0.04\phantom{***}} \\\textnormal{-0.08\phantom{***}} \\\textbf{0.66***} \\}   &  \makecell[l]{\textnormal{(-0.42, 0.48)} \\\textnormal{(-0.42, 0.34)} \\\textnormal{(-0.44, 0.28)} \\\textnormal{(0.3, 1.02)} \\} \\ 
+
+      \bottomrule
+      {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
+      \end{tabular}
+      \end{small}
+      \caption{Part 1 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \label{tab:table3a}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    

@@ -1,0 +1,39 @@
+
+      \setlength{\fboxsep}{0pt}
+      \begin{table}
+      \begin{center}
+      \begin{small}
+      \begin{tabular}{lllll}
+      \toprule
+        \textbf{Variables}
+          & \multicolumn{4}{l}{\textbf{Adjusted model}} \\ \cline{2-5}
+        & \multicolumn{2}{l}{\textbf{From home to school}} 
+          & \multicolumn{2}{l}{\textbf{From school to home}} \\ \cline{2-3} \cline{4-5}
+        & \textbf{Coefficient} & \textbf{95\% CI} & \textbf{Coefficient} & \textbf{95\% CI} \\
+      \midrule
+    \textbf{Gender} & & & & \\ 
+\quad Males    &  \makecell[l]{\textnormal{7.97***} \\\textnormal{8.19***} \\\textbf{0.29\phantom{***}} \\\textnormal{7.27***} \\}   &  \makecell[l]{\textnormal{(6.75, 9.19)} \\\textnormal{(7.2, 9.18)} \\\textnormal{(-1.66, 2.25)} \\\textnormal{(6.11, 8.44)} \\}   &  \makecell[l]{\textnormal{7.58***} \\\textnormal{7.45***} \\\textbf{-0.36\phantom{***}} \\\textnormal{8.26***} \\}   &  \makecell[l]{\textnormal{(6.52, 8.63)} \\\textnormal{(6.6, 8.29)} \\\textnormal{(-1.99, 1.27)} \\\textnormal{(7.31, 9.2)} \\} \\ 
+\quad Females (ref) & & & & \\ 
+\multicolumn{5}{l}{\textbf{Interaction Commuting group x Gender}} \\ 
+\quad Car x Gender    &  \makecell[l]{\textnormal{-2.2*\phantom{**}} \\\textnormal{-2.32**\phantom{*}} \\\textbf{-2.75\phantom{***}} \\\textbf{-0.35\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-4.16, -0.24)} \\\textnormal{(-3.86, -0.77)} \\\textnormal{(-5.66, 0.16)} \\\textnormal{(-2.17, 1.48)} \\}   &  \makecell[l]{\textnormal{-2.63*\phantom{**}} \\\textnormal{-2.3*\phantom{**}} \\\textbf{0.41\phantom{***}} \\\textnormal{-4.21**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(-5.23, -0.03)} \\\textnormal{(-4.59, -0.01)} \\\textnormal{(-2.97, 3.78)} \\\textnormal{(-6.97, -1.44)} \\} \\ 
+& & & & \\ 
+\quad Public x Males    &  \makecell[l]{\textnormal{-2.0*\phantom{**}} \\\textnormal{-2.56***} \\\textbf{-1.69\phantom{***}} \\\textbf{-0.5\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-3.81, -0.2)} \\\textnormal{(-4.05, -1.07)} \\\textnormal{(-4.46, 1.07)} \\\textnormal{(-2.16, 1.16)} \\}   &  \makecell[l]{\textnormal{-1.35\phantom{***}} \\\textbf{-1.53*\phantom{**}} \\\textnormal{-2.18\phantom{***}} \\\textbf{-1.88*\phantom{**}} \\}   &  \makecell[l]{\textnormal{(-2.99, 0.3)} \\\textnormal{(-2.83, -0.22)} \\\textnormal{(-4.77, 0.4)} \\\textnormal{(-3.35, -0.41)} \\} \\ 
+& & & & \\ 
+\quad Wheels x Males    &  \makecell[l]{\textnormal{-1.95\phantom{***}} \\\textnormal{-4.06\phantom{***}} \\\textnormal{-0.17\phantom{***}} \\\textnormal{0.05\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-7.49, 3.6)} \\\textnormal{(-10.16, 2.05)} \\\textnormal{(-3.71, 3.38)} \\\textnormal{(-3.38, 3.47)} \\}   &  \makecell[l]{\textnormal{-3.09\phantom{***}} \\\textnormal{nan\phantom{***}} \\\textnormal{0.16\phantom{***}} \\\textnormal{nan\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-9.31, 3.12)} \\\textnormal{(nan, nan)} \\\textnormal{(-3.25, 3.56)} \\\textnormal{(nan, nan)} \\} \\ 
+\quad Walk x Males (ref) & & & & \\ 
+\textbf{Covariates} & & & & \\ 
+\quad MVPA    &  \makecell[l]{\textnormal{0.08***} \\\textnormal{0.08***} \\\textnormal{-0.06**\phantom{*}} \\\textnormal{0.17***} \\}   &  \makecell[l]{\textnormal{(0.03, 0.12)} \\\textnormal{(0.04, 0.12)} \\\textnormal{(-0.11, -0.02)} \\\textnormal{(0.13, 0.22)} \\}   &  \makecell[l]{\textnormal{0.07***} \\\textnormal{0.07***} \\\textnormal{-0.06**\phantom{*}} \\\textnormal{0.14***} \\}   &  \makecell[l]{\textnormal{(0.03, 0.11)} \\\textnormal{(0.03, 0.12)} \\\textnormal{(-0.11, -0.01)} \\\textnormal{(0.09, 0.18)} \\} \\ 
+& & & & \\ 
+\quad Age    &  \makecell[l]{\textnormal{0.43*\phantom{**}} \\\textnormal{0.53**\phantom{*}} \\\textbf{-0.11\phantom{***}} \\\textnormal{0.66**\phantom{*}} \\}   &  \makecell[l]{\textnormal{(0.0, 0.85)} \\\textnormal{(0.14, 0.92)} \\\textnormal{(-0.64, 0.42)} \\\textnormal{(0.26, 1.06)} \\}   &  \makecell[l]{\textnormal{0.4\phantom{***}} \\\textbf{0.55**\phantom{*}} \\\textnormal{-0.08\phantom{***}} \\\textnormal{-0.05\phantom{***}} \\}   &  \makecell[l]{\textnormal{(-0.02, 0.82)} \\\textnormal{(0.17, 0.93)} \\\textnormal{(-0.61, 0.45)} \\\textnormal{(-0.43, 0.33)} \\} \\ 
+
+      \bottomrule
+      {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
+      \end{tabular}
+      \end{small}
+      \caption{Part 2 (of 2) of the original paper's Table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO2max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      }
+      \label{tab:table3b}
+      \end{center}
+      \end{table}
+      \setlength{\fboxsep}{3pt}
+    
