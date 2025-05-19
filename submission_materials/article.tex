@@ -120,8 +120,10 @@
 \DeclareGraphicsExtensions{.png,.pdf}
 
 \definecolor{lightyellow}{rgb}{1.0, 1.0, 0.8}
-\sethlcolor{lightyellow}    % Use 'white' to remove the highlight
-%\sethlcolor{white}
+%\sethlcolor{lightyellow}    % Use 'white' to remove the highlight
+\sethlcolor{white}
+% The following command designates the highlighting from May 25, but otherwise does nothing
+\newcommand{\hlmay}[1]{#1}
 
 \title{Data Anonymization for Open Science: A Case Study}
 
@@ -182,15 +184,15 @@ The evaluation in this study focuses on three questions:
     \item How difficult would it have been for non-experts to generate the anonymized data?
 \end{enumerate}
 
-The three anonymization tools evaluated are ARX\mycite{7} (developed by Prasser), SynDiffix\mycite{8} (developed by Francis), and SDV\mycite{9}. All tools are open source software and implement different methods to create anonymized datasets. \hl{
-ARX provides a variety of anonymization mechanisms, with a focus on K-anonymity and it variants (L-diversity etc.). For this study, K-anonymity was used ($K=2$). SDV also offers a variety of mechanisms, but all from the family of AI-based data synthesis techniques that have become popular in recent years}\mycite{5}. \hl{For this study, we used CTGAN. SynDiffix is one of a class of techniques that uses regression trees to automate aggregation, adding suppression and noise to strengthen anonymity. These three methods are representative of three popular approaches to data anonymization: K-anonymity, AI synthesis, and regression trees.} More information about these tools, as well as the procedure used to select them, can be found in the Methods section of this paper.
+The three anonymization tools evaluated are ARX\mycite{7} (developed by Prasser), SynDiffix\mycite{8} (developed by Francis), and SDV\mycite{9}. All tools are open source software and implement different methods to create anonymized datasets. \hlmay{
+ARX provides a variety of anonymization mechanisms, with a focus on K-anonymity and it variants (L-diversity etc.). For this study, K-anonymity was used ($K=2$). SDV also offers a variety of mechanisms, but all from the family of AI-based data synthesis techniques that have become popular in recent years}\mycite{5}. \hlmay{For this study, we used CTGAN. SynDiffix is one of a class of techniques that uses regression trees to automate aggregation, adding suppression and noise to strengthen anonymity. These three methods are representative of three popular approaches to data anonymization: K-anonymity, AI synthesis, and regression trees.} More information about these tools, as well as the procedure used to select them, can be found in the Methods section of this paper.
 
-\hl{To our knowledge, this is the first paper to examine anonymized data quality in the context of a specific scientific study, versus prior work which examines data quality in general terms. Another distinguishing feature of this paper is that it analyses the relative ease of generating anonymized data, which is important in an open science setting. While this paper is narrow in that it only analyzes a single scientific study, we believe that it serves as a blueprint for how to evaluate anonymized data quality.}
+\hlmay{To our knowledge, this is the first paper to examine anonymized data quality in the context of a specific scientific study, versus prior work which examines data quality in general terms. Another distinguishing feature of this paper is that it analyses the relative ease of generating anonymized data, which is important in an open science setting. While this paper is narrow in that it only analyzes a single scientific study, we believe that it serves as a blueprint for how to evaluate anonymized data quality.}
 
-\subsection*{\hl{Prior work}}
+\subsection*{\hlmay{Prior work}}
 
-\hl{The quality and utility of anonymized data has long been studied. It is common to distinguish between general-purpose and special-purpose (or workload-aware) approaches for quantifying anonymized data quality. General-purpose approaches include information loss metrics, like granularity reduction} \mycite{10} or record fidelity \mycite{11}, \hl{as well as resemblance metrics, which can be univariate, e.g. comparing distributions of variables in unprotected vs. anonymized data} \mycite{12}, \hl{or multivariate, e.g. comparing differences in correlation matrices} \mycite{13}. \hl{Another approach is to study how well classifiers can distinguish unprotected and anonymized records} \mycite{14}. The three presented anonymization methods have been previously explored regarding the general-purpose utility of the protected data \mycite{15}, whereas workload-aware utility analysis was not yet explored for all methods. 
-\hl{Other prior work proposes that even the anonymization mechanisms themselves should be workload aware: they take into account what analysis is going to be done after anonymization} \mycite{16}\mycite{17}. \hl{The quality evaluations in this work are therefore naturally based on the workload analysis, which is a novelty of this paper.}
+\hlmay{The quality and utility of anonymized data has long been studied. It is common to distinguish between general-purpose and special-purpose (or workload-aware) approaches for quantifying anonymized data quality. General-purpose approaches include information loss metrics, like granularity reduction} \mycite{10} or record fidelity \mycite{11}, \hlmay{as well as resemblance metrics, which can be univariate, e.g. comparing distributions of variables in unprotected vs. anonymized data} \mycite{12}, \hlmay{or multivariate, e.g. comparing differences in correlation matrices} \mycite{13}. \hlmay{Another approach is to study how well classifiers can distinguish unprotected and anonymized records} \mycite{14}. The three presented anonymization methods have been previously explored regarding the general-purpose utility of the protected data \mycite{15}, whereas workload-aware utility analysis was not yet explored for all methods. 
+\hlmay{Other prior work proposes that even the anonymization mechanisms themselves should be workload aware: they take into account what analysis is going to be done after anonymization} \mycite{16}\mycite{17}. \hl{The quality evaluations in this work are therefore naturally based on the workload analysis, which is a novelty of this paper.}
 
 \hl{All of the quality measures in this prior work, however, are generic in that they do not take into account a specific scientific goal. These generic measures are useful for comparing the quality of different anonymization techniques generally, but they fall short of predicting whether any given scientific conclusion will be correct or not. By contrast, our paper measures quality based on specific scientific conclusions, which is another novelty of this study. Here we directly compare the ability of the anonymization methods to preserve the data characteristics that lead to the scientific conclusions.}
 
@@ -203,7 +205,7 @@ The base study of Jurak et al. investigated whether active commuting has the pot
 
 The following sections discuss the similarities and differences between the anonymized and original data, and comment on the extent to which the conclusions of the original paper \mycite{6} still hold given the anonymized data.
 
-\subsection*{Dataset comparison}
+\subsection*{\hl{Dataset comparison}}
 
 \setlength{\fboxsep}{0pt}
 \begin{table}
@@ -222,13 +224,13 @@ Distance from school & 3287 (3832) & 3275 (3463) & 5233 (6664)* & 3252 (3609) \\
 \bottomrule
 \end{tabular}
       \end{small}
-      \caption{Descriptive statistics of continuous variables expressed as mean and standard deviation. * statistically significant differences based on two-sided independent t-tests and alpha-level of 0.005.}
+      \caption{\hl{Descriptive statistics of continuous variables expressed as mean and standard deviation. * statistically significant differences based on two-sided independent t-tests and alpha-level of 0.005.}}
       \label{tab:table1}
       \end{center}
       \end{table}
 	\setlength{\fboxsep}{3pt}
 
-Descriptive univariate statistics as mean and standard deviations are provided in Table 1, showing overall similar distributions and no statistical significant difference to the original data. The data generated by SDV showed differences in four out of five variables with p-values below .001. The p-value for the Age variable was 0.006, which is very close to the chosen alpha-level of 0.005. Looking at the difference in mean values, we see huge deviations in the SDV dataset for both commute distances, potentially indicating general flaws in the synthetic data generation used here.
+\hl{Descriptive univariate statistics as mean and standard deviations are provided in Table 1, showing overall similar distributions and no statistical significant difference to the original data. The data generated by SDV showed differences in four out of five variables with p-values below .001. The p-value for the Age variable was 0.006, which is very close to the chosen alpha-level of 0.005. Looking at the difference in mean values, we see huge deviations in the SDV dataset for both commute distances, potentially indicating general flaws in the synthetic data generation used here.}
 
 \subsection*{Reproduction of commute modes and distances}
 
@@ -258,14 +260,14 @@ Descriptive univariate statistics as mean and standard deviations are provided i
       \bottomrule
       \end{tabular}
       \end{small}
-      \caption{Base-table 1 from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. Counts and their corresponding percentages are \textbf{bold font} when the absolute error is greater than 20 or the relative error is greater than 30\%. They are \textit{italic} when the absolute error is greater than 10 or the relative error is greater than 15\%.}
+      \caption{Base-table 1 \mycite{6} from the paper showing the counts and percentages for the original data and the three anonymization methods. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. Counts and their corresponding percentages are \textbf{bold font} when the absolute error is greater than 20 or the relative error is greater than 30\%. They are \textit{italic} when the absolute error is greater than 10 or the relative error is greater than 15\%.}
       \label{tab:table1}
       \end{center}
       \end{table}
       \setlength{\fboxsep}{3pt}
 
 
-The original and anonymized data for base-tables 1 and 2 explored the types of commuting in school children and the commute distances traveled. These are given in this paper's Tables 2 and 3 respectively\mycite{18}. 
+The original and anonymized data for base-tables 1 and 2 \mycite{6} explored the types of commuting in school children and the commute distances traveled. These are given in this paper's Tables 2 and 3 respectively\mycite{18}. 
 
 Among the three anonymization methods, SynDiffix most closely reproduced original counts and percentages for cross-tabulation of commuting modes (Table 2), with only one deviating record in the cross table. It is closely followed by ARX which showed up to 18 deviations, while SDV provides large differences of up to 179 different commute mode counts in the cross table. Nevertheless, the basic description of these results in original paper \mycite{6}, i.e. that active commuting is more frequent in the direction from school to home than in other direction, still holds, but this may be a coincidence in case of SDV as it substantially over- or underestimates the frequencies for both modes of active commuting (walking and wheels). Note also that the anonymized table of ARX contains 1.4\% fewer rows (703 versus 713) due to suppression of rare records.
 
@@ -315,7 +317,7 @@ Walk      &  \makecell[l]{\textnormal{279} \textnormal{(39\%)} \\\textnormal{278
       \bottomrule
       \end{tabular}
       \end{small}
-      \caption{Base-table 2 from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods \mycite{6}. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. The bold/italic fonts for counts (N) are as described for Table 2. Distance and IRQ are \textbf{bold font} when the relative error is greater than 30\%, and \textit{italics} when the relative error is greater than 15\%.  Note that the original distances median and IQR don't perfectly match those of the base-table 2 because of differences in the way median and IQR were calculated (Python versus R).}
+      \caption{Base-table 2 \mycite{6} from the original paper showing the counts and distances in meters (median and IQR) for the original data and the three anonymization methods \mycite{6}. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. The bold/italic fonts for counts (N) are as described for Table 2. Distance and IRQ are \textbf{bold font} when the relative error is greater than 30\%, and \textit{italics} when the relative error is greater than 15\%.  Note that the original distances median and IQR don't perfectly match those of the base-table 2 \mycite{6} because of differences in the way median and IQR were calculated (Python versus R).}
       \label{tab:table2}
       \end{center}
       \end{table}
@@ -379,7 +381,7 @@ The absolute errors of the cross-table counts from Table 2 and the distance valu
       {\footnotesize * p $\leq$ 0.05, \quad** p $\leq$ 0.01, \quad*** p $\leq$ 0.001}
       \end{tabular}
       \end{small}
-      \caption{Part 1 (of 2) of the base-table 3 showing the parameters (regression coefficients) of the linear model for prediction of VO$_2$max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
+      \caption{Part 1 (of 2) of the base-table 3 \mycite{6} showing the parameters (regression coefficients) of the linear model for prediction of VO$_2$max by group and distance. \textbf{Bold font} indcates that the anonymized entry is non-significant where the original data is significant or vice versa. Each group of four presents the data in order of Original, ARX, SDV, and SynDiffix. 
       }
       \label{tab:table3a}
       \end{center}
@@ -442,7 +444,7 @@ The absolute errors of the cross-table counts from Table 2 and the distance valu
 
 \subsection*{Reproduction of statistical significance of regression coefficients}
 
-The original and anonymized data for base-table 3 are given is this paper's Tables~4 and 5 (the data is spread over two tables for formatting purposes)\mycite{18}. The primary purpose of base-table 3 is to indicate statistical significance. As such, those entries where the original data is significant and the anonymized data is not, or vice versa, are highlighted in red. In total, there are 3 such mismatches for ARX, 8 for SDV, and 5 for SynDiffix.
+The original and anonymized data for base-table 3 \mycite{6} are given is this paper's Tables~4 and 5 (the data is spread over two tables for formatting purposes)\mycite{18}. The primary purpose of base-table 3 \mycite{6} is to indicate statistical significance. As such, those entries where the original data is significant and the anonymized data is not, or vice versa, are highlighted in red. In total, there are 3 such mismatches for ARX, 8 for SDV, and 5 for SynDiffix.
 
 Several differences were found in statistics of linear prediction models based on original data and the data produced by all three anonymization methods (Tables~4 and 5). In the original models predicting VO$_2$max, the constant (intercept), the predictors Gender and MVPA, and the derived Car × Gender interaction term were statistically significant in both directions of commuting. This also holds for all parameters in the SynDiffix and ARX models, except for the Car x Gender parameter in the SynDiffix model, which is not significant in one of the directions of commuting. The Gender parameter in the SDV model was found to be non-significant, despite being highly significant (p$\leq$.001) in the three other models.
 
@@ -480,7 +482,7 @@ The normalized error for coefficients in Tables 4 and 5 is illustrated in Figure
 
 \subsection*{Reproduction of the stratification of children's cardiorespiratory fitness}
 
-The plot for base-figure 1 is given in this paper's Figure 3, which replicates the plot from the original paper as well as gives the corresponding plots for the three anonymized datasets \mycite{6}.
+The plot for base-figure 1 \mycite{6} is given in this paper's Figure 3, which replicates the plot from the original paper as well as gives the corresponding plots for the three anonymized datasets \mycite{6}.
 In male children, point predictions and prediction intervals in the original paper \mycite{6} are quite closely matched with the ones from ARX and SynDiffix, but not with SDV. 
 In female children, original statistics are most closely matched by ARX, followed SynDiffix and then by SDV.
 SDV gives similar results for male and female children, although they are clearly separated in the original data. SDV performs worst also in estimating prediction interval widths, which are very similar for both sexes, although being quite different in the original plot. ARX and SynDiffix produce interval widths that are more similar to original, but still differ in some cases, e.g. being too narrow in case of walk commuting in ARX and too narrow in females' wheels commuting from school to home in both ARX and SynDiffix.
@@ -628,18 +630,18 @@ In terms of protected data generation, SynDiffix is the easiest to use of all me
 
 In general, any anonymization technique requires that the analyst understands the extent to which data has been distorted, and requires that they compensate for that distortion. This always creates additional burden. Since the anonymization process in ARX is typically explainable and deterministic, and the present distortions are visible in univariate and bivariate statistics, they might be easier to understand. In contrast, typical synthetic data generation involves randomness and it is often not clear how the internal structure of the data might have changed, even if uni- and bivariate distributions appear to be similar. 
 
-\subsection*{\hl{Risk Evaluation}}
+\subsection*{\hlmay{Risk Evaluation}}
 
-\hl{All three of the data anonymization methods studied in this paper have strong privacy properties. K-anonymity is a well-established technique that has been in use for more than two decades} \mycite{19}. \hl{AI-based synthetic data tools like CTGAN are offered commercially. Like K-anonymity, SynDiffix uses the mechanisms of aggregation and suppression, and additionally adds noise.}
+\hlmay{All three of the data anonymization methods studied in this paper have strong privacy properties. K-anonymity is a well-established technique that has been in use for more than two decades} \mycite{19}. \hlmay{AI-based synthetic data tools like CTGAN are offered commercially. Like K-anonymity, SynDiffix uses the mechanisms of aggregation and suppression, and additionally adds noise.}
 
-\hl{Here we demonstrate the strong privacy properties of the three methods with respect to the commuting dataset using the attribute inference privacy metric from the Anonymeter tool}\mycite{20} (https://github.com/statice/anonymeter). \hl{In an attribute inference, an attacker knows several attributes of a person known to be in a dataset, and then tries to predict an unknown attribute from the released anonymized data. Anonymeter makes this prediction by finding the microdata record in the anonymized data that most closely matches the known attributes, and predicting the unknown attribute from that record.} 
+\hlmay{Here we demonstrate the strong privacy properties of the three methods with respect to the commuting dataset using the attribute inference privacy metric from the Anonymeter tool}\mycite{20} (https://github.com/statice/anonymeter). \hlmay{In an attribute inference, an attacker knows several attributes of a person known to be in a dataset, and then tries to predict an unknown attribute from the released anonymized data. Anonymeter makes this prediction by finding the microdata record in the anonymized data that most closely matches the known attributes, and predicting the unknown attribute from that record.} 
 
-\hl{Anonymeter measures the \textit{improvement} of the predictions over a statistical baseline. For example, the statistical baseline precision for predicting sex would be 50\%, assuming an even distribution of male and female. Anonymeter establishes the statistical baseline by making inference predictions on records that have been removed from the dataset prior to anonymization. Any prediction success on these records is only statistical in nature, and does not represent a loss of individual privacy.
+\hlmay{Anonymeter measures the \textit{improvement} of the predictions over a statistical baseline. For example, the statistical baseline precision for predicting sex would be 50\%, assuming an even distribution of male and female. Anonymeter establishes the statistical baseline by making inference predictions on records that have been removed from the dataset prior to anonymization. Any prediction success on these records is only statistical in nature, and does not represent a loss of individual privacy.
 }
 
-\hl{Anonymeter measures Risk as $R=P_{atk}-P_{base}/1-P_{base}$, where $P_{atk}$ is the prediction precision of records in the dataset, and $P_{base}$ is the precision of records not in the dataset. For example, if the baseline precision for predicting sex is $P_{base}=0.5$, and the attack precision is $P_{atk}=0.75$, then the improvement, or Risk, is $R=0.5$. Any Risk below 0.5 can be regarded as strongly anonymous. When $P_{base}$ is low, then $R=0.5$ leaves substantial uncertainty on the part of the attacker, or equivalently, substantial deniability on the part of the victim. When $P_{base}$ is high, the attacker in any event has little uncertainty, and a Risk of 0.5 represents only a modest improvement. Furthermore, a high baseline implies an attribute that is common in the dataset population and therefore unlikely to be a sensitive attribute.}
+\hlmay{Anonymeter measures Risk as $R=P_{atk}-P_{base}/1-P_{base}$, where $P_{atk}$ is the prediction precision of records in the dataset, and $P_{base}$ is the precision of records not in the dataset. For example, if the baseline precision for predicting sex is $P_{base}=0.5$, and the attack precision is $P_{atk}=0.75$, then the improvement, or Risk, is $R=0.5$. Any Risk below 0.5 can be regarded as strongly anonymous. When $P_{base}$ is low, then $R=0.5$ leaves substantial uncertainty on the part of the attacker, or equivalently, substantial deniability on the part of the victim. When $P_{base}$ is high, the attacker in any event has little uncertainty, and a Risk of 0.5 represents only a modest improvement. Furthermore, a high baseline implies an attribute that is common in the dataset population and therefore unlikely to be a sensitive attribute.}
 
-\hl{For our measure, we removed 100 records from the dataset to establish the baseline, and re-anonymized the remaining 613 records. We assumed that the attacker knows the victim's gender, age, and commuting distance and mode in both directions. These are all potentially publicly-known attributes. The unknown attributes being predicted are VO$_2$max and MVPA. In evaluating SynDiffix, the two tables with only the known attributes are unknown attribute were used. Table} 7 \hl{presents the Risk scores and the 95\% confidence intervals. In all cases, even the high confidence bound is well below the strong privacy Risk threshold of 0.5.}
+\hlmay{For our measure, we removed 100 records from the dataset to establish the baseline, and re-anonymized the remaining 613 records. We assumed that the attacker knows the victim's gender, age, and commuting distance and mode in both directions. These are all potentially publicly-known attributes. The unknown attributes being predicted are VO$_2$max and MVPA. In evaluating SynDiffix, the two tables with only the known attributes are unknown attribute were used. Table} 7 \hlmay{presents the Risk scores and the 95\% confidence intervals. In all cases, even the high confidence bound is well below the strong privacy Risk threshold of 0.5.}
 
 
 \begin{table}
@@ -674,7 +676,7 @@ Regarding researcher burden for data analysis, the output of ARX and SDV can be 
 
 A major limitation of the current study is that it does not truly replicate an open science scenario, whereby an analyst undertakes a scientific analysis purely from anonymized data. In the current study, the analyst had the advantage of hindsight, was already familiar with the raw data and its analysis, and simply replicated an analysis that had already taken place on the raw data. A more realistic study would be to give the anonymized data to a researcher unfamiliar with the data, have them undertake a scientific study from scratch, and then follow up the study with the raw data to determine not only whether the results are correct, but also whether they would have done the analysis differently given the raw data.
 
-Another limitation of this study is that it is based on only one dataset and analysis. \hl{As future work, it would be valuable to undertake additional scientific studies on different datasets, ideally with separate teams working in isolation on the original and anonymized data respectively. It would also be valuable to explore other anonymization methods, or these methods with different parameter settings. In this fashion, we can build up an understanding as to whether current anonymization methods can be used in an open science settings, and what improvements are needed to reach that goal.}
+Another limitation of this study is that it is based on only one dataset and analysis. \hlmay{As future work, it would be valuable to undertake additional scientific studies on different datasets, ideally with separate teams working in isolation on the original and anonymized data respectively. It would also be valuable to explore other anonymization methods, or these methods with different parameter settings. In this fashion, we can build up an understanding as to whether current anonymization methods can be used in an open science settings, and what improvements are needed to reach that goal.}
 
 
 
@@ -829,6 +831,20 @@ The repository at {\small \url{https://github.com/BIH-MI/commute-health-anonymiz
 \section*{Data Availability}
 
 The public repository at\mycite{18} contains all of the anonymized data used for this paper. This anonymized data may be used for the purpose of studying anonymity, either by sharing the data or by running the anonymization software locally. Note that the original pseudonymized data from which the anonymized data was derived is considered personal data and is therefore not publicly available.  \hl{Please contact Bojan Leskosek (bojan.Leskosek@fsp.uni-lj.si) or Gregor Jurak (gregor.jurak@fsp.uni-lj.si) to access the original dataset. Any data access request should state the purpose for requesting the data, describe measures how sensitive data will be protected and assurance of ethical use. Requesters need to sign a Data Use Agreement (DUA). We guarantee that reasonable requests will be honored. }
+
+\hl{The data at}\mycite{18} \hl{has 713 records, one per individual, and contains the following columns:}
+
+\begin{itemize}
+\item \hl{\textbf{VO2max:} Float.  Maximum oxygen consumption during exercise, measured in milliliters of oxygen per kilogram of body weight per minute (ml/kg/min). VO2max is a key indicator of cardiorespiratory fitness and aerobic endurance. Higher values indicate better cardiovascular fitness.}
+\item \hl{\textbf{CommToSch:} String.  Mode of commuting to school. Contains the categorical values ``walk'', ``wheels'', ``car'' and ``public''.}
+\item \hl{\textbf{CommHome:} String.  Mode of commuting from school to home. Contains the categorical values ``walk'', ``wheels'', ``car'' and ``public''. This may differ from CommToSch if students use different transportation methods for their return journey.}
+\item \hl{\textbf{gender:} String.  Gender of the participant. Contains categories ``male'' and ``female''.}
+\item \hl{\textbf{age:} Float.  Age of the participant in years. The float type suggests precision beyond whole years (e.g., 12.5 years).}
+\item \hl{\textbf{MVPAsqrt:} Float.  Square root transformed value of Moderate to Vigorous Physical Activity. The square root transformation is commonly applied to normalize skewed physical activity data. This represents the amount of meaningful physical activity performed, transformed for statistical analysis.}
+\item \hl{\textbf{DistFromHome:} Integer.  Distance from participant's home to their school, measured in meters.}
+\item \hl{\textbf{DistFromSchool:} Integer.  Distance from school to participants homes, measured in meters.}
+\end{itemize}
+
 
 \section*{Competing interests}
 
@@ -1179,12 +1195,12 @@ The authors declare no competing interests.
 
 \subsection*{Figure 1:}
 
-Absolute error of the three anonymization methods for the counts and distances in Tables 1  and 2. Each box plot data point is taken from a single cell in Tables 2 and 3.
+Absolute error of the three anonymization methods for the counts and distances in Tables 2  and 3. Each box plot data point is taken from a single cell in Tables 2 and 3.
 
 
 \subsection*{Figure 2:}
 
-Normalized error for coefficients in Tables~3 and 4, and Fit (V0$_2$max predicted at mode for median distance) for Figure 3. Normalized error $E$ is computed as $E = \frac{\left| \text{O} - \text{A} \right|}{\max\left( \left| \text{O} \right|, \left| \text{A} \right| \right)}$, where $O$ is the original value and $A$ is the anonymized value. The middle plot displays normalized error only for the datapoints in Tables~4 and 5 where the original coefficient is significant.
+Normalized error for coefficients in Tables~4 and 5, and Fit (V0$_2$max predicted at mode for median distance) for Figure 3. Normalized error $E$ is computed as $E = \frac{\left| \text{O} - \text{A} \right|}{\max\left( \left| \text{O} \right|, \left| \text{A} \right| \right)}$, where $O$ is the original value and $A$ is the anonymized value. The middle plot displays normalized error only for the datapoints in Tables~4 and 5 where the original coefficient is significant.
 
 
 \subsection*{Figure 3:}
